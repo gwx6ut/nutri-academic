@@ -204,82 +204,95 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                router.push("/login");
-                return;
-            }
-
-            const { data: profileData } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", user.id)
-                .single();
-
-            const isPro = profileData?.plan_type === 'pro' || profileData?.is_admin;
-            if (profileData) {
-                setProfile({ ...profileData, email: user.email });
-                setWeight(profileData.weight || "");
-                setHeight(profileData.height || "");
-                setTargetCalories(profileData.target_calories?.toString() || "");
-                setTargetProtein(profileData.target_protein?.toString() || "");
-                setTargetCarbs(profileData.target_carbs?.toString() || "");
-                setTargetFats(profileData.target_fats?.toString() || "");
-                if (profileData.mode) setMode(profileData.mode as 'cutting' | 'bulking');
-                if (profileData.water_intake !== undefined) setWaterIntake(profileData.water_intake);
-            } else {
-                setProfile({ id: user.id, email: user.email, plan_type: 'free', is_admin: false });
-            }
-
-            // Fetch today's habits
-            const today = new Date().toISOString().split('T')[0];
-            const { data: habitData } = await supabase
-                .from('habits')
-                .select('*')
-                .eq('user_id', user.id)
-                .eq('created_at', today);
-
-            if (habitData && habitData.length > 0) {
-                setHabits(habitData.sort((a, b) => a.id - b.id));
-            } else {
-                const baseHabitsCount = isPro ? 10 : 5;
-                const baseHabitNames = [
-                    "Bater Calorias Alvo",
-                    "3L de Água (Metabolismo)",
-                    "Treino do Dia (Protocolo)",
-                    "Banho Gelado (Dopamina/Inflamação)",
-                    "7h de Sono (Recuperação CNS)",
-                    "Leitura 10min",
-                    "Cardio 30min",
-                    "Suplementação (Creatina)",
-                    "Zero Açúcar",
-                    "Meditação (Foco)"
-                ].slice(0, baseHabitsCount);
-
-                const inserts = baseHabitNames.map(task => ({
-                    user_id: user.id,
-                    task_name: task,
-                    is_completed: false,
-                    created_at: today
-                }));
-
-                const { data: newHabits } = await supabase.from('habits').insert(inserts).select();
-                if (newHabits) {
-                    setHabits(newHabits.sort((a, b) => a.id - b.id));
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) {
+                    router.push("/login");
+                    return;
                 }
+
+                // Garante que o perfil existe antes de qualquer outra operação
+                const { data: profileData } = await supabase
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", user.id)
+                    .single();
+
+                if (profileData) {
+                    setProfile({ ...profileData, email: user.email });
+                    setWeight(profileData.weight || "");
+                    setHeight(profileData.height || "");
+                    setTargetCalories(profileData.target_calories?.toString() || "");
+                    setTargetProtein(profileData.target_protein?.toString() || "");
+                    setTargetCarbs(profileData.target_carbs?.toString() || "");
+                    setTargetFats(profileData.target_fats?.toString() || "");
+                    if (profileData.mode) setMode(profileData.mode as 'cutting' | 'bulking');
+                    if (profileData.water_intake !== undefined) setWaterIntake(profileData.water_intake);
+                } else {
+                    // Cria o perfil se não existir (primeiro login)
+                    await supabase.from('profiles').upsert({
+                        id: user.id,
+                        email: user.email,
+                        plan_type: 'free',
+                        is_admin: false,
+                    }, { onConflict: 'id' });
+                    setProfile({ id: user.id, email: user.email, plan_type: 'free', is_admin: false });
+                }
+
+                const isPro = profileData?.plan_type === 'pro' || profileData?.is_admin;
+
+                // Fetch today's habits
+                const today = new Date().toISOString().split('T')[0];
+                const { data: habitData, error: habitFetchError } = await supabase
+                    .from('habits')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .eq('created_at', today);
+
+                if (!habitFetchError && habitData && habitData.length > 0) {
+                    setHabits(habitData.sort((a, b) => a.id - b.id));
+                } else if (!habitFetchError) {
+                    const baseHabitsCount = isPro ? 10 : 5;
+                    const baseHabitNames = [
+                        "Bater Calorias Alvo",
+                        "3L de Água (Metabolismo)",
+                        "Treino do Dia (Protocolo)",
+                        "Banho Gelado (Dopamina/Inflamação)",
+                        "7h de Sono (Recuperação CNS)",
+                        "Leitura 10min",
+                        "Cardio 30min",
+                        "Suplementação (Creatina)",
+                        "Zero Açúcar",
+                        "Meditação (Foco)"
+                    ].slice(0, baseHabitsCount);
+
+                    const inserts = baseHabitNames.map(task => ({
+                        user_id: user.id,
+                        task_name: task,
+                        is_completed: false,
+                        created_at: today
+                    }));
+
+                    const { data: newHabits } = await supabase.from('habits').insert(inserts).select();
+                    if (newHabits) {
+                        setHabits(newHabits.sort((a, b) => a.id - b.id));
+                    }
+                }
+
+                // Fetch custom meals
+                const { data: mealsData } = await supabase
+                    .from('diet_meals')
+                    .select('*')
+                    .eq('user_id', user.id);
+
+                if (mealsData && mealsData.length > 0) {
+                    setCustomMeals(mealsData);
+                }
+            } catch (err) {
+                console.error("Dashboard fetch error:", err);
+            } finally {
+                setLoading(false);
             }
-
-            // Fetch custom meals
-            const { data: mealsData } = await supabase
-                .from('diet_meals')
-                .select('*')
-                .eq('user_id', user.id);
-
-            if (mealsData && mealsData.length > 0) {
-                setCustomMeals(mealsData);
-            }
-
-            setLoading(false);
         };
 
         fetchUser();
