@@ -128,15 +128,15 @@ const TacticalGrid = ({ habits, accentColor, bgAccent }: { habits: string[], acc
     };
 
     return (
-        <div className="bg-zinc-900/30 border border-white/5 rounded-[3rem] p-10 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-8">
+        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
                 <div>
-                    <h3 className="text-2xl font-black italic uppercase">Tactical Grid</h3>
-                    <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-1 italic">Checklist de Performance Diária</p>
+                    <h3 className="text-xl sm:text-2xl font-black italic uppercase">Tactical Grid</h3>
+                    <p className="text-[9px] sm:text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-1 italic">Checklist de Performance Diária</p>
                 </div>
-                <LayoutList className={`w-8 h-8 ${accentColor}`} />
+                <LayoutList className={`w-6 h-6 sm:w-8 sm:h-8 ${accentColor}`} />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
                 {habits.map((habit, i) => (
                     <motion.div
                         key={habit}
@@ -246,16 +246,15 @@ export default function SportsNutritionPage() {
                     </motion.h1>
 
                     {/* SELECTOR DE ESPORTE */}
-                    <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8 sm:mb-12">
+                    <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 w-full max-w-3xl mx-auto">
                         {Object.values(SPORTS_DATA).map((sport) => (
                             <button
                                 key={sport.id}
                                 onClick={() => setSelectedSport(sport.id as any)}
-                                className={`px-3 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 transition-all flex items-center gap-2 sm:gap-3 font-black text-[8px] sm:text-[10px] uppercase tracking-widest min-h-[44px] ${selectedSport === sport.id ? `${sport.accent.replace('text', 'border')} bg-white text-black` : 'border-white/5 bg-zinc-900/50 text-zinc-500 hover:border-white/10'}`}
+                                className={`px-2 sm:px-6 py-3 sm:py-3 rounded-[1.25rem] sm:rounded-2xl border-2 transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 font-black text-[9px] sm:text-[10px] uppercase tracking-widest min-h-[44px] shadow-lg ${selectedSport === sport.id ? `${sport.accent.replace('text', 'border')} bg-white text-black scale-105` : 'border-white/5 bg-zinc-900/50 text-zinc-500 hover:border-white/10 hover:bg-zinc-800'}`}
                             >
-                                <sport.icon className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedSport === sport.id ? 'text-black' : sport.accent}`} />
-                                <span className="hidden sm:inline">{sport.label}</span>
-                                <span className="sm:hidden">{sport.label.slice(0, 3)}</span>
+                                <sport.icon className={`w-5 h-5 sm:w-4 sm:h-4 ${selectedSport === sport.id ? 'text-black' : sport.accent}`} />
+                                <span className="text-center leading-tight">{sport.label}</span>
                             </button>
                         ))}
                     </div>
@@ -290,34 +289,35 @@ export default function SportsNutritionPage() {
 
                     <div className="lg:col-span-2 space-y-10">
                         {/* PROTOCOLO NUTRICIONAL */}
-                        <div className="bg-zinc-900/30 border border-white/5 rounded-[3rem] p-10 backdrop-blur-sm relative overflow-hidden">
-                            <div className={`absolute top-0 right-0 p-10 opacity-5 ${currentSport.accent}`}><Zap className="w-48 h-48" /></div>
-                            <div className="flex items-center justify-between mb-12 relative z-10">
-                                <div>
-                                    <h2 className="text-3xl font-black italic uppercase">{currentSport.nutritionTitle}</h2>
-                                    <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-2 italic">{currentSport.nutritionDesc}</p>
+                        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm relative overflow-hidden">
+                            <div className={`absolute top-0 right-0 p-6 sm:p-10 opacity-5 ${currentSport.accent}`}><Zap className="w-32 h-32 sm:w-48 sm:h-48" /></div>
+                            <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 gap-6 relative z-10 w-full">
+                                <div className="flex-1 w-full">
+                                    <h2 className="text-2xl sm:text-3xl font-black italic uppercase leading-tight">{currentSport.nutritionTitle}</h2>
+                                    <p className="text-[9px] sm:text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-2 sm:mt-3 italic max-w-lg leading-relaxed">{currentSport.nutritionDesc}</p>
                                 </div>
-                                <div className={`w-12 h-12 ${currentSport.bgAccent} rounded-2xl flex items-center justify-center text-black`}>
-                                    <Target className="w-6 h-6" />
+                                <div className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${currentSport.bgAccent} rounded-2xl flex items-center justify-center text-black shadow-xl`}>
+                                    <Target className="w-6 h-6 sm:w-7 sm:h-7" />
                                 </div>
                             </div>
 
-                            <div className="space-y-6 relative z-10">
+                            <div className="space-y-4 sm:space-y-6 relative z-10">
                                 {currentSport.protocol.map((step, idx) => (
                                     <motion.div
                                         key={idx}
                                         layout
-                                        className="bg-black/40 border border-white/5 p-8 rounded-3xl hover:border-white/20 transition-all flex flex-col md:flex-row gap-8 items-start group"
+                                        className="bg-black/40 border border-white/5 p-5 sm:p-8 rounded-[1.5rem] sm:rounded-3xl hover:border-white/20 transition-all flex flex-col md:flex-row gap-4 sm:gap-8 items-start group relative overflow-hidden"
                                     >
+                                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <div className="flex flex-col gap-2 shrink-0">
-                                            <span className={`text-[9px] font-black ${currentSport.accent} border ${currentSport.accent.replace('text', 'border')}/30 px-3 py-1 rounded-full w-fit uppercase tracking-widest`}>{step.time}</span>
-                                            <h4 className="text-xl font-black italic uppercase mt-2">{step.title}</h4>
+                                            <span className={`text-[8px] sm:text-[9px] font-black ${currentSport.accent} border ${currentSport.accent.replace('text', 'border')}/30 px-3 py-1.5 rounded-full w-fit uppercase tracking-[0.2em]`}>{step.time}</span>
+                                            <h4 className="text-lg sm:text-xl font-black italic uppercase mt-1 sm:mt-2">{step.title}</h4>
                                         </div>
-                                        <div className="space-y-4">
-                                            <p className="text-sm text-zinc-400 font-medium italic leading-relaxed">{step.desc}</p>
-                                            <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${currentSport.accent}`}>
-                                                <Zap className="w-3 h-3" /> {step.stats}
-                                                <button className="ml-4 p-1 rounded-md bg-white/5 text-zinc-600 hover:text-white transition-colors"><Info className="w-3 h-3" /></button>
+                                        <div className="space-y-3 sm:space-y-4">
+                                            <p className="text-xs sm:text-sm text-zinc-400 font-medium italic leading-relaxed">{step.desc}</p>
+                                            <div className={`flex items-center flex-wrap gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest ${currentSport.accent} bg-white/5 px-3 py-2 rounded-xl w-fit`}>
+                                                <Zap className="w-3 h-3 shrink-0" />
+                                                <span className="leading-none">{step.stats}</span>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -326,16 +326,16 @@ export default function SportsNutritionPage() {
                         </div>
 
                         {/* PROTOCOLO DE TREINO ESPECÍFICO */}
-                        <div className="bg-zinc-900/30 border border-white/5 rounded-[3rem] p-10 backdrop-blur-sm relative overflow-hidden">
-                            <div className="flex items-center gap-4 mb-10">
-                                <Activity className={`w-6 h-6 ${currentSport.accent}`} />
-                                <h3 className="text-2xl font-black italic uppercase">Engenharia de Treino</h3>
+                        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm relative overflow-hidden">
+                            <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-10">
+                                <Activity className={`w-5 h-5 sm:w-6 sm:h-6 ${currentSport.accent}`} />
+                                <h3 className="text-xl sm:text-2xl font-black italic uppercase">Engenharia de Treino</h3>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                 {currentSport.workout.map((w, i) => (
-                                    <div key={i} className="p-8 bg-black/40 border border-white/5 rounded-[2.5rem] group hover:bg-zinc-800/50 transition-all">
-                                        <h4 className={`text-sm font-black uppercase tracking-widest mb-4 ${currentSport.accent}`}>{w.title}</h4>
-                                        <p className="text-sm font-bold italic text-zinc-400 leading-tight">{w.desc}</p>
+                                    <div key={i} className="p-5 sm:p-8 bg-black/40 border border-white/5 rounded-[1.5rem] sm:rounded-[2.5rem] group hover:bg-zinc-800/50 transition-all hover:border-white/10">
+                                        <h4 className={`text-xs sm:text-sm font-black uppercase tracking-widest mb-3 sm:mb-4 ${currentSport.accent}`}>{w.title}</h4>
+                                        <p className="text-xs sm:text-sm font-bold italic text-zinc-400 leading-relaxed">{w.desc}</p>
                                     </div>
                                 ))}
                             </div>
@@ -350,18 +350,18 @@ export default function SportsNutritionPage() {
                         <TacticalGrid habits={currentSport.grid} accentColor={currentSport.accent} bgAccent={currentSport.bgAccent} />
 
                         {/* SUPLEMENTAÇÃO */}
-                        <div className="bg-zinc-900/30 border border-white/5 rounded-[3rem] p-10 backdrop-blur-sm">
-                            <div className="flex items-center gap-4 mb-8">
-                                <Microscope className="w-6 h-6 text-emerald-500" />
-                                <h3 className="text-xl font-black italic uppercase">Suplementos</h3>
+                        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm">
+                            <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                                <Microscope className={`w-5 h-5 sm:w-6 sm:h-6 ${currentSport.accent}`} />
+                                <h3 className="text-lg sm:text-xl font-black italic uppercase">Suplementos</h3>
                             </div>
-                            <div className="space-y-6">
+                            <div className="space-y-4 sm:space-y-6">
                                 {currentSport.supps.map((s, i) => (
-                                    <div key={i} className="flex gap-4 items-start group">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${currentSport.bgAccent} mt-2 shrink-0 group-hover:scale-150 transition-all`}></div>
+                                    <div key={i} className="flex gap-3 sm:gap-4 items-start group bg-black/20 p-4 sm:p-5 rounded-2xl border border-white/5 hover:bg-white/5 transition-all">
+                                        <div className={`w-1.5 h-1.5 rounded-full ${currentSport.bgAccent} mt-2 shrink-0 group-hover:scale-150 transition-all shadow-[0_0_10px_rgba(255,255,255,0.3)]`}></div>
                                         <div>
-                                            <p className="text-xs font-black uppercase text-white mb-1 group-hover:text-primary transition-colors">{s.name}</p>
-                                            <p className="text-[10px] text-zinc-500 leading-relaxed italic">{s.info}</p>
+                                            <p className="text-[11px] sm:text-xs font-black uppercase text-white mb-1.5 group-hover:text-primary transition-colors tracking-wide">{s.name}</p>
+                                            <p className="text-[10px] sm:text-[11px] text-zinc-400 leading-relaxed italic">{s.info}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -369,16 +369,16 @@ export default function SportsNutritionPage() {
                         </div>
 
                         {/* INSIGHTS NEURAIS */}
-                        <div className="bg-gradient-to-br from-zinc-900 to-black border border-white/10 rounded-[3rem] p-10 relative overflow-hidden">
-                            <div className="flex items-center gap-3 mb-6">
+                        <div className="bg-gradient-to-br from-zinc-900 to-black border border-white/10 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 relative overflow-hidden">
+                            <div className="flex items-center gap-3 mb-5 sm:mb-6">
                                 <Brain className="w-5 h-5 text-purple-500" />
                                 <h3 className="text-lg font-black italic uppercase">Physio Insight</h3>
                             </div>
                             <div className="space-y-4">
-                                <p className="text-[11px] text-zinc-400 leading-relaxed italic border-l-2 border-purple-500/30 pl-4 py-1">
+                                <p className="text-[10px] sm:text-[11px] text-zinc-300 leading-relaxed italic border-l-2 border-purple-500/30 pl-4 py-1">
                                     "{currentSport.description}"
                                 </p>
-                                <p className="text-[9px] text-[#CCFF00] font-black uppercase tracking-widest animate-pulse">Alpha Brain Connection: Active</p>
+                                <p className="text-[8px] sm:text-[9px] text-[#CCFF00] font-black uppercase tracking-[0.2em] sm:tracking-widest animate-pulse mt-4">Alpha Brain Connection: Active</p>
                             </div>
                         </div>
                     </div>
