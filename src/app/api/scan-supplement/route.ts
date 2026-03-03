@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
         // Se quiser validar créditos do usuário Free na tabela profiles,
         // o ideal seria fazer via banco (iremos assumir que a verificação de limite ocorreu no cliente ou aqui futuramente).
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
         const prompt = `
 Você é um perito nutricional linha dura.
