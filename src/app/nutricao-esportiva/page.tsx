@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
+import SupplementAnalyzer from "./SupplementAnalyzer";
 
 // --- DATA STRUCTURES ---
 
@@ -194,15 +195,15 @@ export default function SportsNutritionPage() {
         <main className="relative min-h-screen bg-[#050505] text-white selection:bg-[#CCFF00] selection:text-black font-sans pb-20">
 
             {/* BOTÃO VOLTAR */}
-            <div className="fixed top-8 left-8 z-[60]">
-                <Link href="/dashboard" className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-xl border border-white/5 px-6 py-3 rounded-2xl hover:bg-zinc-800 transition-all group shadow-2xl">
+            <div className="fixed top-8 left-8 z-[60] max-sm:left-4 max-sm:top-4">
+                <Link href="/dashboard" className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-xl border border-white/5 px-6 py-3 rounded-2xl hover:bg-zinc-800 transition-all group shadow-2xl max-sm:px-4 max-sm:py-2.5 max-sm:rounded-xl min-h-[44px] min-w-[44px]">
                     <ArrowLeft className="w-4 h-4 text-zinc-400 group-hover:text-[#CCFF00] transition-colors" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">Voltar ao Painel</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors max-sm:hidden">Voltar ao Painel</span>
                 </Link>
             </div>
 
             {/* HERO SECTION */}
-            <section className="relative h-[80vh] flex flex-col items-center justify-center overflow-hidden">
+            <section className="relative h-[80vh] min-h-screen sm:h-[80vh] flex flex-col items-center justify-center overflow-hidden">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={selectedSport}
@@ -224,19 +225,19 @@ export default function SportsNutritionPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent"></div>
                 <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/40 via-transparent to-[#050505]"></div>
 
-                <div className="z-10 text-center px-6 max-w-5xl">
+                <div className="z-10 text-center px-4 sm:px-6 max-w-5xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/20 rounded-full mb-8"
+                        className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/20 rounded-full mb-6 sm:mb-8"
                     >
-                        <Crown className="w-4 h-4 text-[#CCFF00]" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#CCFF00]">Módulo de Elite Pro Alpha</span>
+                        <Crown className="w-3 h-3 sm:w-4 sm:h-4 text-[#CCFF00]" />
+                        <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#CCFF00]">Módulo de Elite Pro Alpha</span>
                     </motion.div>
 
                     <motion.h1
                         layout
-                        className="text-6xl md:text-9xl font-black italic uppercase leading-[0.8] tracking-tighter mb-8"
+                        className="text-4xl sm:text-6xl md:text-9xl font-black italic uppercase leading-[0.8] tracking-tighter mb-6 sm:mb-8"
                     >
                         SPORTS <br />
                         <span className={`bg-gradient-to-r ${currentSport.accent === 'text-[#CCFF00]' ? 'from-[#CCFF00] to-[#4A7A00]' : 'from-white to-zinc-500'} bg-clip-text text-transparent italic`}>
@@ -245,15 +246,16 @@ export default function SportsNutritionPage() {
                     </motion.h1>
 
                     {/* SELECTOR DE ESPORTE */}
-                    <div className="flex flex-wrap justify-center gap-4 mb-12">
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8 sm:mb-12">
                         {Object.values(SPORTS_DATA).map((sport) => (
                             <button
                                 key={sport.id}
                                 onClick={() => setSelectedSport(sport.id as any)}
-                                className={`px-6 py-3 rounded-2xl border-2 transition-all flex items-center gap-3 font-black text-[10px] uppercase tracking-widest ${selectedSport === sport.id ? `${sport.accent.replace('text', 'border')} bg-white text-black` : 'border-white/5 bg-zinc-900/50 text-zinc-500 hover:border-white/10'}`}
+                                className={`px-3 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 transition-all flex items-center gap-2 sm:gap-3 font-black text-[8px] sm:text-[10px] uppercase tracking-widest min-h-[44px] ${selectedSport === sport.id ? `${sport.accent.replace('text', 'border')} bg-white text-black` : 'border-white/5 bg-zinc-900/50 text-zinc-500 hover:border-white/10'}`}
                             >
-                                <sport.icon className={`w-4 h-4 ${selectedSport === sport.id ? 'text-black' : sport.accent}`} />
-                                {sport.label}
+                                <sport.icon className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedSport === sport.id ? 'text-black' : sport.accent}`} />
+                                <span className="hidden sm:inline">{sport.label}</span>
+                                <span className="sm:hidden">{sport.label.slice(0, 3)}</span>
                             </button>
                         ))}
                     </div>
@@ -261,30 +263,30 @@ export default function SportsNutritionPage() {
             </section>
 
             {/* CONTENT GRID */}
-            <section className="px-6 max-w-7xl mx-auto relative">
+            <section className="px-3 sm:px-6 max-w-7xl mx-auto relative">
                 {!isPro && !loading && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 z-50 flex items-center justify-center px-6 -top-20"
+                        className="absolute inset-0 z-50 flex items-center justify-center px-4 sm:px-6 -top-20"
                     >
                         <div className="absolute inset-0 bg-[#050505]/90 backdrop-blur-xl"></div>
-                        <div className="relative z-10 max-w-2xl w-full bg-zinc-900/80 border border-white/10 p-12 md:p-20 rounded-[4rem] text-center shadow-[0_50px_100px_rgba(0,0,0,0.5)]">
-                            <div className="bg-[#CCFF00]/10 p-8 rounded-[2rem] w-fit mx-auto mb-12 border border-[#CCFF00]/20">
-                                <Lock className="w-16 h-16 text-[#CCFF00]" />
+                        <div className="relative z-10 max-w-2xl w-full bg-zinc-900/80 border border-white/10 p-6 sm:p-12 md:p-20 rounded-3xl sm:rounded-[4rem] text-center shadow-[0_50px_100px_rgba(0,0,0,0.5)]">
+                            <div className="bg-[#CCFF00]/10 p-6 sm:p-8 rounded-2xl sm:rounded-[2rem] w-fit mx-auto mb-8 sm:mb-12 border border-[#CCFF00]/20">
+                                <Lock className="w-12 h-12 sm:w-16 sm:h-16 text-[#CCFF00]" />
                             </div>
-                            <h2 className="text-5xl font-black italic uppercase tracking-tighter mb-6 leading-none">Acesso <br /> Restrito</h2>
-                            <p className="text-zinc-500 text-xl font-bold italic max-w-md mx-auto leading-relaxed mb-16">
+                            <h2 className="text-3xl sm:text-5xl font-black italic uppercase tracking-tighter mb-4 sm:mb-6 leading-none">Acesso <br /> Restrito</h2>
+                            <p className="text-zinc-500 text-base sm:text-xl font-bold italic max-w-md mx-auto leading-relaxed mb-8 sm:mb-16">
                                 O laboratório de performance avançada é exclusivo para membros Pro Alpha. Escolha seu caminho de elite.
                             </p>
-                            <Link href="/pricing" className="bg-[#CCFF00] text-black font-black px-12 py-6 rounded-2xl text-[10px] uppercase tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-2xl flex items-center gap-4 mx-auto w-fit">
-                                Migrar para Pro Alpha <Crown className="w-5 h-5" />
+                            <Link href="/pricing" className="bg-[#CCFF00] text-black font-black px-8 sm:px-12 py-4 sm:py-6 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-2xl flex items-center gap-3 sm:gap-4 mx-auto w-fit min-h-[44px]">
+                                Migrar para Pro Alpha <Crown className="w-4 h-4 sm:w-5 sm:h-5" />
                             </Link>
                         </div>
                     </motion.div>
                 )}
 
-                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-10 transition-all duration-700 ${!isPro && !loading ? 'blur-2xl pointer-events-none' : ''}`}>
+                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10 transition-all duration-700 ${!isPro && !loading ? 'blur-2xl pointer-events-none' : ''}`}>
 
                     <div className="lg:col-span-2 space-y-10">
                         {/* PROTOCOLO NUTRICIONAL */}
@@ -338,6 +340,9 @@ export default function SportsNutritionPage() {
                                 ))}
                             </div>
                         </div>
+
+                        {/* ANÁLISE DE SUPLEMENTOS */}
+                        <SupplementAnalyzer accentColor={currentSport.accent} bgAccent={currentSport.bgAccent} />
                     </div>
 
                     <div className="space-y-10">

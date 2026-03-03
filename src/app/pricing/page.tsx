@@ -36,7 +36,7 @@ const PLANS = [
         ],
         cta: "Fazer Upgrade Agora",
         active: false,
-        accent: "emerald",
+        accent: "green",
         popular: true,
     }
 ];
@@ -72,7 +72,7 @@ export default function PricingPage() {
 
             <div className="text-center max-w-3xl mb-20">
                 <h1 className="text-5xl md:text-7xl font-black text-zinc-900 tracking-tighter mb-6 uppercase italic">
-                    POTENCIAL <span className="text-emerald-600">ILIMITADO</span>
+                    POTENCIAL <span className="text-green-600">ILIMITADO</span>
                 </h1>
                 <p className="text-xl text-zinc-500 font-bold tracking-tight max-w-2xl mx-auto">
                     A ciência da performance por um valor simbólico. Escolha o plano Pro e desbloqueie o motor completo de evolução.
@@ -84,7 +84,7 @@ export default function PricingPage() {
                     <motion.div
                         key={plan.name}
                         whileHover={{ y: -8 }}
-                        className={`relative bg-white rounded-[3rem] p-10 border-2 transition-all shadow-sm ${plan.accent === 'emerald' ? 'border-emerald-500 shadow-xl shadow-emerald-50' : 'border-zinc-100'}`}
+                        className={`relative bg-white rounded-[3rem] p-10 border-2 transition-all shadow-sm ${plan.accent === 'green' ? 'border-green-500 shadow-xl shadow-green-50' : 'border-zinc-100'}`}
                     >
                         {plan.popular && (
                             <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-zinc-950 text-white text-[10px] font-black uppercase tracking-[0.2em] px-6 py-2.5 rounded-full shadow-2xl">
@@ -102,7 +102,7 @@ export default function PricingPage() {
                         <ul className="space-y-4 mb-12">
                             {plan.features.map((feat) => (
                                 <li key={feat} className="flex items-center gap-3 text-sm font-black uppercase tracking-tighter text-zinc-700">
-                                    <div className={`p-1.5 rounded-xl border ${plan.accent === 'emerald' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-zinc-50 text-zinc-300 border-zinc-100'}`}>
+                                    <div className={`p-1.5 rounded-xl border ${plan.accent === 'green' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-zinc-50 text-zinc-300 border-zinc-100'}`}>
                                         <Check className="w-4 h-4" />
                                     </div>
                                     {feat}
@@ -110,9 +110,9 @@ export default function PricingPage() {
                             ))}
                         </ul>
                         <button
-                            onClick={() => plan.accent === 'emerald' ? router.push('/upgrade') : null}
-                            className={`w-full py-5 rounded-[1.5rem] font-black uppercase tracking-[0.2em] text-[10px] transition-all shadow-xl shadow-zinc-100 ${plan.accent === 'emerald'
-                                ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-200 active:scale-95'
+                            onClick={() => plan.accent === 'green' ? router.push('/upgrade') : null}
+                            className={`w-full py-5 rounded-[1.5rem] font-black uppercase tracking-[0.2em] text-[10px] transition-all shadow-xl shadow-zinc-100 ${plan.accent === 'green'
+                                ? 'bg-green-600 text-white hover:bg-green-700 shadow-green-200 active:scale-95'
                                 : 'bg-zinc-100 text-zinc-300 cursor-default grayscale'
                                 }`}
                         >
@@ -125,7 +125,7 @@ export default function PricingPage() {
             {/* FAQ SECTION */}
             <div className="max-w-3xl w-full mb-32">
                 <div className="text-center mb-16">
-                    <HelpCircle className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
+                    <HelpCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
                     <h2 className="text-4xl font-black text-zinc-900 uppercase italic tracking-tight mb-4">Dúvidas Frequentes</h2>
                     <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Transparência total em cada etapa</p>
                 </div>
@@ -138,7 +138,7 @@ export default function PricingPage() {
                                 className="w-full text-left p-8 flex items-center justify-between group transition-colors hover:bg-zinc-50"
                             >
                                 <span className="text-zinc-950 font-black uppercase tracking-tighter text-lg">{faq.q}</span>
-                                {openFaq === i ? <ChevronUp className="w-5 h-5 text-emerald-600" /> : <ChevronDown className="w-5 h-5 text-zinc-300 group-hover:text-zinc-900" />}
+                                {openFaq === i ? <ChevronUp className="w-5 h-5 text-green-600" /> : <ChevronDown className="w-5 h-5 text-zinc-300 group-hover:text-zinc-900" />}
                             </button>
                             <AnimatePresence>
                                 {openFaq === i && (

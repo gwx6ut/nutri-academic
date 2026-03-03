@@ -166,6 +166,7 @@ export default function DashboardPage() {
     const [isEditingDiet, setIsEditingDiet] = useState(false);
     const [isSavingDiet, setIsSavingDiet] = useState(false);
     const [isWaterSplashing, setIsWaterSplashing] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const supabase = createClient();
     const router = useRouter();
@@ -467,17 +468,52 @@ export default function DashboardPage() {
     };
 
     if (loading) return (
-        <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="min-h-screen bg-white flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
     );
 
     const isPro = profile?.plan_type === 'pro' || profile?.is_admin;
-    const currentSuggestions = selectedProfile === 'standard'
-        ? (mode === 'cutting' ? DIET_CATALOG.standard.cutting : DIET_CATALOG.standard.bulking)
-        : selectedProfile === 'economical'
-            ? (mode === 'cutting' ? DIET_CATALOG.economical.cutting : DIET_CATALOG.economical.bulking)
-            : (mode === 'cutting' ? DIET_CATALOG.practical.cutting : DIET_CATALOG.practical.bulking);
+    // Build suggestions for current selected profile, but avoid showing a catalog
+    // that the evaluator considers clearly 'Crítico' (for auto-suggestions).
+    const getCatalogMeals = (key: 'standard' | 'economical' | 'practical') =>
+        (mode === 'cutting' ? DIET_CATALOG[key].cutting : DIET_CATALOG[key].bulking);
+
+    const evaluateMealsQuick = (meals: any[]) => {
+        const totals = meals.reduce((acc, m) => ({ p: acc.p + (m.protein || 0), c: acc.c + (m.carbs || 0), f: acc.f + (m.fats || 0), kcal: acc.kcal + (m.calories || 0) }), { p: 0, c: 0, f: 0, kcal: 0 });
+        const diffP = totals.p - finalProtein;
+        const diffKcal = totals.kcal - finalCalories;
+        if (mode === 'bulking') {
+            if (diffP < -10) return 'Crítico';
+            if (diffKcal < -150) return 'Alerta';
+            if (Math.abs(diffP) < 30 && Math.abs(diffKcal) < 200) return 'Alpha Performance';
+            if (diffKcal > 500) return 'Sujeira';
+            return 'Ajustável';
+        } else {
+            if (diffKcal > 150) return 'Crítico';
+            if (diffP < -15) return 'Alerta';
+            if (Math.abs(diffKcal) < 150 && diffP >= -5) return 'Alpha Performance';
+            return 'Ajustável';
+        }
+    };
+
+    // selected profile meals (may be swapped below if selected catalog is critical)
+    let currentSuggestions = getCatalogMeals(selectedProfile as any);
+
+    // If using automatic suggestions (no custom meals), avoid showing a catalog that evaluates as Critical.
+    const hasCustomMealsForMode = customMeals.filter(m => m.mode === mode).length > 0;
+    if (!(hasCustomMealsForMode && !isEditingDiet)) {
+        const allowedCatalogs: Array<'standard' | 'economical' | 'practical'> = isPro ? ['standard', 'economical', 'practical'] : ['standard'];
+        const selectedEval = evaluateMealsQuick(getCatalogMeals(selectedProfile as any));
+        if (selectedEval === 'Crítico' || selectedEval === 'Sujeira') {
+            // try to find a non-critical catalog
+            const fallback = allowedCatalogs.find(c => {
+                const s = evaluateMealsQuick(getCatalogMeals(c));
+                return s !== 'Crítico' && s !== 'Sujeira';
+            });
+            if (fallback) currentSuggestions = getCatalogMeals(fallback);
+        }
+    }
 
     const displaySuggestions = isPro ? currentSuggestions : currentSuggestions.slice(0, 2);
 
@@ -499,10 +535,10 @@ export default function DashboardPage() {
     const completedCount = habits.filter(h => h.is_completed).length;
     const progressPerc = habits.length === 0 ? 0 : Math.round((completedCount / habits.length) * 100);
 
-    const accentColor = mode === 'cutting' ? 'text-emerald-600' : 'text-orange-600';
-    const accentBg = mode === 'cutting' ? 'bg-emerald-600' : 'bg-orange-600';
-    const accentBorder = mode === 'cutting' ? 'border-emerald-600' : 'border-orange-600';
-    const accentLightBg = mode === 'cutting' ? 'bg-emerald-50' : 'bg-orange-50';
+    const accentColor = mode === 'cutting' ? 'text-green-600' : 'text-orange-600';
+    const accentBg = mode === 'cutting' ? 'bg-green-600' : 'bg-orange-600';
+    const accentBorder = mode === 'cutting' ? 'border-green-600' : 'border-orange-600';
+    const accentLightBg = mode === 'cutting' ? 'bg-green-50' : 'bg-orange-50';
 
     const waterGoal = 3000;
     const waterPerc = Math.min((waterIntake / waterGoal) * 100, 100);
@@ -525,18 +561,22 @@ export default function DashboardPage() {
         const isAuto = !useMeals;
         const prefix = isAuto ? "[Auto] " : "";
 
+        // Relax thresholds for auto suggestions so default system diets are not
+        // unfairly marked as critical. Custom diets (useMeals) remain strict.
+        const relax = isAuto ? 2.0 : 1.0;
+
         // MODE-AWARE EVALUATION LOGIC
         if (mode === 'bulking') {
             // In Bulking, excess protein is fine, but deficit is critical
-            if (diffP < -10) return { score: 'Crítico', msg: `${prefix}Proteína insuficiente para anabolismo.`, color: 'text-red-500' };
-            if (diffKcal < -150) return { score: 'Alerta', msg: `${prefix}Déficit detectado. Você não vai ganhar massa assim.`, color: 'text-orange-500' };
-            if (Math.abs(diffP) < 30 && Math.abs(diffKcal) < 200) return { score: 'Alpha Performance', msg: `${prefix}Bulking limpo e otimizado!`, color: 'text-emerald-500' };
-            if (diffKcal > 500) return { score: 'Sujeira', msg: `${prefix}Superávit muito alto. Ganho de gordura excessivo.`, color: 'text-orange-500' };
+            if (diffP < -10 * relax) return { score: 'Crítico', msg: `${prefix}Proteína insuficiente para anabolismo.`, color: 'text-red-500' };
+            if (diffKcal < -150 * relax) return { score: 'Alerta', msg: `${prefix}Déficit detectado. Você não vai ganhar massa assim.`, color: 'text-orange-500' };
+            if (Math.abs(diffP) < 30 * relax && Math.abs(diffKcal) < 200 * relax) return { score: 'Alpha Performance', msg: `${prefix}Bulking limpo e otimizado!`, color: 'text-emerald-500' };
+            if (diffKcal > 500 * relax) return { score: 'Sujeira', msg: `${prefix}Superávit muito alto. Ganho de gordura excessivo.`, color: 'text-orange-500' };
         } else {
             // In Cutting, excess protein is Good, but excess calories are critical
-            if (diffKcal > 100) return { score: 'Crítico', msg: `${prefix}Calorias acima do limite para Cutting.`, color: 'text-red-500' };
-            if (diffP < -15) return { score: 'Alerta', msg: `${prefix}Proteína baixa. Risco de perda muscular.`, color: 'text-orange-500' };
-            if (Math.abs(diffKcal) < 150 && diffP >= -5) return { score: 'Alpha Performance', msg: `${prefix}Cutting perfeito e seguro!`, color: 'text-emerald-500' };
+            if (diffKcal > 100 * relax) return { score: 'Crítico', msg: `${prefix}Calorias acima do limite para Cutting.`, color: 'text-red-500' };
+            if (diffP < -15 * relax) return { score: 'Alerta', msg: `${prefix}Proteína baixa. Risco de perda muscular.`, color: 'text-orange-500' };
+            if (Math.abs(diffKcal) < 150 * relax && diffP >= -5 * relax) return { score: 'Alpha Performance', msg: `${prefix}Cutting perfeito e seguro!`, color: 'text-emerald-500' };
         }
 
         return { score: 'Ajustável', msg: `${prefix}Bons alimentos, ajuste as porções para seus macros.`, color: 'text-yellow-500' };
@@ -601,7 +641,91 @@ export default function DashboardPage() {
     const overallScore = getOverallPerformance();
 
     return (
-        <div className="min-h-screen flex bg-[#F4F6F8] font-sans selection:bg-emerald-200">
+        <div className="h-screen flex bg-white font-sans selection:bg-green-200 overflow-hidden">
+            {/* MOBILE SIDEBAR DRAWER */}
+            <motion.div
+                animate={{ x: sidebarOpen ? 0 : -320 }}
+                transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
+                className="fixed left-0 top-0 h-screen w-80 bg-white shadow-2xl z-[95] lg:hidden flex flex-col overflow-hidden"
+            >
+                <div className="p-10 border-b border-zinc-100 flex items-center gap-3 bg-gradient-to-r from-green-400 to-green-700">
+                    <div className="p-2.5 rounded-xl bg-white/20 text-white shadow-lg">
+                        <Activity className="w-6 h-6" />
+                    </div>
+                    <h1 className="font-black tracking-tighter text-white text-xl leading-none uppercase italic pr-4">Nutri<br />Academic</h1>
+                </div>
+
+                <div className="flex-1 px-4 space-y-2 overflow-y-auto py-4">
+                    {SIDEBAR_ITEMS.map((item) => {
+                        const Icon = item.icon;
+                        const isLocked = !isPro && item.proOnly;
+
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => {
+                                    setSidebarOpen(false);
+                                    if (item.isExternal) {
+                                        window.location.href = '/nutricao-esportiva';
+                                    } else {
+                                        setActiveTab(item.id as any);
+                                    }
+                                }}
+                                className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 group ${activeTab === item.id
+                                    ? 'bg-zinc-950 text-white shadow-xl'
+                                    : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900'
+                                    }`}
+                            >
+                                <div className="flex items-center gap-4">
+                                    <Icon className="w-5 h-5" />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
+                                </div>
+                                {isLocked && <Lock className="w-3 h-3 text-zinc-300" />}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                <div className="p-4 border-t border-zinc-100">
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-green-600 hover:bg-green-50 rounded-lg transition"
+                    >
+                        <LogOut className="w-4 h-4" />
+                        <span className="text-xs font-semibold uppercase">Sair</span>
+                    </button>
+                </div>
+            </motion.div>
+
+            {/* MOBILE DRAWER HANDLE */}
+            {!sidebarOpen && (
+                <motion.button
+                    onClick={() => setSidebarOpen(true)}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    whileHover={{ x: 10 }}
+                    className="fixed left-0 top-1/2 -translate-y-1/2 bg-green-600 hover:bg-green-700 text-white rounded-r-lg shadow-lg z-[90] lg:hidden p-3 transition-all"
+                    title="Abrir menu"
+                >
+                    <motion.div
+                        animate={{ x: sidebarOpen ? 20 : 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <ChevronRight className="w-6 h-6" />
+                    </motion.div>
+                </motion.button>
+            )}
+
+            {/* OVERLAY */}
+            {sidebarOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setSidebarOpen(false)}
+                    className="fixed inset-0 bg-black/40 z-[85] lg:hidden"
+                />
+            )}
             {/* SIDEBAR */}
             <aside className="hidden lg:flex w-80 flex-col bg-white border-r border-zinc-200 shadow-sm z-10 sticky top-0 h-screen">
                 <div className="p-10 border-b border-zinc-100 flex items-center gap-3">
@@ -651,7 +775,7 @@ export default function DashboardPage() {
                     {profile?.is_admin && (
                         <Link
                             href="/admin-nutri-master"
-                            className="w-full mt-10 flex items-center gap-4 px-6 py-4 rounded-2xl bg-emerald-600/10 border border-emerald-600/20 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all duration-300 group shadow-lg shadow-emerald-500/5"
+                            className="w-full mt-10 flex items-center gap-4 px-6 py-4 rounded-2xl bg-green-600/10 border border-green-600/20 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 group shadow-lg shadow-green-500/5"
                         >
                             <ShieldCheck className="w-5 h-5 transition-transform group-hover:rotate-12" />
                             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Painel Admin Master</span>
@@ -681,8 +805,8 @@ export default function DashboardPage() {
             </aside >
 
             {/* MAIN */}
-            < main className="flex-1 flex flex-col h-screen overflow-hidden" >
-                <div className="flex-1 overflow-y-auto p-6 sm:p-12 md:p-16 relative">
+            <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                <div className="flex-1 overflow-y-auto p-6 sm:p-8 md:p-12 relative">
 
                     {/* Upper Header Control */}
                     <div className="flex flex-col xl:flex-row justify-between xl:items-end mb-16 gap-8">
@@ -768,7 +892,7 @@ export default function DashboardPage() {
                                             <Scale className="w-5 h-5 text-zinc-300" />
                                         </div>
                                         <div className="text-5xl font-black text-zinc-900 tracking-tighter italic">{weight || '--'} <span className="text-xs text-zinc-300 not-italic uppercase tracking-widest">kg</span></div>
-                                        <p className="text-[9px] font-black text-emerald-500 bg-emerald-50 px-3 py-1.5 rounded-full w-fit mt-5 uppercase tracking-widest border border-emerald-100">Algoritmo Ativado</p>
+                                        <p className="text-[9px] font-black text-green-500 bg-green-50 px-3 py-1.5 rounded-full w-fit mt-5 uppercase tracking-widest border border-green-100">Algoritmo Ativado</p>
                                     </div>
 
                                     <div className="bg-zinc-950 rounded-[2.5rem] p-10 shadow-2xl text-white relative overflow-hidden group transition-all hover:scale-[1.02] hover:shadow-[0_40px_100px_rgba(0,0,0,0.3)]">
@@ -1115,41 +1239,69 @@ export default function DashboardPage() {
                                             { id: 'standard', label: 'Alpha Standard', desc: 'Equilíbrio entre custo e performance.', icon: <Utensils className="w-5 h-5" /> },
                                             { id: 'economical', label: 'Essencial/Econômico', desc: 'Foco em ovos, arroz, feijão e frango.', icon: <Calculator className="w-5 h-5" /> },
                                             { id: 'practical', label: 'Ultra Praticidade', desc: 'Shakes, marmitas e lanches rápidos.', icon: <Zap className="w-5 h-5" /> }
-                                        ].map((cat) => (
-                                            <button
-                                                key={cat.id}
-                                                onClick={() => {
-                                                    if (!isPro && cat.id !== 'standard') {
-                                                        alert("Este catálogo é exclusivo para assinantes Alpha Pro.");
-                                                        return;
-                                                    }
-                                                    setSelectedProfile(cat.id as any);
-                                                    if (isEditingDiet) {
-                                                        const template = cat.id === 'standard' ? DIET_CATALOG.standard : cat.id === 'economical' ? DIET_CATALOG.economical : DIET_CATALOG.practical;
-                                                        const meals = mode === 'cutting' ? template.cutting : template.bulking;
-                                                        setCustomMeals(meals.map(s => ({
-                                                            id: Math.random().toString(36).substr(2, 9),
-                                                            name: s.name,
-                                                            time: s.time,
-                                                            items: s.items,
-                                                            protein: s.protein,
-                                                            carbs: s.carbs,
-                                                            fats: s.fats,
-                                                            calories: s.calories,
-                                                            mode: mode
-                                                        })));
-                                                    }
-                                                }}
-                                                className={`p-6 rounded-[2rem] border-2 text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${selectedProfile === cat.id ? `${accentBorder} bg-white shadow-xl` : 'border-zinc-100 bg-zinc-50/50 opacity-60 hover:opacity-100'} relative overflow-hidden`}
-                                            >
-                                                {!isPro && cat.id !== 'standard' && <div className="absolute top-4 right-4"><Lock className="w-4 h-4 text-zinc-300" /></div>}
-                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${selectedProfile === cat.id ? accentBg + ' text-white' : 'bg-white text-zinc-300'}`}>
-                                                    {cat.icon}
-                                                </div>
-                                                <h4 className="font-black italic uppercase tracking-tighter mb-1 text-sm">{cat.label}</h4>
-                                                <p className="text-[10px] text-zinc-400 font-bold leading-tight">{cat.desc}</p>
-                                            </button>
-                                        ))}
+                                        ].map((cat) => {
+                                            // compute quick evaluation for this catalog (day total)
+                                            const template = cat.id === 'standard' ? DIET_CATALOG.standard : cat.id === 'economical' ? DIET_CATALOG.economical : DIET_CATALOG.practical;
+                                            const meals = mode === 'cutting' ? template.cutting : template.bulking;
+                                            const totals = meals.reduce((acc, m) => ({ p: acc.p + (m.protein || 0), c: acc.c + (m.carbs || 0), f: acc.f + (m.fats || 0), kcal: acc.kcal + (m.calories || 0) }), { p: 0, c: 0, f: 0, kcal: 0 });
+                                            const diffP = totals.p - finalProtein;
+                                            const diffKcal = totals.kcal - finalCalories;
+                                            let catScore = 'Ajustável';
+                                            let catColor = 'text-yellow-500';
+                                            if (mode === 'bulking') {
+                                                if (diffP < -10) { catScore = 'Crítico'; catColor = 'text-red-500'; }
+                                                else if (diffKcal < -150) { catScore = 'Alerta'; catColor = 'text-orange-500'; }
+                                                else if (Math.abs(diffP) < 30 && Math.abs(diffKcal) < 200) { catScore = 'Alpha Performance'; catColor = 'text-emerald-500'; }
+                                                else if (diffKcal > 500) { catScore = 'Sujeira'; catColor = 'text-orange-500'; }
+                                            } else {
+                                                if (diffKcal > 100) { catScore = 'Crítico'; catColor = 'text-red-500'; }
+                                                else if (diffP < -15) { catScore = 'Alerta'; catColor = 'text-orange-500'; }
+                                                else if (Math.abs(diffKcal) < 150 && diffP >= -5) { catScore = 'Alpha Performance'; catColor = 'text-emerald-500'; }
+                                            }
+
+                                            return (
+                                                <button
+                                                    key={cat.id}
+                                                    onClick={() => {
+                                                        if (!isPro && cat.id !== 'standard') {
+                                                            alert("Este catálogo é exclusivo para assinantes Alpha Pro.");
+                                                            return;
+                                                        }
+                                                        setSelectedProfile(cat.id as any);
+                                                        if (isEditingDiet) {
+                                                            const templateInner = cat.id === 'standard' ? DIET_CATALOG.standard : cat.id === 'economical' ? DIET_CATALOG.economical : DIET_CATALOG.practical;
+                                                            const mealsInner = mode === 'cutting' ? templateInner.cutting : templateInner.bulking;
+                                                            setCustomMeals(mealsInner.map(s => ({
+                                                                id: Math.random().toString(36).substr(2, 9),
+                                                                name: s.name,
+                                                                time: s.time,
+                                                                items: s.items,
+                                                                protein: s.protein,
+                                                                carbs: s.carbs,
+                                                                fats: s.fats,
+                                                                calories: s.calories,
+                                                                mode: mode
+                                                            })));
+                                                        }
+                                                    }}
+                                                    className={`p-6 rounded-[2rem] text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${selectedProfile === cat.id ? `${accentBorder} bg-white shadow-xl` : 'border-zinc-100 bg-zinc-50/50 opacity-60 hover:opacity-100'} relative overflow-hidden`}
+                                                >
+                                                    {!isPro && cat.id !== 'standard' && <div className="absolute top-4 right-4"><Lock className="w-4 h-4 text-zinc-300" /></div>}
+                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${selectedProfile === cat.id ? accentBg + ' text-white' : 'bg-white text-zinc-300'}`}>
+                                                        {cat.icon}
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <div>
+                                                            <h4 className="font-black italic uppercase tracking-tighter mb-1 text-sm">{cat.label}</h4>
+                                                            <p className="text-[10px] text-zinc-400 font-bold leading-tight">{cat.desc}</p>
+                                                        </div>
+                                                        <div className="ml-4 flex-shrink-0 text-right">
+                                                            <span className={`px-3 py-1 rounded-full text-xs font-black ${catColor.replace('text', 'bg').replace('500', '50/50')} ${catColor}`}>{catScore}</span>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
@@ -1242,7 +1394,7 @@ export default function DashboardPage() {
 
                                 <div className="grid grid-cols-1 gap-6">
                                     {(isEditingDiet ? customMeals.filter(m => m.mode === mode) : (useMeals || displaySuggestions)).map((food: any, i) => (
-                                        <div key={i} className="bg-white rounded-[3rem] p-10 border border-zinc-200 shadow-sm relative group overflow-hidden">
+                                        <div key={i} className="rounded-[3rem] p-10 bg-transparent shadow-sm relative group overflow-hidden">
                                             <div className="flex flex-col xl:flex-row gap-10 items-start xl:items-center">
                                                 <div className={`w-32 h-32 rounded-[2rem] ${accentLightBg} border-2 ${accentBorder} flex flex-col items-center justify-center font-black ${accentColor} shadow-inner`}>
                                                     <span className="text-[10px] uppercase tracking-widest mb-1 opacity-50">T-Minus</span>

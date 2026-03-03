@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #CCFF00;
-  --color-background: #020202;
-  --color-foreground: #ededed;
+  /* primary brand color (mid-range green) */
+  --color-primary: #4cff4c;
+  /* consistent white background throughout the app */
+  --color-background: #ffffff;
+  /* default text/foreground should be true black */
+  --color-foreground: #000000;
 
   --font-sans: var(--font-montserrat), sans-serif;
 }
@@ -14,8 +17,85 @@
 
 @layer base {
   :root {
+    /* use full white and full black for clarity */
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 0 0% 0%;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    color: hsl(var(--foreground));
+    background: hsl(var(--background));
+    overflow-x: hidden;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Suporte a safe area para notches */
+  @supports (padding: max(0px)) {
+    body {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  }
+}
+
+@layer components {
+  /* Touch-friendly buttons */
+  button, a {
+    @apply transition-all duration-200;
+  }
+
+  /* Melhor contraste em mobile */
+  @media (max-width: 768px) {
+    h1 {
+      @apply text-3xl sm:text-4xl;
+    }
+
+    h2 {
+      @apply text-2xl sm:text-3xl;
+    }
+
+    h3 {
+      @apply text-lg sm:text-xl;
+    }
+
+    button {
+      @apply min-h-[44px] min-w-[44px];
+    }
+
+    a {
+      @apply min-h-[44px] flex items-center;
+    }
+
+    input, textarea, select {
+      @apply text-base;
+    }
+  }
+
+  /* Dark mode optimization para Safari */
+  @supports (color: oklch(0 0 0)) {
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      @apply bg-zinc-900;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      @apply bg-zinc-700 rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      @apply bg-zinc-600;
+    }
   }
 }
 

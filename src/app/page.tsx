@@ -1,265 +1,230 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
-  ArrowRight, Activity, ShieldCheck, Flame, Medal,
-  Dna, Zap, Target, Brain, CheckCircle2,
-  Instagram, Twitter, Github, Mail, ArrowUpRight,
-  ChevronRight, Lock, Sparkles, Trophy, MousePointer2
+  ArrowRight,
+  Activity,
+  BarChart3,
+  Zap,
+  Target,
+  Brain,
+  Users,
+  Dna,
+  ChevronRight,
+  Sparkles,
+  Menu,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2, delayChildren: 0.3 },
-  },
-} as const;
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100, damping: 10 } },
-} as const;
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { type: "spring", stiffness: 100 },
+};
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navigationLinks = [
+    { href: "#recursos", label: "Recursos" },
+    { href: "#beneficios", label: "Benefícios" },
+    { href: "/pricing", label: "Preços" },
+  ];
+
   return (
-    <main className="relative min-h-screen bg-[#050505] text-white selection:bg-primary selection:text-black font-sans">
-
-      {/* BARRA DE NAVEGAÇÃO */}
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm">
-        <div className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#CCFF00] to-[#4A7A00] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(204,255,0,0.3)] group-hover:scale-110 transition-transform">
-            <Activity className="text-black w-6 h-6" />
-          </div>
-          <span className="text-2xl font-black italic uppercase tracking-tighter bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent">NutriAcademic</span>
-        </div>
-        <div className="hidden md:flex items-center gap-10">
-          <Link href="#features" className="text-[10px] font-black uppercase tracking-[0.2em] hover:text-[#CCFF00] transition-colors">Tecnologia</Link>
-          <Link href="#science" className="text-[10px] font-black uppercase tracking-[0.2em] hover:text-[#CCFF00] transition-colors">Ciência</Link>
-          <Link href="/pricing" className="text-[10px] font-black uppercase tracking-[0.2em] hover:text-[#CCFF00] transition-colors">Planos</Link>
-          <Link href="/login" className="px-6 py-2 border border-zinc-800 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">Portal Alpha</Link>
-        </div>
-      </nav>
-
-      {/* SEÇÃO HERO */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/whisk-hero.jpeg"
-            alt="Ambiente de Performance NutriAcademic"
-            fill
-            className="object-cover object-center opacity-30 grayscale-[10%]"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/40"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-transparent to-[#050505]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#050505_100%)]"></div>
-        </div>
-
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#CCFF00] rounded-full mix-blend-soft-light filter blur-[180px] opacity-10 z-0"></div>
-
-        <motion.div
-          className="z-10 flex flex-col items-center text-center px-6 max-w-6xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="mb-8 flex items-center space-x-3 bg-zinc-900/80 backdrop-blur-xl border border-white/5 px-6 py-3 rounded-2xl shadow-2xl"
-          >
-            <Sparkles className="text-[#CCFF00] w-4 h-4 animate-pulse" />
-            <span className="text-zinc-400 font-black tracking-[0.3em] uppercase text-[9px]">Motor de Performance Neural 2.0</span>
-          </motion.div>
-
-          <motion.h1
-            variants={itemVariants}
-            className="text-6xl md:text-[10rem] font-black italic tracking-tight leading-[0.85] mb-8 uppercase"
-          >
-            EVOLUÇÃO <br />
-            <span className="bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent pr-4 translate-x-2 inline-block">INTELIGENTE</span>
-          </motion.h1>
-
-          <motion.p
-            variants={itemVariants}
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-14 font-medium leading-relaxed italic"
-          >
-            Sua jornada fitness guiada por algoritmos avançados. <br className="hidden md:block" />
-            Não é apenas uma dieta, é engenharia para o seu corpo.
-          </motion.p>
-
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 items-center justify-center w-full max-w-2xl mx-auto">
-            <Link
-              href="/login"
-              className="group relative w-full sm:w-auto inline-flex items-center justify-center px-10 py-6 font-black uppercase tracking-[0.2em] text-black bg-gradient-to-r from-[#CCFF00] to-[#BDFF00] rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_rgba(204,255,0,0.15)]"
-            >
-              <span className="relative z-10 flex items-center gap-3 text-xs italic">
-                Começar Agora <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-              </span>
-            </Link>
-            <Link
-              href="/pricing"
-              className="w-full sm:w-auto px-10 py-6 bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all flex items-center justify-center gap-3"
-            >
-              <Trophy className="w-4 h-4 text-zinc-500" /> Ver Planos Elite
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 cursor-pointer"
-        >
-          <span className="text-[8px] font-black uppercase tracking-[0.4em] text-zinc-600">O Mapa da Evolução</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-[#CCFF00] to-transparent opacity-50"></div>
-        </motion.div>
-      </section>
-
-      {/* BANNER DE ACESSO RESTRITO */}
-      <div className="bg-[#CCFF00]/5 border-y border-white/5 py-4 overflow-hidden whitespace-nowrap">
-        <div className="flex animate-marquee gap-20">
-          {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="flex items-center gap-4">
-              <Lock className="w-3 h-3 text-[#CCFF00] opacity-50" />
-              <span className="text-[10px] font-black uppercase tracking-[1em] text-zinc-500">AUTENTICAÇÃO NECESSÁRIA PARA ACESSO AO SISTEMA</span>
-            </div>
-          ))}
-        </div>
+    <main className="relative min-h-screen bg-white text-black font-sans overflow-x-hidden">
+      {/* Background accents */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 -left-4 w-96 h-96 bg-green-400/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 -right-4 w-96 h-96 bg-green-400/5 rounded-full blur-3xl" />
       </div>
 
-      {/* SEÇÃO DE TECNOLOGIA */}
-      <section id="features" className="py-40 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative group h-[600px] rounded-[3rem] overflow-hidden border border-zinc-800 shadow-[0_50px_100px_rgba(0,0,0,0.5)]"
-            >
-              <Image
-                src="/whisk-hero.jpeg"
-                alt="Prévia da Tecnologia"
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-50"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-              <div className="absolute bottom-12 left-12 right-12">
-                <div className="bg-black/80 backdrop-blur-2xl p-8 rounded-[2rem] border border-white/10 shadow-2xl">
-                  <p className="bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent font-black uppercase text-[9px] tracking-[0.4em] mb-4">Display em Tempo Real</p>
-                  <h4 className="text-3xl font-black italic uppercase pr-6 leading-none mb-6">Interface de <br /> Alta Precisão</h4>
-                  <div className="space-y-3">
-                    <div className="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
-                      <motion.div className="h-full bg-gradient-to-r from-[#CCFF00] to-[#4A7A00]" initial={{ width: 0 }} whileInView={{ width: "92%" }} transition={{ duration: 1.5 }} />
-                    </div>
-                    <div className="flex justify-between text-[10px] font-black uppercase text-zinc-500">
-                      <span>Sincronia Metabólica</span>
-                      <span className="text-white">92%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <div className="space-y-12">
-              <div>
-                <h2 className="bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent font-black uppercase tracking-widest text-xs mb-6 flex items-center gap-3">
-                  <div className="w-8 h-[1px] bg-[#CCFF00]"></div> SISTEMA NUTRIACADEMIC
-                </h2>
-                <h3 className="text-5xl md:text-7xl font-black italic uppercase pr-10 leading-[0.9] tracking-tighter mb-10">
-                  CHEGA DE <br /> <span className="text-zinc-500 opacity-30">ADIVINHAR.</span>
-                </h3>
-                <p className="text-zinc-400 text-lg leading-relaxed font-medium mb-12 italic">
-                  NutriAcademic não é apenas um app de dieta. É uma ferramenta para quem busca o máximo de resultados com base em dados reais e ciência aplicada.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6">
-                {[
-                  { title: "Modos Dinâmicos", desc: "Mude entre Cutting (perda) e Bulking (ganho) instantaneamente.", icon: Zap },
-                  { title: "Catálogo Inteligente", desc: "Sugestões de refeições baseadas no que você tem disponível.", icon: Target },
-                  { title: "O Grid", desc: "Sistema de hábitos para manter sua disciplina no topo todos os dias.", icon: Activity }
-                ].map((item, i) => (
-                  <Link key={i} href="/login" className="group flex items-center gap-8 p-8 bg-zinc-900/30 border border-white/5 rounded-[2.5rem] hover:bg-zinc-900/80 transition-all hover:border-[#CCFF00]/20">
-                    <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-[#CCFF00]/30 transition-all shadow-inner shadow-zinc-800">
-                      <item.icon className="w-6 h-6 text-zinc-500 group-hover:text-[#CCFF00] transition-colors" />
-                    </div>
-                    <div>
-                      <h4 className="font-black italic uppercase tracking-tighter mb-1">{item.title}</h4>
-                      <p className="text-xs text-zinc-500 font-medium leading-relaxed">{item.desc}</p>
-                    </div>
-                    <Lock className="w-4 h-4 ml-auto text-zinc-800 group-hover:text-zinc-600 transition-colors" />
-                  </Link>
-                ))}
-              </div>
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-green-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 sm:gap-3"
+          >
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-green-400 to-green-700 rounded-lg flex items-center justify-center shadow-lg shadow-green-400/20">
+              <Activity className="text-white w-5 h-5 sm:w-6 sm:h-6" />
             </div>
+            <span className="text-lg sm:text-xl font-black bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent uppercase italic">
+              NutriAcademic
+            </span>
+          </motion.div>
+
+          <div className="hidden md:flex items-center gap-8">
+            {navigationLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="text-sm font-semibold text-black hover:text-green-600 transition">
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3 sm:gap-4">
+            <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition">
+              {menuOpen ? <X className="w-6 h-6 text-green-600" /> : <Menu className="w-6 h-6 text-green-600" />}
+            </button>
+
+            <Link href="/login" className="hidden sm:block px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-black hover:text-green-600 transition">
+              Login
+            </Link>
+            <Link href="/login" className="px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 rounded-lg transition min-h-[44px] flex items-center uppercase font-black">
+              Começar
+            </Link>
           </div>
         </div>
-      </section>
 
-      {/* CHAMADA PARA AÇÃO - LOGIN */}
-      <section className="py-40 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="p-16 rounded-[4rem] bg-zinc-900 border border-white/5 shadow-2xl space-y-12"
-          >
-            <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/20 rounded-full">
-              <MousePointer2 className="w-4 h-4 text-[#CCFF00]" />
-              <p className="text-[10px] font-black uppercase text-[#CCFF00] tracking-widest">Acesso Restrito</p>
+        {/* Mobile menu expanded */}
+        {menuOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="md:hidden bg-white backdrop-blur border-t border-green-200 p-6 space-y-4">
+            {navigationLinks.map((link) => (
+              <Link key={link.href} href={link.href} onClick={() => setMenuOpen(false)} className="block px-4 py-3 text-sm font-semibold text-black hover:text-green-600 hover:bg-green-50 rounded-lg transition min-h-[44px] flex items-center">
+                {link.label}
+              </Link>
+            ))}
+            <Link href="/login" onClick={() => setMenuOpen(false)} className="block px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-lg transition min-h-[44px] flex items-center uppercase font-black">
+              Login
+            </Link>
+          </motion.div>
+        )}
+      </nav>
+
+      {/* Hero */}
+      <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-40 px-4 sm:px-6 lg:px-8 z-10">
+        <div className="max-w-7xl mx-auto">
+          <motion.div variants={fadeInUp} initial="initial" animate="animate" className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 border border-green-300 rounded-full mb-6 bg-green-50 backdrop-blur">
+              <Sparkles className="w-4 h-4 text-green-600" />
+              <span className="text-xs sm:text-sm font-black text-green-700 uppercase tracking-wider">Revolução em Nutrição Esportiva</span>
             </div>
 
-            <h3 className="text-5xl font-black italic uppercase leading-none pr-4 tracking-tighter">
-              Somente Para <br /> <span className="bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent pr-6 translate-x-3 inline-block">Membros Elite</span>
-            </h3>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 leading-[0.9]">
+              <span className="block text-black">Performance</span>
+              <span className="bg-gradient-to-r from-green-500 via-green-600 to-green-700 bg-clip-text text-transparent">Otimizada</span>
+            </h1>
 
-            <p className="text-zinc-500 font-bold max-w-xl mx-auto leading-relaxed">
-              O acesso completo ao ecossistema NutriAcademic requer login. Proteja seus dados e sincronize sua evolução com nossa tecnologia.
-            </p>
+            <p className="text-lg sm:text-xl text-black max-w-2xl mx-auto leading-relaxed mb-8">Análises genômicas, suplementação científica e planos personalizados para atletas que querem mais.</p>
+          </motion.div>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-              <Link href="/login" className="px-12 py-6 bg-gradient-to-r from-[#CCFF00] to-[#BDFF00] text-black font-black uppercase tracking-widest text-[11px] rounded-[1.75rem] shadow-[0_20px_40px_rgba(204,255,0,0.15)] hover:scale-105 active:scale-95 transition-all">Sincronizar Agora</Link>
-              <Link href="/login" className="px-12 py-6 bg-zinc-800 text-white font-black uppercase tracking-widest text-[11px] rounded-[1.75rem] hover:bg-zinc-700 transition-all">Criar Conta</Link>
-            </div>
+          <motion.div variants={fadeInUp} initial="initial" animate="animate" transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-16 sm:mb-32">
+            <Link href="/login" className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-black rounded-xl transition-all min-h-[52px] flex items-center justify-center gap-2 uppercase tracking-wider shadow-lg shadow-green-600/30">
+              Começar Grátis <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link href="/pricing" className="w-full sm:w-auto px-8 py-4 border-2 border-green-500 hover:border-green-600 text-green-600 hover:text-green-700 hover:bg-green-50 font-black rounded-xl transition-all min-h-[52px] flex items-center justify-center gap-2 uppercase tracking-wider">
+              Ver Planos <ChevronRight className="w-5 h-5" />
+            </Link>
+          </motion.div>
+
+          <motion.div variants={fadeInUp} initial="initial" animate="animate" transition={{ delay: 0.3 }} className="relative rounded-2xl overflow-hidden shadow-2xl shadow-green-600/20 aspect-video border border-green-200">
+            <Image src="/whisk-hero.jpeg" alt="Hero" fill className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
           </motion.div>
         </div>
       </section>
 
-      {/* RODAPÉ */}
-      <footer className="py-20 px-6 border-t border-white/5 bg-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-          <div className="flex items-center gap-4 group">
-            <Activity className="text-[#CCFF00] w-8 h-8 group-hover:scale-110 transition-transform" />
-            <span className="text-2xl font-black italic uppercase tracking-tighter bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent">NutriAcademic</span>
+      {/* Features */}
+      <section id="recursos" className="relative py-20 sm:py-40 px-4 sm:px-6 lg:px-8 z-10 border-t border-green-200">
+        <div className="max-w-7xl mx-auto">
+          <motion.div variants={fadeInUp} initial="initial" whileInView="animate" viewport={{ once: true }} className="text-center mb-16 sm:mb-24">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight"><span className="text-black">Tecnologia</span> <span className="bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">Avançada</span></h2>
+            <p className="text-black text-base sm:text-lg max-w-2xl mx-auto">Ferramentas científicas para otimizar seu corpo e performance</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {[
+              { icon: Dna, title: "Análise Genômica", desc: "Personalizações baseadas em seu perfil genético" },
+              { icon: BarChart3, title: "Dashboard Intuitivo", desc: "Métricas em tempo real de performance" },
+              { icon: Zap, title: "Suplementos IA", desc: "Recomendações otimizadas por algoritmo" },
+              { icon: Users, title: "Comunidade Pro", desc: "Network com atletas e profissionais" },
+              { icon: Brain, title: "IA Adaptativa", desc: "Algoritmo que aprende com seus dados" },
+              { icon: Target, title: "Planos 360°", desc: "Estratégias personalizadas por esporte" },
+            ].map((f, i) => (
+              <motion.div key={i} variants={fadeInUp} initial="initial" whileInView="animate" viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-8 bg-gradient-to-br from-green-50 to-white rounded-2xl border border-green-200 hover:border-green-400 hover:shadow-xl hover:shadow-green-600/20 transition-all group">
+                <f.icon className="w-12 h-12 text-green-600 mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-black mb-3 text-black">{f.title}</h3>
+                <p className="text-black text-sm">{f.desc}</p>
+              </motion.div>
+            ))}
           </div>
-          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-700">© 2024 NutriAcademic Bio-Systems. Acesso Restrito.</p>
-          <div className="flex gap-6">
-            <Link href="/login" className="text-zinc-600 hover:text-white transition-colors"><Lock className="w-5 h-5" /></Link>
-            <Link href="/login" className="text-zinc-600 hover:text-white transition-colors"><Mail className="w-5 h-5" /></Link>
-            <Link href="/login" className="text-zinc-600 hover:text-white transition-colors"><Instagram className="w-5 h-5" /></Link>
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <section id="beneficios" className="relative py-20 sm:py-40 px-4 sm:px-6 lg:px-8 z-10 border-t border-green-200">
+        <div className="max-w-7xl mx-auto">
+          <motion.div variants={fadeInUp} initial="initial" whileInView="animate" viewport={{ once: true }} className="text-center mb-16 sm:mb-24">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight"><span className="bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">Resultados</span> <span className="text-black">Comprovados</span></h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            {[
+              { number: "3x", text: "Mais eficiente na otimização nutricional" },
+              { number: "2x", text: "Redução de tempo em análises" },
+              { number: "95%", text: "Taxa de satisfação entre atletas" },
+              { number: "500+", text: "Combinações de suplementos analisadas" },
+            ].map((b, i) => (
+              <motion.div key={i} variants={fadeInUp} initial="initial" whileInView="animate" viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-8 bg-gradient-to-r from-green-100 to-green-50 rounded-2xl border border-green-300 group">
+                <div className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform origin-left">{b.number}</div>
+                <p className="text-lg text-black">{b.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-8 z-10">
+        <motion.div variants={fadeInUp} initial="initial" whileInView="animate" viewport={{ once: true }} className="max-w-4xl mx-auto bg-gradient-to-r from-green-50 via-white to-green-50 rounded-3xl p-12 sm:p-16 text-center border border-green-300 backdrop-blur">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-black tracking-tight">Pronto para<br /><span className="bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">Descolar?</span></h2>
+          <p className="text-lg sm:text-xl text-black mb-8 max-w-2xl mx-auto">Junte-se a centenas de atletas que já otimizaram sua performance com NutriAcademic</p>
+          <Link href="/login" className="inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-black rounded-2xl transition-all min-h-[56px] uppercase tracking-wider shadow-lg shadow-green-600/30 hover:scale-105">Começar Agora <ArrowRight className="w-5 h-5" /></Link>
+        </motion.div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative border-t border-green-200 bg-gradient-to-b from-white to-green-50 py-12 sm:py-16 px-4 sm:px-6 lg:px-8 z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-700 rounded-lg flex items-center justify-center">
+                  <Activity className="text-white w-5 h-5" />
+                </div>
+                <span className="font-black bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent uppercase">NutriAcademic</span>
+              </div>
+              <p className="text-black text-sm">Nutrição científica para atletas em busca de performance máxima.</p>
+            </div>
+
+            <div>
+              <h4 className="text-black font-black mb-4 uppercase">Produto</h4>
+              <ul className="space-y-2 text-sm text-black">
+                <li><Link href="/pricing" className="hover:text-green-600 transition">Preços</Link></li>
+                <li><Link href="/nutricao-esportiva" className="hover:text-green-600 transition">Nutrição Esportiva</Link></li>
+                <li><Link href="/dashboard" className="hover:text-green-600 transition">Dashboard</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-black font-black mb-4 uppercase">Legal</h4>
+              <ul className="space-y-2 text-sm text-black">
+                <li><a href="#" className="hover:text-green-600 transition">Privacidade</a></li>
+                <li><a href="#" className="hover:text-green-600 transition">Termos</a></li>
+                <li><a href="#" className="hover:text-green-600 transition">Contato</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-green-200 pt-8 text-center text-sm text-black">
+            <p>&copy; 2026 NutriAcademic. Todos os direitos reservados. Desenvolvido com ⚡ para atletas.</p>
           </div>
         </div>
       </footer>
-
-      <style jsx global>{`
-        .stroke-text {
-          -webkit-text-stroke: 1px rgba(255,255,255,0.2);
-          color: transparent;
-        }
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          display: flex;
-          animation: marquee 30s linear infinite;
-        }
-      `}</style>
     </main>
   );
 }

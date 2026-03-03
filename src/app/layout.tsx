@@ -11,6 +11,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "NutriAcademic",
   description: "MicroSaaS de Nutrição de alta performance with PIX subscriptions.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes",
 };
 
 export default function RootLayout({
