@@ -113,9 +113,9 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                         <p className="text-sm font-bold text-zinc-500 text-center px-4">Faça upload da tabela nutricional do pote.</p>
 
                         {!isPro && (
-                            <div className="mt-8 px-4 py-2 bg-white/5 rounded-full inline-flex items-center gap-2 border border-white/10">
-                                <Sparkles className="w-3 h-3 text-yellow-500" />
-                                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Scan Grátis: 1 disponível</span>
+                            <div className="mt-8 px-5 py-3 bg-white/10 rounded-full inline-flex items-center gap-3 border border-white/20">
+                                <Sparkles className="w-4 h-4 text-yellow-400" />
+                                <span className="text-xs font-black uppercase tracking-widest text-white">Scan Grátis: 1 disponível</span>
                             </div>
                         )}
                     </div>
@@ -138,9 +138,11 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                                         className="absolute w-full h-1 bg-[#CCFF00] shadow-[0_0_20px_#CCFF00] z-20"
                                     ></motion.div>
                                     <div className="absolute inset-x-0 bottom-0 top-0 opacity-20 bg-[linear-gradient(transparent_50%,rgba(0,0,0,1)_50%)] bg-[length:100%_4px] bg-repeat-y z-10 pointer-events-none"></div>
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center z-30">
-                                        <SearchCode className="w-12 h-12 text-[#CCFF00] animate-pulse mb-4" />
-                                        <p className="text-[#CCFF00] font-black uppercase tracking-widest text-xs animate-pulse">Alpha Engine Processing...</p>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center z-30 bg-black/40">
+                                        <div className="bg-black/80 px-6 py-4 rounded-2xl border border-[#CCFF00]/50 flex flex-col items-center shadow-[0_0_30px_rgba(204,255,0,0.2)]">
+                                            <SearchCode className="w-12 h-12 text-[#CCFF00] animate-pulse mb-3" />
+                                            <p className="text-[#CCFF00] font-black uppercase tracking-widest text-sm animate-pulse text-center leading-tight">Alpha Engine<br />Processando...</p>
+                                        </div>
                                     </div>
                                 </>
                             )}
@@ -155,9 +157,9 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                         {!isScanning && !result && !errorMsg && (
                             <button
                                 onClick={triggerScan}
-                                className="bg-white text-black font-black uppercase px-10 py-5 rounded-2xl tracking-[0.2em] text-sm hover:scale-105 transition-transform flex items-center gap-3 w-full sm:w-auto justify-center"
+                                className="bg-[#CCFF00] text-black font-black uppercase px-12 py-6 rounded-2xl tracking-widest text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-3 w-full sm:w-auto justify-center shadow-[0_0_30px_rgba(204,255,0,0.3)]"
                             >
-                                Analisar Produto <Search className="w-5 h-5" />
+                                Iniciar Raio-X AI <Search className="w-5 h-5" />
                             </button>
                         )}
                     </div>
@@ -177,40 +179,40 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                                 <div className="absolute inset-0 bg-red-500/5 animate-[pulse_2s_ease-in-out_infinite]"></div>
                             )}
 
-                            <h4 className="text-[10px] text-zinc-400 font-black uppercase tracking-widest mb-1 italic">Veredito do Laboratório</h4>
-                            <h3 className="text-2xl font-black uppercase mb-6">{result.produto}</h3>
+                            <h4 className="text-xs text-zinc-300 font-black uppercase tracking-widest mb-2 italic">Veredito do Laboratório</h4>
+                            <h3 className="text-3xl font-black uppercase text-white mb-8">{result.produto}</h3>
 
                             <div className="flex justify-center flex-wrap gap-4 mb-8">
-                                <div className="bg-black/40 px-6 py-4 rounded-2xl flex-1 min-w-[120px]">
-                                    <p className="text-[9px] uppercase text-zinc-500 font-black tracking-widest">Proteína/Porção</p>
-                                    <p className="text-xl font-black mt-1">{result.proteina_g}g</p>
-                                    <p className="text-xs text-zinc-500 mt-1">em {result.porcao_g}g</p>
+                                <div className="bg-black/60 border border-white/5 px-8 py-6 rounded-2xl flex-1 min-w-[140px]">
+                                    <p className="text-xs uppercase text-zinc-400 font-black tracking-widest">Proteína/Porção</p>
+                                    <p className="text-3xl font-black text-white mt-2">{result.proteina_g}g</p>
+                                    <p className="text-sm text-zinc-400 mt-1 font-bold">em {result.porcao_g}g</p>
                                 </div>
-                                <div className="bg-black/40 px-6 py-4 rounded-2xl flex-1 min-w-[120px]">
-                                    <p className="text-[9px] uppercase text-zinc-500 font-black tracking-widest">Índice de Pureza</p>
-                                    <p className={`text-4xl font-black italic mt-1 ${result.pureza >= 70 ? 'text-emerald-500' : 'text-red-500'}`}>{result.pureza}%</p>
+                                <div className="bg-black/60 border border-white/5 px-8 py-6 rounded-2xl flex-1 min-w-[140px]">
+                                    <p className="text-xs uppercase text-zinc-400 font-black tracking-widest">Índice de Pureza</p>
+                                    <p className={`text-4xl md:text-5xl font-black italic mt-2 ${result.pureza >= 70 ? 'text-emerald-400' : 'text-red-500'}`}>{result.pureza}%</p>
                                 </div>
                             </div>
 
                             {result.pureza >= 70 ? (
-                                <div className="flex items-center gap-4 bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20 max-w-lg mx-auto">
-                                    <CheckCircle className="w-8 h-8 text-emerald-500 shrink-0" />
+                                <div className="flex items-center gap-6 bg-emerald-950/40 p-6 rounded-2xl border border-emerald-500/30 max-w-lg mx-auto shadow-xl">
+                                    <CheckCircle className="w-12 h-12 text-emerald-400 shrink-0" />
                                     <div className="text-left">
-                                        <p className="text-sm font-black uppercase text-emerald-500">Produto Alpha Aprovado</p>
-                                        <p className="text-xs font-bold italic text-emerald-500/70 mt-1 leading-relaxed">Excelente margem de proteína real. Concentração adequada para construção de massa magna livre de sujeira.</p>
+                                        <p className="text-base font-black uppercase text-emerald-400 mb-1">Produto Alpha Aprovado</p>
+                                        <p className="text-sm font-bold text-emerald-100/90 leading-relaxed">Excelente margem de proteína real. Concentração adequada para construção de massa magna livre de sujeira.</p>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="flex items-center gap-4 bg-red-500/10 p-5 rounded-2xl border border-red-500/20 max-w-lg mx-auto">
-                                    <AlertTriangle className="w-10 h-10 text-red-500 shrink-0 animate-[bounce_1s_infinite]" />
+                                <div className="flex items-center gap-6 bg-red-950/40 p-6 rounded-2xl border border-red-500/30 max-w-lg mx-auto shadow-xl">
+                                    <AlertTriangle className="w-12 h-12 text-red-500 shrink-0 animate-[bounce_1s_infinite]" />
                                     <div className="text-left">
-                                        <p className="text-sm font-black uppercase text-red-500">Whey Fake/Enchimento</p>
-                                        <p className="text-xs font-bold italic text-red-400 mt-1 leading-relaxed">Alto % de carboidrato ou amino spiking. Você está pagando caro por açúcar e pó inócuo. Evite compras futuras.</p>
+                                        <p className="text-base font-black uppercase text-red-500 mb-1">Whey Fake/Enchimento</p>
+                                        <p className="text-sm font-bold text-red-100/90 leading-relaxed">Alto % de carboidrato ou amino spiking. Você está pagando caro por açúcar e pó inócuo. Evite compras futuras.</p>
                                     </div>
                                 </div>
                             )}
 
-                            <button onClick={reset} className="mt-8 text-[11px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
+                            <button onClick={reset} className="mt-10 px-8 py-4 bg-white/5 rounded-2xl text-xs font-black uppercase tracking-widest text-zinc-300 hover:text-white hover:bg-white/10 transition-all border border-white/10">
                                 Escanear outro produto
                             </button>
                         </div>
@@ -220,11 +222,11 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                 {/* ERROR FEEDBACK */}
                 {errorMsg && (
                     <div className="mt-6 w-full">
-                        <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-5 flex flex-col sm:flex-row gap-4 items-center sm:items-start text-center sm:text-left">
-                            <AlertTriangle className="w-8 h-8 text-red-500 shrink-0" />
+                        <div className="bg-red-950/80 border-2 border-red-500/50 rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-center sm:items-start text-center sm:text-left shadow-2xl">
+                            <AlertTriangle className="w-10 h-10 text-red-500 shrink-0" />
                             <div>
-                                <h4 className="text-red-500 font-black uppercase text-sm mb-1">Erro Tático</h4>
-                                <p className="text-zinc-300 text-xs italic font-bold leading-relaxed">{errorMsg}</p>
+                                <h4 className="text-red-400 font-black uppercase text-base mb-2">Erro Tático</h4>
+                                <p className="text-white text-sm font-bold leading-relaxed">{errorMsg}</p>
                             </div>
                         </div>
                         {errorMsg.includes('upgrade') && (
