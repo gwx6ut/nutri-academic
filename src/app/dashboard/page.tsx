@@ -218,68 +218,11 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const fetchUser = async () => {
-<<<<<<< HEAD
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                router.push("/login");
-                return;
-            }
-
-            const { data: profileData } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", user.id)
-                .single();
-
-            const isProLocal = profileData?.plan_type === 'pro' || profileData?.is_admin;
-            if (profileData) {
-                setProfile({ ...profileData, email: user.email });
-                setWeight(profileData.weight || "");
-                setHeight(profileData.height || "");
-                setTargetCalories(profileData.target_calories?.toString() || "");
-                setTargetProtein(profileData.target_protein?.toString() || "");
-                setTargetCarbs(profileData.target_carbs?.toString() || "");
-                setTargetFats(profileData.target_fats?.toString() || "");
-                if (profileData.mode) setMode(profileData.mode as 'cutting' | 'bulking');
-                if (profileData.water_intake !== undefined) setWaterIntake(profileData.water_intake);
-            } else {
-                setProfile({ id: user.id, email: user.email, plan_type: 'free', is_admin: false });
-            }
-
-            const today = new Date().toISOString().split('T')[0];
-            const { data: habitData } = await supabase
-                .from('habits')
-                .select('*')
-                .eq('user_id', user.id)
-                .eq('created_at', today);
-
-            if (habitData && habitData.length > 0) {
-                setHabits(habitData.sort((a, b) => a.id - b.id));
-            } else {
-                const baseHabitsCount = isProLocal ? 10 : 5;
-                const baseHabitNames = [
-                    "Bater Calorias Alvo", "3L de Água (Metabolismo)", "Treino do Dia (Protocolo)",
-                    "Banho Gelado (Dopamina/Inflamação)", "7h de Sono (Recuperação CNS)",
-                    "Leitura 10min", "Cardio 30min", "Suplementação (Creatina)", "Zero Açúcar", "Meditação (Foco)"
-                ].slice(0, baseHabitsCount);
-
-                const inserts = baseHabitNames.map(task => ({
-                    user_id: user.id,
-                    task_name: task,
-                    is_completed: false,
-                    created_at: today
-                }));
-
-                const { data: newHabits } = await supabase.from('habits').insert(inserts).select();
-                if (newHabits) {
-                    setHabits(newHabits.sort((a, b) => a.id - b.id));
-=======
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (!user) {
                     router.push("/login");
                     return;
->>>>>>> 8c2e3b5826934aecc720c4c5cad000b5ebc529d0
                 }
 
                 // Garante que o perfil existe antes de qualquer outra operação
@@ -364,19 +307,6 @@ export default function DashboardPage() {
             } finally {
                 setLoading(false);
             }
-<<<<<<< HEAD
-
-            const { data: mealsData } = await supabase
-                .from('diet_meals')
-                .select('*')
-                .eq('user_id', user.id);
-
-            if (mealsData && mealsData.length > 0) {
-                setCustomMeals(mealsData);
-            }
-            setLoading(false);
-=======
->>>>>>> 8c2e3b5826934aecc720c4c5cad000b5ebc529d0
         };
         fetchUser();
     }, [router, supabase]);
@@ -569,175 +499,7 @@ export default function DashboardPage() {
         </div>
     );
 
-<<<<<<< HEAD
-=======
-    const isPro = profile?.plan_type === 'pro' || profile?.is_admin;
-    // Build suggestions for current selected profile, but avoid showing a catalog
-    // that the evaluator considers clearly 'Crítico' (for auto-suggestions).
-    const getCatalogMeals = (key: 'standard' | 'economical' | 'practical') =>
-        (mode === 'cutting' ? DIET_CATALOG[key].cutting : DIET_CATALOG[key].bulking);
 
-    const evaluateMealsQuick = (meals: any[]) => {
-        const totals = meals.reduce((acc, m) => ({ p: acc.p + (m.protein || 0), c: acc.c + (m.carbs || 0), f: acc.f + (m.fats || 0), kcal: acc.kcal + (m.calories || 0) }), { p: 0, c: 0, f: 0, kcal: 0 });
-        const diffP = totals.p - finalProtein;
-        const diffKcal = totals.kcal - finalCalories;
-        if (mode === 'bulking') {
-            if (diffP < -10) return 'Crítico';
-            if (diffKcal < -150) return 'Alerta';
-            if (Math.abs(diffP) < 30 && Math.abs(diffKcal) < 200) return 'Alpha Performance';
-            if (diffKcal > 500) return 'Sujeira';
-            return 'Ajustável';
-        } else {
-            if (diffKcal > 150) return 'Crítico';
-            if (diffP < -15) return 'Alerta';
-            if (Math.abs(diffKcal) < 150 && diffP >= -5) return 'Alpha Performance';
-            return 'Ajustável';
-        }
-    };
-
-    // selected profile meals (may be swapped below if selected catalog is critical)
-    let currentSuggestions = getCatalogMeals(selectedProfile as any);
-
-    // If using automatic suggestions (no custom meals), avoid showing a catalog that evaluates as Critical.
-    const hasCustomMealsForMode = customMeals.filter(m => m.mode === mode).length > 0;
-    if (!(hasCustomMealsForMode && !isEditingDiet)) {
-        const allowedCatalogs: Array<'standard' | 'economical' | 'practical'> = isPro ? ['standard', 'economical', 'practical'] : ['standard'];
-        const selectedEval = evaluateMealsQuick(getCatalogMeals(selectedProfile as any));
-        if (selectedEval === 'Crítico' || selectedEval === 'Sujeira') {
-            // try to find a non-critical catalog
-            const fallback = allowedCatalogs.find(c => {
-                const s = evaluateMealsQuick(getCatalogMeals(c));
-                return s !== 'Crítico' && s !== 'Sujeira';
-            });
-            if (fallback) currentSuggestions = getCatalogMeals(fallback);
-        }
-    }
-
-    const displaySuggestions = isPro ? currentSuggestions : currentSuggestions.slice(0, 2);
-
-    const weightNum = parseFloat(weight);
-    const hasMetrics = !isNaN(weightNum) && weightNum > 0;
-
-    // Fallback/Auto-calc values
-    const autoCalories = hasMetrics ? Math.round(weightNum * (mode === 'cutting' ? 26 : 38)) : 0;
-    const autoProtein = Math.round(weightNum * 2.2) || 0;
-    const autoFats = Math.round(weightNum * 0.8) || 0;
-    const autoCarbs = Math.round((autoCalories - (autoProtein * 4) - (autoFats * 9)) / 4) || 0;
-
-    // Actual values used in display (Manual override or Auto-calc)
-    const finalCalories = parseInt(targetCalories) || autoCalories;
-    const finalProtein = parseInt(targetProtein) || autoProtein;
-    const finalCarbs = parseInt(targetCarbs) || autoCarbs;
-    const finalFats = parseInt(targetFats) || autoFats;
-
-    const completedCount = habits.filter(h => h.is_completed).length;
-    const progressPerc = habits.length === 0 ? 0 : Math.round((completedCount / habits.length) * 100);
-
-    const accentColor = mode === 'cutting' ? 'text-green-600' : 'text-orange-600';
-    const accentBg = mode === 'cutting' ? 'bg-green-600' : 'bg-orange-600';
-    const accentBorder = mode === 'cutting' ? 'border-green-600' : 'border-orange-600';
-    const accentLightBg = mode === 'cutting' ? 'bg-green-50' : 'bg-orange-50';
-
-    const waterGoal = 3000;
-    const waterPerc = Math.min((waterIntake / waterGoal) * 100, 100);
-
-    // Evaluation Engine
-    const currentMeals = customMeals.filter(m => m.mode === mode);
-    const useMeals = (currentMeals.length > 0 && !isEditingDiet) ? currentMeals : null;
-
-    const totalDietMacros = (useMeals || currentSuggestions || []).reduce((acc, m: any) => ({
-        p: acc.p + (m.protein || 0),
-        c: acc.c + (m.carbs || 0),
-        f: acc.f + (m.fats || 0),
-        kcal: acc.kcal + (m.calories || 0)
-    }), { p: 0, c: 0, f: 0, kcal: 0 });
-
-    const getEvaluation = () => {
-        const diffP = totalDietMacros.p - finalProtein;
-        const diffKcal = totalDietMacros.kcal - finalCalories;
-
-        const isAuto = !useMeals;
-        const prefix = isAuto ? "[Auto] " : "";
-
-        // Relax thresholds for auto suggestions so default system diets are not
-        // unfairly marked as critical. Custom diets (useMeals) remain strict.
-        const relax = isAuto ? 2.0 : 1.0;
-
-        // MODE-AWARE EVALUATION LOGIC
-        if (mode === 'bulking') {
-            // In Bulking, excess protein is fine, but deficit is critical
-            if (diffP < -10 * relax) return { score: 'Crítico', msg: `${prefix}Proteína insuficiente para anabolismo.`, color: 'text-red-500' };
-            if (diffKcal < -150 * relax) return { score: 'Alerta', msg: `${prefix}Déficit detectado. Você não vai ganhar massa assim.`, color: 'text-orange-500' };
-            if (Math.abs(diffP) < 30 * relax && Math.abs(diffKcal) < 200 * relax) return { score: 'Alpha Performance', msg: `${prefix}Bulking limpo e otimizado!`, color: 'text-emerald-500' };
-            if (diffKcal > 500 * relax) return { score: 'Sujeira', msg: `${prefix}Superávit muito alto. Ganho de gordura excessivo.`, color: 'text-orange-500' };
-        } else {
-            // In Cutting, excess protein is Good, but excess calories are critical
-            if (diffKcal > 100 * relax) return { score: 'Crítico', msg: `${prefix}Calorias acima do limite para Cutting.`, color: 'text-red-500' };
-            if (diffP < -15 * relax) return { score: 'Alerta', msg: `${prefix}Proteína baixa. Risco de perda muscular.`, color: 'text-orange-500' };
-            if (Math.abs(diffKcal) < 150 * relax && diffP >= -5 * relax) return { score: 'Alpha Performance', msg: `${prefix}Cutting perfeito e seguro!`, color: 'text-emerald-500' };
-        }
-
-        return { score: 'Ajustável', msg: `${prefix}Bons alimentos, ajuste as porções para seus macros.`, color: 'text-yellow-500' };
-    };
-
-    const getDietInsights = () => {
-        const insights = [];
-        const diffP = finalProtein - totalDietMacros.p;
-        const diffC = finalCarbs - totalDietMacros.c;
-        const diffKcal = finalCalories - totalDietMacros.kcal;
-
-        if (diffP > 20) insights.push(`Faltam ${diffP}g de proteína. Adicione fontes como frango, ovos ou whey.`);
-        if (Math.abs(diffKcal) > 200) insights.push(diffKcal > 0 ? `Déficit de ${diffKcal}kcal detectado. Aumente as porções.` : `Excesso de ${Math.abs(diffKcal)}kcal. Reduza carboidratos ou gorduras.`);
-        if (diffC > 50 && mode === 'bulking') insights.push("Carboidratos baixos para Bulking. Adicione aveia ou arroz.");
-
-        if (!useMeals && insights.length > 0) {
-            insights.unshift("Sugestão automática: Considere ajustar as porções para bater os macros exatos.");
-        }
-
-        if (insights.length === 0) insights.push("Configuração Alpha detectada. Mantenha a disciplina.");
-
-        return insights;
-    };
-
-    const dietInsights = getDietInsights();
-
-    const getGridEvaluation = () => {
-        if (habits.length === 0) return { score: 'Vazio', msg: 'Nenhum objetivo tático injetado no Grid.', color: 'text-zinc-400' };
-        if (habits.length < 5) return { score: 'Baixa Volatilidade', msg: 'Sua rotina está muito leve. Adicione mais desafios.', color: 'text-yellow-500' };
-        if (progressPerc > 80) return { score: 'Elite Execution', msg: 'Disciplina de alto nível detectada.', color: 'text-primary' };
-        if (progressPerc < 30 && habits.length > 0) return { score: 'Crítico', msg: 'Falha na execução. Reajuste suas prioridades.', color: 'text-red-500' };
-        return { score: 'Operacional', msg: 'Ritmo constante. Mantenha a consistência.', color: 'text-emerald-500' };
-    };
-
-    const getGoalEvaluation = () => {
-        if (!hasMetrics) return { score: 'Incompleto', msg: 'Aguardando dados antropométricos.', color: 'text-zinc-400' };
-
-        const bmr = autoCalories;
-        const isDangerousDeficit = mode === 'cutting' && finalCalories < (bmr * 0.7);
-        const isExcessiveSurplus = mode === 'bulking' && finalCalories > (bmr * 1.3);
-
-        if (isDangerousDeficit) return { score: 'Risco Biológico', msg: 'Calorias muito baixas. Risco de catabolismo e crash hormonal.', color: 'text-red-500' };
-        if (isExcessiveSurplus) return { score: 'Alerta de Gordura', msg: 'Superávit muito alto. Ganho de gordura será excessivo.', color: 'text-orange-500' };
-        if (finalProtein < (weightNum * 1.6)) return { score: 'Proteína Baixa', msg: 'Abaixo do limiar de segurança para síntese proteica.', color: 'text-yellow-500' };
-
-        return { score: 'Meta Otimizada', msg: 'Seus alvos estão dentro da zona de segurança científica.', color: 'text-emerald-500' };
-    };
-
-    const evalResult = getEvaluation();
-    const gridEval = getGridEvaluation();
-    const goalEval = getGoalEvaluation();
-
-    const getOverallPerformance = () => {
-        let score = 0;
-        if (progressPerc > 70) score += 40;
-        if (evalResult.score === 'Alpha Performance') score += 30;
-        if (goalEval.score === 'Meta Otimizada') score += 20;
-        if (waterPerc > 80) score += 10;
-        return score;
-    };
-
-    const overallScore = getOverallPerformance();
->>>>>>> 8c2e3b5826934aecc720c4c5cad000b5ebc529d0
 
     return (
         <div className="h-screen flex bg-white font-sans selection:bg-green-200 overflow-hidden">
