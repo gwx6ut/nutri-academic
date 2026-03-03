@@ -224,11 +224,6 @@ export default function UpgradePage() {
                 </AnimatePresence>
             </section>
 
-            <style jsx global>{`
-                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&display=swap');
-                body { font-family: 'Outfit', sans-serif; }
-                .italic { font-style: italic; }
-            `}</style>
         </main>
     );
 }

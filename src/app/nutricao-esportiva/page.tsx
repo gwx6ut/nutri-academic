@@ -395,9 +395,6 @@ export default function SportsNutritionPage() {
                 </div>
             </footer>
 
-            <style jsx global>{`
-                .italic { font-style: italic; }
-            `}</style>
         </main>
     );
 }
