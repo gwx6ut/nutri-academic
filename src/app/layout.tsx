@@ -8,6 +8,13 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: true,
+};
+
 export const metadata: Metadata = {
   title: "NutriAcademic",
   description: "MicroSaaS de Nutrição de alta performance with PIX subscriptions.",

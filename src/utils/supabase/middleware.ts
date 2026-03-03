@@ -14,10 +14,15 @@ export async function updateSession(request: NextRequest) {
                 getAll() {
                     return request.cookies.getAll();
                 },
+<<<<<<< HEAD
+                setAll(cookiesToSet: { name: string; value: string; options: any }[]) {
+                    cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+=======
 setAll(cookiesToSet: { name: string; value: string; options: any }[]) {
                     cookiesToSet.forEach(({ name, value, options }) => 
                         request.cookies.set(name, value)
                     );
+>>>>>>> 8c2e3b5826934aecc720c4c5cad000b5ebc529d0
                     supabaseResponse = NextResponse.next({
                         request,
                     });
