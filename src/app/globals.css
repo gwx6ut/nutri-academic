@@ -37,17 +37,19 @@
   }
 
   /* Suporte a safe area para notches */
-  @supports (padding: max(0px)) {
+  @supports (padding: env(safe-area-inset-left)) {
     body {
-      padding-left: max(1rem, env(safe-area-inset-left));
-      padding-right: max(1rem, env(safe-area-inset-right));
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
     }
   }
 }
 
 @layer components {
+
   /* Touch-friendly buttons */
-  button, a {
+  button,
+  a {
     @apply transition-all duration-200;
   }
 
@@ -73,7 +75,9 @@
       @apply min-h-[44px] flex items-center;
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       @apply text-base;
     }
   }
