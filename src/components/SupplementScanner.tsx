@@ -90,14 +90,14 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
 
     return (
         <div className="bg-zinc-900/30 border border-white/5 rounded-[3rem] p-10 backdrop-blur-sm relative overflow-hidden h-full flex flex-col">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-8 relative z-10">
                 <div>
-                    <h2 className="text-3xl font-black italic uppercase items-center flex gap-3">
-                        Detector <span className="text-[#CCFF00]">AI</span>
+                    <h2 className="text-4xl font-semibold tracking-tight text-white flex items-center gap-3">
+                        Neural <span className="text-emerald-400">Scanner</span>
                     </h2>
-                    <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-2 italic">Descubra se seu Whey é puro açúcar em 3 segundos.</p>
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.4em] mt-2 ml-1">High-Fidelity Supplement Analysis</p>
                 </div>
-                <div className="w-12 h-12 bg-[#CCFF00]/10 border border-[#CCFF00]/20 rounded-2xl flex items-center justify-center text-[#CCFF00]">
+                <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400 shadow-lg shadow-emerald-500/5">
                     <SearchCode className="w-6 h-6" />
                 </div>
             </div>
@@ -130,22 +130,21 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                     <div className="w-full flex flex-col items-center">
                         <div className="relative w-full max-w-[300px] h-[400px] rounded-3xl overflow-hidden shadow-2xl mb-8 group">
                             <img src={imageStr} className="w-full h-full object-cover" alt="Tabela Nutricional" />
-
                             {/* OVERLAY DE SCANNER */}
                             {isScanning && (
                                 <>
-                                    <div className="absolute inset-0 bg-black/50 blur-sm"></div>
+                                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
                                     <motion.div
                                         initial={{ top: "0%" }}
                                         animate={{ top: ["0%", "100%", "0%"] }}
                                         transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                                        className="absolute w-full h-1 bg-[#CCFF00] shadow-[0_0_20px_#CCFF00] z-20"
+                                        className="absolute w-full h-1 bg-emerald-400 shadow-[0_0_30px_#10b981] z-20"
                                     ></motion.div>
-                                    <div className="absolute inset-x-0 bottom-0 top-0 opacity-20 bg-[linear-gradient(transparent_50%,rgba(0,0,0,1)_50%)] bg-[length:100%_4px] bg-repeat-y z-10 pointer-events-none"></div>
+                                    <div className="absolute inset-x-0 bottom-0 top-0 opacity-10 bg-[linear-gradient(transparent_50%,rgba(255,255,255,0.1)_50%)] bg-[length:100%_4px] bg-repeat-y z-10 pointer-events-none"></div>
                                     <div className="absolute inset-0 flex flex-col items-center justify-center z-30 bg-black/40">
-                                        <div className="bg-black/80 px-6 py-4 rounded-2xl border border-[#CCFF00]/50 flex flex-col items-center shadow-[0_0_30px_rgba(204,255,0,0.2)]">
-                                            <SearchCode className="w-12 h-12 text-[#CCFF00] animate-pulse mb-3" />
-                                            <p className="text-[#CCFF00] font-black uppercase tracking-widest text-sm animate-pulse text-center leading-tight">Alpha Engine<br />Processando...</p>
+                                        <div className="bg-zinc-900/90 px-8 py-6 rounded-[2rem] border border-emerald-500/30 flex flex-col items-center shadow-2xl backdrop-blur-md">
+                                            <SearchCode className="w-12 h-12 text-emerald-400 animate-pulse mb-3" />
+                                            <p className="text-emerald-400 font-bold uppercase tracking-[0.3em] text-[10px] animate-pulse text-center leading-tight">Neural Engine<br />Processing Matrix...</p>
                                         </div>
                                     </div>
                                 </>
@@ -161,7 +160,7 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                         {!isScanning && !result && !errorMsg && (
                             <button
                                 onClick={triggerScan}
-                                className="bg-[#CCFF00] text-black font-black uppercase px-12 py-6 rounded-2xl tracking-widest text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-3 w-full sm:w-auto justify-center shadow-[0_0_30px_rgba(204,255,0,0.3)]"
+                                className="bg-emerald-500 text-white font-bold uppercase px-12 py-6 rounded-[2rem] tracking-[0.3em] text-[10px] hover:scale-105 active:scale-95 transition-all flex items-center gap-3 w-full sm:w-auto justify-center shadow-2xl shadow-emerald-500/20 border border-emerald-400/20"
                             >
                                 Iniciar Raio-X AI <Search className="w-5 h-5" />
                             </button>

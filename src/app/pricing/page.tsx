@@ -65,55 +65,77 @@ export default function PricingPage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
 
     return (
-        <div className="min-h-screen bg-[#F4F6F8] flex flex-col items-center py-20 px-6">
-            <Link href="/dashboard" className="absolute top-8 left-8 text-zinc-500 hover:text-zinc-900 flex items-center gap-2 font-black transition">
-                <ArrowLeft className="w-5 h-5" /> Voltar ao Painel
+        <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center py-20 px-6 relative overflow-hidden font-sans selection:bg-emerald-500/30">
+            {/* Background Decorations */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-600/5 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/5 rounded-full blur-[100px]" />
+            </div>
+
+            <Link href="/dashboard" className="absolute top-8 left-8 z-50 flex items-center gap-3 bg-zinc-900/50 backdrop-blur-xl border border-white/5 px-6 py-3 rounded-2xl hover:bg-zinc-800 transition-all group shadow-2xl">
+                <ArrowLeft className="w-5 h-5 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 group-hover:text-white transition-colors">Voltar ao Console</span>
             </Link>
 
-            <div className="text-center max-w-3xl mb-20">
-                <h1 className="text-5xl md:text-7xl font-black text-zinc-900 tracking-tighter mb-6 uppercase italic">
-                    POTENCIAL <span className="text-green-600">ILIMITADO</span>
+            <div className="text-center max-w-4xl mb-24 relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-10"
+                >
+                    <Crown className="w-4 h-4 text-emerald-400" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400">Upgrade Protocolo Alpha</span>
+                </motion.div>
+                <h1 className="text-6xl md:text-8xl font-medium tracking-tight text-white mb-8 leading-none">
+                    Potencial <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 italic pr-4">Ilimitado.</span>
                 </h1>
-                <p className="text-xl text-zinc-500 font-bold tracking-tight max-w-2xl mx-auto">
-                    A ciência da performance por um valor simbólico. Escolha o plano Pro e desbloqueie o motor completo de evolução.
+                <p className="text-xl text-zinc-500 font-bold tracking-wide max-w-2xl mx-auto leading-relaxed">
+                    A ciência da performance por um valor simbólico. Escolha o protocolo Pro e desbloqueie o motor completo de evolução metabólica.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full mb-32">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full mb-32 relative z-10">
                 {PLANS.map((plan) => (
                     <motion.div
                         key={plan.name}
-                        whileHover={{ y: -8 }}
-                        className={`relative bg-white rounded-[3rem] p-10 border-2 transition-all shadow-sm ${plan.accent === 'green' ? 'border-green-500 shadow-xl shadow-green-50' : 'border-zinc-100'}`}
+                        whileHover={{ y: -10 }}
+                        className={`relative bg-zinc-900/40 backdrop-blur-3xl rounded-[4rem] p-12 border transition-all shadow-2xl overflow-hidden group ${plan.accent === 'green' ? 'border-emerald-500/30 shadow-emerald-500/5' : 'border-white/5'}`}
                     >
                         {plan.popular && (
-                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-zinc-950 text-white text-[10px] font-black uppercase tracking-[0.2em] px-6 py-2.5 rounded-full shadow-2xl">
-                                Elite Choice
-                            </div>
+                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 blur-[60px] rounded-full group-hover:bg-emerald-500/20 transition-all"></div>
                         )}
-                        <div className="mb-10">
-                            <h3 className="text-2xl font-black text-zinc-900 mb-2 uppercase italic tracking-tight">{plan.name}</h3>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-5xl font-black text-zinc-900 tracking-tighter italic">{plan.price}</span>
-                                {plan.period && <span className="text-xs text-zinc-400 font-black uppercase tracking-widest ml-1">{plan.period}</span>}
+
+                        <div className="relative z-10 mb-12">
+                            <div className="flex justify-between items-start mb-6">
+                                <h3 className="text-3xl font-semibold text-white tracking-tight">{plan.name}</h3>
+                                {plan.popular && (
+                                    <span className="bg-emerald-500 text-zinc-950 text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full">Elite Choice</span>
+                                )}
                             </div>
-                            <p className="text-zinc-500 text-sm mt-6 font-bold leading-relaxed">{plan.description}</p>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-7xl font-semibold text-white tracking-tighter">{plan.price}</span>
+                                {plan.period && <span className="text-xs text-zinc-500 font-bold uppercase tracking-[0.2em]">{plan.period}</span>}
+                            </div>
+                            <p className="text-zinc-500 text-sm mt-8 font-bold leading-relaxed">{plan.description}</p>
                         </div>
-                        <ul className="space-y-4 mb-12">
+
+                        <ul className="space-y-6 mb-16 relative z-10">
                             {plan.features.map((feat) => (
-                                <li key={feat} className="flex items-center gap-3 text-sm font-black uppercase tracking-tighter text-zinc-700">
-                                    <div className={`p-1.5 rounded-xl border ${plan.accent === 'green' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-zinc-50 text-zinc-300 border-zinc-100'}`}>
+                                <li key={feat} className="flex items-center gap-4 text-[11px] font-bold uppercase tracking-wider text-zinc-300">
+                                    <div className={`p-2 rounded-xl border ${plan.accent === 'green' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-white/5 text-zinc-500 border-white/5'}`}>
                                         <Check className="w-4 h-4" />
                                     </div>
                                     {feat}
                                 </li>
                             ))}
                         </ul>
+
                         <button
                             onClick={() => plan.accent === 'green' ? router.push('/upgrade') : null}
-                            className={`w-full py-5 rounded-[1.5rem] font-black uppercase tracking-[0.2em] text-[10px] transition-all shadow-xl shadow-zinc-100 ${plan.accent === 'green'
-                                ? 'bg-green-600 text-white hover:bg-green-700 shadow-green-200 active:scale-95'
-                                : 'bg-zinc-100 text-zinc-300 cursor-default grayscale'
+                            className={`w-full py-6 rounded-[2.5rem] font-bold uppercase tracking-[0.3em] text-[11px] transition-all relative z-10 ${plan.accent === 'green'
+                                ? 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-2xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95'
+                                : 'bg-white/5 text-zinc-600 cursor-default border border-white/5'
                                 }`}
                         >
                             {plan.cta}
@@ -123,22 +145,24 @@ export default function PricingPage() {
             </div>
 
             {/* FAQ SECTION */}
-            <div className="max-w-3xl w-full mb-32">
-                <div className="text-center mb-16">
-                    <HelpCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-                    <h2 className="text-4xl font-black text-zinc-900 uppercase italic tracking-tight mb-4">Dúvidas Frequentes</h2>
-                    <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Transparência total em cada etapa</p>
+            <div className="max-w-4xl w-full mb-32 relative z-10">
+                <div className="text-center mb-20">
+                    <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl mx-auto mb-8 flex items-center justify-center">
+                        <HelpCircle className="w-8 h-8 text-emerald-400" />
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-semibold text-white tracking-tight mb-6 leading-none">Dúvidas <span className="text-zinc-500 italic">Frequentes</span></h2>
+                    <p className="text-zinc-600 font-bold uppercase tracking-[0.3em] text-[10px]">Transparência total em cada etapa do protocolo</p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-5">
                     {FAQS.map((faq, i) => (
-                        <div key={i} className="bg-white rounded-3xl border border-zinc-100 overflow-hidden shadow-sm">
+                        <div key={i} className="bg-zinc-900/40 backdrop-blur-2xl rounded-[2.5rem] border border-white/5 overflow-hidden transition-all hover:border-white/10">
                             <button
                                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                                className="w-full text-left p-8 flex items-center justify-between group transition-colors hover:bg-zinc-50"
+                                className="w-full text-left p-10 flex items-center justify-between group transition-colors"
                             >
-                                <span className="text-zinc-950 font-black uppercase tracking-tighter text-lg">{faq.q}</span>
-                                {openFaq === i ? <ChevronUp className="w-5 h-5 text-green-600" /> : <ChevronDown className="w-5 h-5 text-zinc-300 group-hover:text-zinc-900" />}
+                                <span className="text-white font-semibold tracking-tight text-xl">{faq.q}</span>
+                                {openFaq === i ? <ChevronUp className="w-6 h-6 text-emerald-400" /> : <ChevronDown className="w-6 h-6 text-zinc-700 group-hover:text-emerald-400 transition-all" />}
                             </button>
                             <AnimatePresence>
                                 {openFaq === i && (
@@ -146,9 +170,9 @@ export default function PricingPage() {
                                         initial={{ height: 0, opacity: 0 }}
                                         animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
-                                        className="px-8 pb-8"
+                                        className="px-10 pb-10"
                                     >
-                                        <p className="text-zinc-500 font-medium leading-relaxed border-t border-zinc-50 pt-6">
+                                        <p className="text-zinc-500 font-bold text-sm leading-relaxed border-t border-white/5 pt-8 tracking-wide">
                                             {faq.a}
                                         </p>
                                     </motion.div>
@@ -160,18 +184,18 @@ export default function PricingPage() {
             </div>
 
             {/* Trust Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-                <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-6 h-6" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Ativação Segura</span>
+            <div className="flex flex-wrap items-center justify-center gap-16 opacity-30 group-hover:opacity-100 transition-opacity duration-1000 relative z-10">
+                <div className="flex items-center gap-4">
+                    <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400">Ativação Segura</span>
                 </div>
-                <div className="flex items-center gap-3">
-                    <Lock className="w-6 h-6" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Privacidade Total</span>
+                <div className="flex items-center gap-4">
+                    <Lock className="w-6 h-6 text-zinc-400" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400">Privacidade Total</span>
                 </div>
-                <div className="flex items-center gap-3">
-                    <CreditCard className="w-6 h-6" />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Protocolo de Estorno</span>
+                <div className="flex items-center gap-4">
+                    <CreditCard className="w-6 h-6 text-emerald-400" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400">Protocolo de Estorno</span>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ import Link from "next/link";
 import {
     Activity, ArrowUpRight, BookOpen, Brain, Calculator, CheckCircle2, ChevronRight, Circle, Crown, Droplets, Dumbbell, Flame, Heart, Info, LayoutList, Lock, LogOut, Minus, PieChart, Plus, Save, Scale, Settings, ShieldCheck, Target as TargetIcon, Trash2, Trophy, User, Users, Utensils, Waves, Zap, SearchCode
 } from "lucide-react";
-import { DIET_CATALOG, WORKOUTS, SIDEBAR_ITEMS, WaterWave } from "./constants";
+import { DIET_CATALOG, WORKOUT_CATEGORIES, SIDEBAR_ITEMS, WaterWave } from "./constants";
 import SupplementScanner from "@/components/SupplementScanner";
 
 type Profile = {
@@ -53,7 +53,7 @@ export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState<'overview' | 'dieta' | 'treinos' | 'grid' | 'scanner'>('overview');
     const [habits, setHabits] = useState<Habit[]>([]);
     const [waterIntake, setWaterIntake] = useState(0);
-
+    const [workoutType, setWorkoutType] = useState<'hipertrofia' | 'forca'>('hipertrofia');
     const [weight, setWeight] = useState("");
     const [height, setHeight] = useState("");
     const [targetCalories, setTargetCalories] = useState<string>("");
@@ -102,10 +102,10 @@ export default function DashboardPage() {
     const completedCount = habits.filter(h => h.is_completed).length;
     const progressPerc = habits.length === 0 ? 0 : Math.round((completedCount / habits.length) * 100);
 
-    const accentColor = mode === 'cutting' ? 'text-emerald-600' : 'text-orange-600';
-    const accentBg = mode === 'cutting' ? 'bg-emerald-600' : 'bg-orange-600';
-    const accentBorder = mode === 'cutting' ? 'border-emerald-600' : 'border-orange-600';
-    const accentLightBg = mode === 'cutting' ? 'bg-emerald-50' : 'bg-orange-50';
+    const accentColor = mode === 'cutting' ? 'text-emerald-400' : 'text-orange-400';
+    const accentBg = mode === 'cutting' ? 'bg-emerald-500' : 'bg-orange-500';
+    const accentBorder = mode === 'cutting' ? 'border-emerald-500/30' : 'border-orange-500/30';
+    const accentLightBg = mode === 'cutting' ? 'bg-emerald-500/10' : 'bg-orange-500/10';
 
     const waterGoal = 3000;
     const waterPerc = Math.min((waterIntake / waterGoal) * 100, 100);
@@ -129,16 +129,16 @@ export default function DashboardPage() {
         const prefix = isAuto ? "[Auto] " : "";
 
         if (mode === 'bulking') {
-            if (diffP < -10) return { score: 'Crítico', msg: `${prefix}Proteína insuficiente para anabolismo.`, color: 'text-red-500' };
+            if (diffP < -10) return { score: 'Crítico', msg: `${prefix}Proteína insuficiente para anabolismo.`, color: 'text-rose-500' };
             if (diffKcal < -150) return { score: 'Alerta', msg: `${prefix}Déficit detectado. Você não vai ganhar massa assim.`, color: 'text-orange-500' };
-            if (Math.abs(diffP) < 30 && Math.abs(diffKcal) < 200) return { score: 'Alpha Performance', msg: `${prefix}Bulking limpo e otimizado!`, color: 'text-emerald-500' };
-            if (diffKcal > 500) return { score: 'Sujeira', msg: `${prefix}Superávit muito alto. Ganho de gordura excessivo.`, color: 'text-orange-500' };
+            if (Math.abs(diffP) < 30 && Math.abs(diffKcal) < 200) return { score: 'Alpha Performance', msg: `${prefix}Bulking limpo e otimizado!`, color: 'text-emerald-400' };
+            if (diffKcal > 500) return { score: 'Sujeira', msg: `${prefix}Superávit muito alto. Ganho de gordura excessivo.`, color: 'text-orange-400' };
         } else {
-            if (diffKcal > 100) return { score: 'Crítico', msg: `${prefix}Calorias acima do limite para Cutting.`, color: 'text-red-500' };
+            if (diffKcal > 100) return { score: 'Crítico', msg: `${prefix}Calorias acima do limite para Cutting.`, color: 'text-rose-500' };
             if (diffP < -15) return { score: 'Alerta', msg: `${prefix}Proteína baixa. Risco de perda muscular.`, color: 'text-orange-500' };
-            if (Math.abs(diffKcal) < 150 && diffP >= -5) return { score: 'Alpha Performance', msg: `${prefix}Cutting perfeito e seguro!`, color: 'text-emerald-500' };
+            if (Math.abs(diffKcal) < 150 && diffP >= -5) return { score: 'Alpha Performance', msg: `${prefix}Cutting perfeito e seguro!`, color: 'text-emerald-400' };
         }
-        return { score: 'Ajustável', msg: `${prefix}Bons alimentos, ajuste as porções para seus macros.`, color: 'text-yellow-500' };
+        return { score: 'Ajustável', msg: `${prefix}Bons alimentos, ajuste as porções para seus macros.`, color: 'text-sky-400' };
     };
 
     const getDietInsights = () => {
@@ -435,6 +435,10 @@ export default function DashboardPage() {
         }));
     };
 
+    const deleteCustomMeal = (id: string) => {
+        setCustomMeals(prev => prev.filter(m => m.id !== id));
+    };
+
     const saveDiet = async () => {
         setIsSavingDiet(true);
         const { data: { user } } = await supabase.auth.getUser();
@@ -566,7 +570,7 @@ export default function DashboardPage() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     whileHover={{ x: 10 }}
-                    className="fixed left-0 top-1/2 -translate-y-1/2 bg-green-600 hover:bg-green-700 text-white rounded-r-lg shadow-lg z-[90] lg:hidden p-3 transition-all"
+                    className="fixed left-0 top-1/2 -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-r-2xl shadow-2xl shadow-emerald-500/20 z-[90] lg:hidden p-4 transition-all"
                     title="Abrir menu"
                 >
                     <motion.div
@@ -589,16 +593,20 @@ export default function DashboardPage() {
                 />
             )}
             {/* SIDEBAR */}
-            <aside className="hidden lg:flex w-80 flex-col bg-white border-r border-zinc-200 shadow-sm z-10 sticky top-0 h-screen">
-                <div className="p-10 border-b border-zinc-100 flex items-center gap-3">
-                    <div className={`p-2.5 rounded-xl ${accentBg} text-white shadow-lg shadow-zinc-100`}>
+            <aside className="hidden lg:flex w-80 flex-col bg-zinc-950/80 backdrop-blur-3xl border-r border-white/5 shadow-2xl z-[100] sticky top-0 h-screen overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 via-transparent to-transparent pointer-events-none"></div>
+                <div className="p-10 border-b border-white/5 flex items-center gap-4 relative z-10">
+                    <div className={`p-3 rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 group hover:rotate-6 transition-transform`}>
                         <Activity className="w-6 h-6" />
                     </div>
-                    <h1 className="font-semibold tracking-tight text-zinc-900 text-xl leading-none   pr-4">Nutri<br />Academic</h1>
+                    <div>
+                        <h1 className="font-bold tracking-tight text-white text-lg leading-none uppercase">Nutri<br />Academic</h1>
+                        <p className="text-[8px] font-bold text-zinc-600 tracking-[0.4em] mt-1">Tactical System</p>
+                    </div>
                 </div>
 
                 {/* Sidebar Items */}
-                <div className="flex-1 px-4 space-y-2 overflow-y-auto py-4">
+                <div className="flex-1 px-6 space-y-3 overflow-y-auto py-8 relative z-10 custom-scrollbar">
                     {SIDEBAR_ITEMS.map((item) => {
                         const Icon = item.icon;
                         const isLocked = !isPro && item.proOnly;
@@ -613,19 +621,22 @@ export default function DashboardPage() {
                                         setActiveTab(item.id as any);
                                     }
                                 }}
-                                className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 group ${activeTab === item.id
-                                    ? 'bg-slate-900 text-white shadow-md shadow-zinc-200/40 shadow-zinc-900/20'
-                                    : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900'
+                                className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-500 group relative overflow-hidden ${activeTab === item.id
+                                    ? 'bg-white/5 text-white border border-white/10 shadow-xl'
+                                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
                                     }`}
                             >
+                                {activeTab === item.id && (
+                                    <motion.div layoutId="nav-active" className="absolute left-0 w-1.5 h-6 bg-emerald-500 rounded-r-full" />
+                                )}
                                 <div className="flex items-center gap-4">
-                                    <Icon className={`w-5 h-5 transition-transform duration-500 ${activeTab === item.id ? 'scale-110' : 'group-hover:scale-110'}`} />
-                                    <span className="text-[10px] font-semibold  tracking-[0.2em]">{item.label}</span>
+                                    <Icon className={`w-5 h-5 transition-transform duration-500 ${activeTab === item.id ? 'text-emerald-400 scale-110' : 'group-hover:scale-110'}`} />
+                                    <span className="text-[11px] font-bold tracking-[0.2em] uppercase">{item.label}</span>
                                 </div>
                                 {isLocked ? (
-                                    <Lock className="w-3 h-3 text-zinc-300" />
+                                    <Lock className="w-3 h-3 text-zinc-700" />
                                 ) : activeTab === item.id ? (
-                                    <ChevronRight className="w-4 h-4 opacity-50" />
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#10b981]" />
                                 ) : (item as any).isExternal && (
                                     <ArrowUpRight className="w-3.5 h-3.5 opacity-20 group-hover:opacity-100 transition-opacity" />
                                 )}
@@ -633,186 +644,190 @@ export default function DashboardPage() {
                         );
                     })}
 
-                    {/* Admin Shortcut */}
                     {profile?.is_admin && (
                         <Link
                             href="/admin-nutri-master"
-                            className="w-full mt-10 flex items-center gap-4 px-6 py-4 rounded-2xl bg-green-600/10 border border-green-600/20 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 group shadow-lg shadow-green-500/5"
+                            className="w-full mt-10 flex items-center gap-4 px-6 py-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all duration-300 group shadow-lg shadow-emerald-500/5"
                         >
                             <ShieldCheck className="w-5 h-5 transition-transform group-hover:rotate-12" />
-                            <span className="text-[10px] font-semibold  tracking-[0.2em]">Painel Admin Master</span>
+                            <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Painel Admin Master</span>
                         </Link>
                     )}
                 </div>
 
-                <div className="mt-auto p-8 border-t border-zinc-50 bg-zinc-50/50">
-                    <div className="flex items-center gap-4 mb-8 p-4 bg-white rounded-2xl border border-zinc-100 shadow-sm">
-                        <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-white border-2 border-white shadow-lg">
-                            <User className="w-6 h-6" />
-                        </div>
-                        <div className="overflow-hidden">
-                            <p className="text-xs font-semibold text-slate-900 truncate   tracking-tight">Guardião da Performance</p>
-                            <p className="text-[8px] text-zinc-400 truncate font-semibold  tracking-wider">{profile?.email || 'N/A'}</p>
-                        </div>
-                    </div>
+                <div className="p-6 border-t border-white/5 bg-black/20">
                     {!isPro && (
-                        <button onClick={() => router.push('/pricing')} className="w-full mb-4 py-4 flex items-center justify-center gap-2 rounded-2xl bg-slate-900 text-white text-[10px] font-semibold  tracking-[0.2em] shadow-md shadow-zinc-200/40 hover:scale-[1.02] transition-transform active:scale-95 group">
-                            <Crown className="w-4 h-4 text-primary group-hover:animate-pulse" /> Ativar Pro Alpha
+                        <button onClick={() => router.push('/pricing')} className="w-full mb-4 py-4 flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 text-white text-[10px] font-bold tracking-[0.2em] uppercase shadow-lg shadow-emerald-500/20 hover:scale-[1.02] transition-transform active:scale-95 group">
+                            <Crown className="w-4 h-4 group-hover:animate-pulse" /> Ativar Pro Alpha
                         </button>
                     )}
-                    <button onClick={handleLogout} className="w-full py-3 flex items-center justify-center gap-2 rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 text-[10px] font-semibold  tracking-wider transition-all">
-                        <LogOut className="w-4 h-4" /> Sair do Sistema
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-4 px-6 py-4 text-zinc-500 hover:text-rose-400 hover:bg-rose-500/5 rounded-2xl transition-all group"
+                    >
+                        <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                        <span className="text-[10px] font-bold tracking-[0.2em] uppercase">Sair do Sistema</span>
                     </button>
                 </div>
-            </aside >
+            </aside>
 
-            {/* MAIN */}
-            <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                <div className="flex-1 overflow-y-auto p-6 sm:p-8 md:p-12 relative">
+            {/* MAIN CONTENT AREA */}
+            <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-zinc-950">
+                <div className="flex-1 overflow-y-auto p-6 sm:p-8 md:p-12 relative custom-scrollbar">
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
                     {/* Upper Header Control */}
-                    <div className="flex flex-col xl:flex-row justify-between xl:items-end mb-16 gap-8">
+                    <div className="flex flex-col xl:flex-row justify-between xl:items-end mb-16 gap-8 relative z-10">
                         <div>
                             <div className="flex items-center gap-3 mb-3">
-                                <span className={`w-3 h-3 rounded-full ${accentBg} animate-ping`}></span>
-                                <span className="text-[10px] font-semibold text-zinc-400  tracking-[0.3em]">Status: Operacional • V6.0</span>
+                                <span className={`w-2 h-2 rounded-full ${accentBg} shadow-lg ${accentColor.replace('text', 'shadow')}`}></span>
+                                <span className="text-[10px] font-bold text-zinc-500 tracking-[0.4em] uppercase">Status: Operacional • V6.0 Cinematic</span>
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-semibold text-zinc-900 tracking-tight   leading-[0.9] pr-6">
+                            <h2 className="text-5xl md:text-6xl font-semibold text-white tracking-tight leading-none pr-6">
                                 {SIDEBAR_ITEMS.find(i => i.id === activeTab)?.label}
                             </h2>
                         </div>
 
-                        <div className="bg-white border-2 border-zinc-100 p-2 rounded-[1.5rem] flex relative w-full xl:w-96 overflow-hidden shadow-sm">
+                        <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 p-2 rounded-[2rem] flex relative w-full xl:w-[400px] overflow-hidden shadow-2xl">
                             <motion.div
-                                className={`absolute top-2 bottom-2 w-[calc(50%-8px)] rounded-xl shadow-lg z-0 ${accentBg}`}
+                                className={`absolute top-2 bottom-2 w-[calc(50%-8px)] rounded-2xl shadow-2xl z-0 ${accentBg}`}
                                 initial={false}
-                                animate={{ x: mode === 'cutting' ? 8 : '100%' }}
-                                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                animate={{ x: mode === 'cutting' ? 4 : 'calc(100% - 4px)' }}
+                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
                             />
-                            <button onClick={() => updateMode('cutting')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-3 rounded-xl font-semibold text-[10px]  tracking-wider transition-colors ${mode === 'cutting' ? 'text-white' : 'text-zinc-400 hover:text-zinc-900'}`}>
+                            <button onClick={() => updateMode('cutting')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-[10px] tracking-[0.2em] uppercase transition-all ${mode === 'cutting' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}>
                                 <Droplets className="w-4 h-4" /> Cutting
                             </button>
-                            <button onClick={() => updateMode('bulking')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-3 rounded-xl font-semibold text-[10px]  tracking-wider transition-colors ${mode === 'bulking' ? 'text-white' : 'text-zinc-400 hover:text-zinc-900'}`}>
+                            <button onClick={() => updateMode('bulking')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-[10px] tracking-[0.2em] uppercase transition-all ${mode === 'bulking' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}>
                                 <Flame className="w-4 h-4" /> Bulking
                             </button>
                         </div>
                     </div>
 
                     <AnimatePresence mode="wait">
-
                         {/* TAB: OVERVIEW */}
                         {activeTab === 'overview' && (
-                            <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-12">
-
+                            <motion.div key="overview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-12">
                                 {/* Top Stats Ribbon */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                                    <div className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md shadow-zinc-200/40 group">
+                                    <div className="bg-zinc-900/40 backdrop-blur-xl rounded-[3rem] p-10 border border-white/5 shadow-2xl shadow-black/40 transition-all hover:-translate-y-1 group">
                                         <div className="flex items-center justify-between mb-8">
-                                            <span className="text-[10px] font-semibold text-zinc-400  tracking-wider">Adesão Protocolo</span>
-                                            <div className={`p-2 rounded-lg ${accentLightBg} ${accentColor} group-hover:bg-slate-900 group-hover:text-white transition-colors cursor-help`} title="Adesão mede sua consistência neural. Sem consistência, não há hipertrofia.">
+                                            <span className="text-[10px] font-bold text-zinc-500 tracking-[0.2em] uppercase">Adesão Protocolo</span>
+                                            <div className={`p-2.5 rounded-xl ${accentLightBg} ${accentColor} border border-white/5`}>
                                                 <Activity className="w-4 h-4" />
                                             </div>
                                         </div>
-                                        <div className="text-5xl font-semibold text-zinc-900 tracking-tight  mb-4">{progressPerc}%</div>
-                                        <div className="w-full bg-zinc-100 rounded-full h-1.5 mb-4">
+                                        <div className="text-6xl font-semibold text-white tracking-tight mb-4">{progressPerc}%</div>
+                                        <div className="w-full bg-white/5 rounded-full h-1.5 mb-6 overflow-hidden">
                                             <motion.div className={`h-full rounded-full ${accentBg}`} initial={{ width: 0 }} animate={{ width: `${progressPerc}%` }} />
                                         </div>
-                                        <p className="text-[8px] text-zinc-400 font-bold  leading-tight  opacity-0 group-hover:opacity-100 transition-opacity">
-                                            "Consistência vence a intensidade. 80%+ é o alvo Alpha."
+                                        <p className="text-[9px] text-zinc-600 font-bold leading-relaxed pr-4">
+                                            Tactical metric: 80% minimum required for elite results.
                                         </p>
                                     </div>
 
                                     <motion.div
-                                        animate={isWaterSplashing ? { scale: [1, 1.05, 1], rotate: [0, 1, -1, 0] } : {}}
-                                        className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm relative overflow-hidden group transition-shadow hover:shadow-md shadow-zinc-200/40"
+                                        animate={isWaterSplashing ? { scale: [1, 1.02, 1] } : {}}
+                                        className="bg-zinc-900/40 backdrop-blur-xl rounded-[3rem] p-10 border border-white/5 shadow-2xl shadow-black/40 relative overflow-hidden group transition-all hover:-translate-y-1"
                                     >
                                         <div className="flex items-center justify-between mb-8 relative z-20">
-                                            <span className="text-[10px] font-semibold text-zinc-400  tracking-wider">Tanque d'Água</span>
-                                            <div className="p-2 rounded-lg bg-blue-50 text-blue-500 cursor-help" title="A água é o condutor da síntese proteica. Células desidratadas não crescem.">
+                                            <span className="text-[10px] font-bold text-zinc-500 tracking-[0.2em] uppercase">Hidratação</span>
+                                            <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-lg shadow-blue-500/5">
                                                 <Waves className={`w-4 h-4 ${isWaterSplashing ? 'animate-bounce' : ''}`} />
                                             </div>
                                         </div>
-                                        <div className="flex items-baseline gap-1 mb-4 relative z-20">
-                                            <span className="text-5xl font-semibold text-zinc-900 tracking-tight ">{(waterIntake / 1000).toFixed(1)}</span>
-                                            <span className="text-xs font-semibold text-zinc-300  tracking-wider">/ 3.0L</span>
+                                        <div className="flex items-baseline gap-2 mb-6 relative z-20">
+                                            <span className="text-6xl font-semibold text-white tracking-tight">{(waterIntake / 1000).toFixed(1)}</span>
+                                            <span className="text-xs font-bold text-zinc-500 tracking-wider lowercase">/ 3.0L</span>
                                         </div>
-                                        <div className="flex gap-2 relative z-20">
-                                            <button onClick={() => updateWater(Math.max(0, waterIntake - 250))} className="p-3 bg-zinc-50 rounded-xl hover:bg-zinc-100 text-zinc-400 hover:text-zinc-600 transition outline-none"><Minus className="w-3 h-3" /></button>
-                                            <button onClick={() => updateWater(waterIntake + 250)} className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-semibold text-[10px]  tracking-[0.2em] shadow-lg shadow-blue-100 transition hover:bg-blue-700 active:scale-95 outline-none">+ 250ML</button>
+                                        <div className="flex gap-3 relative z-20">
+                                            <button onClick={() => updateWater(Math.max(0, waterIntake - 250))} className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 text-zinc-500 hover:text-white transition-all border border-white/5"><Minus className="w-4 h-4" /></button>
+                                            <button onClick={() => updateWater(waterIntake + 250)} className="flex-1 py-4 bg-blue-500 text-white rounded-2xl font-bold text-[10px] tracking-[0.2em] uppercase shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95">+ 250ML</button>
                                         </div>
 
-                                        {/* Glassy Overlay for realism */}
-                                        <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/40 to-transparent pointer-events-none z-10" />
-
-                                        {/* Fluid Animation System */}
                                         <WaterWave progress={waterPerc} />
                                     </motion.div>
 
-                                    <div className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md shadow-zinc-200/40">
-                                        <div className="flex items-center justify-between mb-8">
-                                            <span className="text-[10px] font-semibold text-zinc-400  tracking-wider">Peso Atual</span>
-                                            <Scale className="w-5 h-5 text-zinc-300" />
-                                        </div>
-                                        <div className="text-5xl font-semibold text-zinc-900 tracking-tight ">{weight || '--'} <span className="text-xs text-zinc-300 not-  tracking-wider">kg</span></div>
-                                        <p className="text-[9px] font-semibold text-green-500 bg-green-50 px-3 py-1.5 rounded-full w-fit mt-5  tracking-wider border border-green-100">Algoritmo Ativado</p>
-                                    </div>
-
-                                    <div className="bg-slate-900 rounded-[2.5rem] p-10 shadow-lg shadow-zinc-200/40 text-white relative overflow-hidden group transition-all hover:scale-[1.02] hover:shadow-xl shadow-zinc-200/50">
-                                        <div className="absolute top-0 right-0 p-6 opacity-10 scale-150 rotate-12 transition-transform group-hover:rotate-0"><Brain className="w-24 h-24" /></div>
+                                    <div className="bg-zinc-900/40 backdrop-blur-2xl rounded-[3rem] p-10 border border-white/5 transition-all hover:-translate-y-1 hover:border-white/10 hover:shadow-2xl shadow-black/40 group overflow-hidden relative">
+                                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
                                         <div className="flex items-center justify-between mb-8 relative z-10">
-                                            <span className="text-[10px] font-semibold text-zinc-500  tracking-wider">Neural Index</span>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-[10px] font-semibold  text-primary">{overallScore}/100</span>
-                                                <Activity className="w-4 h-4 text-primary" />
+                                            <span className="text-[10px] font-bold text-zinc-500 tracking-[0.2em] uppercase">Peso Atual</span>
+                                            <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/10">
+                                                <Scale className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                                             </div>
                                         </div>
-                                        <p className="text-xl font-semibold  tracking-tight leading-[1.1] relative z-10 group-hover:text-primary transition-colors mb-4">
+                                        <div className="text-6xl font-semibold text-white tracking-tight relative z-10">{weight || '--'} <span className="text-xs text-zinc-500 tracking-wider lowercase">kg</span></div>
+                                        <p className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full w-fit mt-6 tracking-widest uppercase border border-emerald-500/20 relative z-10">Sync Algorithm Active</p>
+                                    </div>
+
+                                    <div className="bg-zinc-900/50 backdrop-blur-3xl rounded-[3rem] p-10 shadow-2xl shadow-black/50 border border-white/5 text-white relative overflow-hidden group transition-all hover:-translate-y-1">
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 via-transparent to-teal-500/5 pointer-events-none"></div>
+                                        <div className="absolute top-0 right-0 p-6 opacity-20 scale-150 rotate-12 transition-transform group-hover:rotate-0 pointer-events-none"><Brain className="w-24 h-24 text-emerald-400" /></div>
+                                        <div className="flex items-center justify-between mb-8 relative z-10">
+                                            <span className="text-[10px] font-bold text-zinc-500 tracking-[0.2em] uppercase">Neural Index</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[10px] font-bold text-emerald-400">{overallScore}/100</span>
+                                                <Activity className="w-4 h-4 text-emerald-400" />
+                                            </div>
+                                        </div>
+                                        <p className="text-xl font-semibold tracking-tight leading-snug relative z-10 group-hover:text-emerald-400 transition-colors mb-6">
                                             {overallScore > 80 ? 'Protocolo em estado de fluxo. Performance de elite.' : overallScore > 50 ? 'Consistente, mas há margem para otimização neural.' : 'Sistema em degradação. Reajuste protocolos imediatamente.'}
                                         </p>
-                                        <div className="w-full bg-zinc-800 rounded-full h-1 mb-4 relative z-10">
-                                            <motion.div className="h-full bg-primary rounded-full" initial={{ width: 0 }} animate={{ width: `${overallScore}%` }} />
+                                        <div className="w-full bg-white/5 rounded-full h-1.5 mb-2 relative z-10 overflow-hidden">
+                                            <motion.div className="h-full bg-emerald-500 rounded-full" initial={{ width: 0 }} animate={{ width: `${overallScore}%` }} />
                                         </div>
-                                        <span className="text-[9px] font-semibold  tracking-[0.3em] text-zinc-600">Biohacking V6 Alpha</span>
+                                        <span className="text-[9px] font-bold tracking-[0.4em] text-zinc-600 uppercase">V6 Alpha Biohack</span>
                                     </div>
                                 </div>
 
                                 {/* Goals & Macro Widget */}
-                                <div className="bg-white rounded-[3.5rem] p-8 md:p-16 border border-zinc-200 shadow-sm relative overflow-hidden">
+                                <div className="bg-zinc-900/40 backdrop-blur-3xl rounded-[3.5rem] p-8 md:p-16 border border-white/5 shadow-2xl shadow-black/40 relative overflow-hidden group">
+                                    <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/5 blur-[100px] rounded-full group-hover:bg-emerald-500/10 transition-colors pointer-events-none"></div>
+                                    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-sky-500/5 blur-[100px] rounded-full group-hover:bg-sky-500/10 transition-colors pointer-events-none"></div>
                                     <div className="flex flex-col lg:flex-row gap-20">
                                         <div className="flex-1">
-                                            <div className="flex items-center gap-4 mb-4">
-                                                <h3 className="text-3xl md:text-4xl font-semibold text-zinc-900   tracking-tight pr-4">Budget de Nutrientes</h3>
-                                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-semibold  tracking-wider ${targetCalories ? 'bg-orange-950 text-white' : 'bg-zinc-100 text-zinc-400'}`}>
+                                            <div className="flex items-center gap-4 mb-6">
+                                                <h3 className="text-4xl md:text-5xl font-semibold text-white tracking-tight pr-4">Budget de Nutrientes</h3>
+                                                <div className={`px-4 py-1.5 rounded-full text-[9px] font-bold tracking-widest uppercase ${targetCalories ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
                                                     {targetCalories ? 'Manual Override' : 'Auto Algorithm'}
                                                 </div>
                                             </div>
-                                            <p className="text-zinc-500 font-bold text-sm mb-12  tracking-wider max-w-xl leading-relaxed">Referencial estratégico calculado para sua massa de {weight || '?'}kg sob regime de {mode}.</p>
+                                            <p className="text-zinc-500 font-bold text-sm mb-12 tracking-wider max-w-xl leading-relaxed">Referencial estratégico calculado para sua massa de {weight || '?'}kg sob regime de {mode === 'cutting' ? 'déficit' : 'superávit'}.</p>
 
                                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                                 {[
-                                                    { label: 'Proteína', val: finalProtein, color: 'emerald', sub: '2.2g/kg' },
-                                                    { label: 'Carbos', val: finalCarbs, color: 'orange', sub: 'Fator Energia' },
-                                                    { label: 'Gorduras', val: finalFats, color: 'yellow', sub: 'Hormonal' }
+                                                    { label: 'Proteína', val: finalProtein, color: 'emerald', sub: '2.2g/kg', icon: <Dumbbell className="w-3 h-3" /> },
+                                                    { label: 'Carbos', val: finalCarbs, color: 'sky', sub: 'Fator Energia', icon: <Zap className="w-3 h-3" /> },
+                                                    { label: 'Gorduras', val: finalFats, color: 'rose', sub: 'Hormonal', icon: <Droplets className="w-3 h-3" /> }
                                                 ].map((macro, i) => (
-                                                    <div key={i} className="bg-zinc-50 border border-zinc-100 p-8 rounded-[2rem] hover:bg-white transition-all hover:border-zinc-200 shadow-inner">
-                                                        <p className="text-[10px] font-semibold text-zinc-400  tracking-wider mb-4">{macro.label}</p>
-                                                        <p className="text-4xl font-semibold text-slate-900 tracking-tight  mb-2">{macro.val}g</p>
-                                                        <p className={`text-[8px] font-semibold  tracking-wider text-${macro.color}-600`}>{macro.sub}</p>
+                                                    <div key={i} className={`bg-zinc-950/50 border border-white/5 p-8 rounded-[2.5rem] hover:bg-zinc-900/50 transition-all hover:border-white/10 hover:-translate-y-1 group/macro shadow-xl`}>
+                                                        <div className="flex items-center justify-between mb-4">
+                                                            <p className="text-[10px] font-bold text-zinc-600 tracking-widest uppercase">{macro.label}</p>
+                                                            <div className={`p-2 rounded-xl bg-${macro.color}-500/10 text-${macro.color}-400 border border-${macro.color}-500/10`}>{macro.icon}</div>
+                                                        </div>
+                                                        <p className="text-4xl font-semibold text-white tracking-tight mb-2">{macro.val}g</p>
+                                                        <p className={`text-[9px] font-black tracking-widest uppercase text-${macro.color}-400/60`}>{macro.sub}</p>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        <div className="w-full lg:w-96 aspect-square rounded-[3rem] bg-slate-900 flex flex-col items-center justify-center p-12 text-center shadow-lg shadow-zinc-200/30 relative group">
-                                            <div className="absolute top-8 right-8 text-primary shadow-lg shadow-zinc-200/40 opacity-50 group-hover:scale-125 transition-transform"><TargetIcon className="w-8 h-8" /></div>
-                                            <p className="text-[10px] font-semibold text-zinc-600  tracking-[0.4em] mb-6">Demanda Calórica</p>
-                                            <div className="relative">
-                                                <span className="text-7xl md:text-8xl font-semibold text-white tracking-tight  leading-[0.85] pr-4">{finalCalories}</span>
-                                                <div className="absolute -right-4 -top-4 w-4 h-4 rounded-full bg-primary blur-sm"></div>
+                                        <div className="w-full lg:w-96 aspect-square rounded-[3rem] bg-zinc-900/60 backdrop-blur-xl border border-white/10 flex flex-col items-center justify-center p-12 text-center shadow-2xl shadow-black/60 relative group overflow-hidden">
+                                            <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent pointer-events-none"></div>
+                                            <motion.div
+                                                animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
+                                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                                className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none"
+                                            ></motion.div>
+                                            <div className="absolute top-8 right-8 text-emerald-400 shadow-lg opacity-40 group-hover:scale-125 transition-transform group-hover:opacity-100"><TargetIcon className="w-8 h-8" /></div>
+                                            <p className="text-[10px] font-semibold text-zinc-500 tracking-[0.4em] mb-6 relative z-10">Demanda Calórica</p>
+                                            <div className="relative z-10">
+                                                <span className="text-7xl md:text-8xl font-semibold text-white tracking-tight leading-[0.85] pr-4">{finalCalories}</span>
+                                                <div className="absolute -right-4 -top-4 w-4 h-4 rounded-full bg-emerald-400 blur-sm animate-pulse"></div>
                                             </div>
-                                            <span className="text-xs font-semibold text-primary  tracking-[0.3em] mt-6">KCal / Ciclo 24h</span>
-                                            <div className="mt-12 p-4 bg-slate-800/50 rounded-2xl border border-zinc-800 w-full">
-                                                <p className="text-[8px] font-semibold text-zinc-500  tracking-[0.2em]">Basal + Efeito Térmico + NEAT</p>
+                                            <span className="text-xs font-semibold text-emerald-400 tracking-[0.3em] mt-6 relative z-10">KCal / Ciclo 24h</span>
+                                            <div className="mt-12 p-4 bg-white/5 rounded-2xl border border-white/5 w-full relative z-10 backdrop-blur-sm">
+                                                <p className="text-[8px] font-semibold text-zinc-500 tracking-[0.2em]">Basal + Efeito Térmico + NEAT</p>
                                             </div>
                                         </div>
                                     </div>
@@ -845,58 +860,59 @@ export default function DashboardPage() {
 
                                 {/* Anthropometry Module (Summarized) */}
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                                    <div className="col-span-1 lg:col-span-2 bg-white rounded-[2.5rem] p-8 md:p-12 border border-zinc-200 shadow-sm relative overflow-hidden">
-                                        <div className="flex justify-between items-start mb-8">
+                                    <div className="col-span-1 lg:col-span-2 bg-zinc-900/40 backdrop-blur-3xl rounded-[3rem] p-10 md:p-14 border border-white/5 shadow-2xl shadow-black/40 relative overflow-hidden group">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
+                                        <div className="flex justify-between items-start mb-10 relative z-10">
                                             <div>
-                                                <h3 className="text-2xl font-semibold text-zinc-900   flex items-center gap-3">
-                                                    <Scale className="w-6 h-6 text-emerald-500" /> Antropometria
+                                                <h3 className="text-3xl font-semibold text-white tracking-tight flex items-center gap-4">
+                                                    <Scale className="w-8 h-8 text-emerald-400" /> Antropometria <span className="text-zinc-600 text-xs font-bold tracking-[0.3em] uppercase ml-2">V6 Tactical</span>
                                                 </h3>
-                                                <p className="text-[10px] text-zinc-400  tracking-wider mt-2">{goalEval.msg}</p>
+                                                <p className="text-[10px] text-zinc-500 font-bold tracking-[0.4em] mt-3 uppercase">{goalEval.msg}</p>
                                             </div>
-                                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-semibold  tracking-wider ${goalEval.color.replace('text', 'bg').replace('500', '50/50')} ${goalEval.color}`}>{goalEval.score}</span>
+                                            <span className={`px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border ${goalEval.color.replace('text', 'border').replace('500', '500/20')} ${goalEval.color.replace('text', 'bg').replace('500', '500/10')} ${goalEval.color}`}>{goalEval.score}</span>
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-4 mb-6">
-                                            <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
-                                                <label className="text-[10px] font-semibold text-zinc-400  tracking-wider block mb-1">Peso (kg)</label>
-                                                <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="00.0" className="w-full bg-transparent font-semibold text-2xl md:text-3xl text-slate-900 outline-none" />
+                                        <div className="grid grid-cols-2 gap-6 mb-8 relative z-10">
+                                            <div className="bg-white/5 p-6 rounded-[2rem] border border-white/5 group/input focus-within:border-emerald-500/30 transition-all">
+                                                <label className="text-[10px] font-bold text-zinc-600 tracking-[0.3em] uppercase block mb-2">Peso (kg)</label>
+                                                <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="00.0" className="w-full bg-transparent font-semibold text-3xl text-white outline-none placeholder:text-zinc-800" />
                                             </div>
-                                            <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
-                                                <label className="text-[10px] font-semibold text-zinc-400  tracking-wider block mb-1">Altura (cm)</label>
-                                                <input value={height} onChange={(e) => setHeight(e.target.value)} placeholder="000" className="w-full bg-transparent font-semibold text-2xl md:text-3xl text-slate-900 outline-none" />
+                                            <div className="bg-white/5 p-6 rounded-[2rem] border border-white/5 group/input focus-within:border-emerald-500/30 transition-all">
+                                                <label className="text-[10px] font-bold text-zinc-600 tracking-[0.3em] uppercase block mb-2">Altura (cm)</label>
+                                                <input value={height} onChange={(e) => setHeight(e.target.value)} placeholder="000" className="w-full bg-transparent font-semibold text-3xl text-white outline-none placeholder:text-zinc-800" />
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-4 gap-2 mb-6">
-                                            <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                                                <label className="text-[8px] font-semibold text-zinc-400  block">Kcal Alvo</label>
-                                                <input value={targetCalories} onChange={(e) => setTargetCalories(e.target.value)} placeholder={autoCalories.toString()} className="w-full bg-transparent font-semibold text-lg min-w-0" />
+                                        <div className="grid grid-cols-4 gap-4 relative z-10">
+                                            <div className="col-span-4 md:col-span-1 bg-white/5 p-4 rounded-2xl border border-white/5">
+                                                <label className="text-[9px] font-bold text-zinc-600 tracking-[0.2em] uppercase block mb-1">Kcal Alvo</label>
+                                                <input value={targetCalories} onChange={(e) => setTargetCalories(e.target.value)} placeholder={autoCalories.toString()} className="w-full bg-transparent font-bold text-xl text-white outline-none" />
                                             </div>
-                                            <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                                                <label className="text-[8px] font-semibold text-zinc-400  block">Prot (g)</label>
-                                                <input value={targetProtein} onChange={(e) => setTargetProtein(e.target.value)} placeholder={autoProtein.toString()} className="w-full bg-transparent font-semibold text-lg min-w-0" />
+                                            <div className="col-span-4 md:col-span-1 bg-white/5 p-4 rounded-2xl border border-white/5">
+                                                <label className="text-[9px] font-bold text-zinc-600 tracking-[0.2em] uppercase block mb-1">Prot (g)</label>
+                                                <input value={targetProtein} onChange={(e) => setTargetProtein(e.target.value)} placeholder={autoProtein.toString()} className="w-full bg-transparent font-bold text-xl text-white outline-none" />
                                             </div>
-                                            <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                                                <label className="text-[8px] font-semibold text-zinc-400  block">Carb (g)</label>
-                                                <input value={targetCarbs} onChange={(e) => setTargetCarbs(e.target.value)} placeholder={autoCarbs.toString()} className="w-full bg-transparent font-semibold text-lg min-w-0" />
+                                            <div className="col-span-4 md:col-span-1 bg-white/5 p-4 rounded-2xl border border-white/5">
+                                                <label className="text-[9px] font-bold text-zinc-600 tracking-[0.2em] uppercase block mb-1">Carb (g)</label>
+                                                <input value={targetCarbs} onChange={(e) => setTargetCarbs(e.target.value)} placeholder={autoCarbs.toString()} className="w-full bg-transparent font-bold text-xl text-white outline-none" />
                                             </div>
-                                            <button onClick={saveMetrics} disabled={isSavingMetrics} className="col-span-4 md:col-span-1 bg-slate-900 text-white font-semibold rounded-xl shadow-lg hover:bg-zinc-800 transition-colors text-[9px]  tracking-wider flex items-center justify-center p-3 gap-2 disabled:opacity-50">
-                                                {isSavingMetrics ? '...' : <><Save className="w-3 h-3" /> Salvar</>}
+                                            <button onClick={saveMetrics} disabled={isSavingMetrics} className="col-span-4 md:col-span-1 bg-emerald-500 text-white font-bold rounded-2xl shadow-2xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all text-[11px] tracking-[0.2em] uppercase flex items-center justify-center p-4 gap-3 disabled:opacity-50">
+                                                {isSavingMetrics ? '...' : <><Save className="w-4 h-4" /> Save Tactical</>}
                                             </button>
                                         </div>
                                     </div>
 
                                     {/* Science Card Mini */}
-                                    <div className="col-span-1 bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden group shadow-lg shadow-zinc-200/40 flex flex-col justify-center">
+                                    <div className="col-span-1 bg-zinc-900/60 backdrop-blur-3xl rounded-[3rem] p-10 text-white relative overflow-hidden group shadow-2xl shadow-black/40 flex flex-col justify-center border border-white/5">
                                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,_rgba(16,185,129,0.15)_0%,_transparent_50%)]"></div>
-                                        <BookOpen className="w-8 h-8 text-emerald-500 mb-6 relative z-10" />
-                                        <h4 className="text-xl font-semibold   mb-4 tracking-tight relative z-10">Protocolo Alpha</h4>
-                                        <p className="text-zinc-400 text-xs leading-relaxed  relative z-10 mb-6">
+                                        <BookOpen className="w-10 h-10 text-emerald-400 mb-8 relative z-10" />
+                                        <h4 className="text-2xl font-semibold mb-5 tracking-tight relative z-10">Protocolo Alpha</h4>
+                                        <p className="text-zinc-500 text-xs font-bold leading-relaxed relative z-10 mb-8 tracking-wide">
                                             Ajustes de peso base devem variar entre 0.25% e 0.5% na semana. Offsets recomendados: <strong className="text-orange-400">Bulking</strong> (+38 kcal/kg), <strong className="text-emerald-400">Cutting</strong> (-26 kcal/kg).
                                         </p>
-                                        <div className="mt-auto p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/5 text-center relative z-10">
-                                            <span className="text-xl font-semibold  tracking-tight block text-white">{mode.toUpperCase()}</span>
-                                            <span className="text-[8px] font-semibold text-emerald-500  tracking-wider">Modo Operacional Ativo</span>
+                                        <div className="mt-auto p-6 bg-emerald-500/5 backdrop-blur-sm rounded-2xl border border-emerald-500/10 text-center relative z-10">
+                                            <span className="text-2xl font-semibold tracking-tight block text-white uppercase">{mode}</span>
+                                            <span className="text-[9px] font-bold text-emerald-400 tracking-[0.3em] uppercase">Modo Operacional Ativado</span>
                                         </div>
                                     </div>
                                 </div>
@@ -905,67 +921,66 @@ export default function DashboardPage() {
 
 
 
-                        {/* TAB: GRID */}
                         {activeTab === 'grid' && (
                             <motion.div key="grid" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-                                <div className="bg-white rounded-[3.5rem] p-8 md:p-16 border border-zinc-200 shadow-sm relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-zinc-900 to-orange-500"></div>
-                                    <div className="flex flex-col lg:flex-row justify-between lg:items-end mb-20 gap-10">
+                                <div className="bg-zinc-900/40 backdrop-blur-3xl rounded-[3.5rem] p-8 md:p-16 border border-white/5 shadow-2xl shadow-black/40 relative overflow-hidden group">
+                                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-teal-900 to-sky-500"></div>
+                                    <div className="flex flex-col lg:flex-row justify-between lg:items-end mb-20 gap-10 relative z-10">
                                         <div>
-                                            <h3 className="text-4xl md:text-5xl font-semibold text-zinc-900   leading-none mb-4 tracking-tight pr-4">The Grid</h3>
+                                            <h3 className="text-4xl md:text-5xl font-semibold text-white leading-none mb-4 tracking-tight pr-4">The Grid</h3>
                                             <div className="flex items-center gap-2 mb-4">
-                                                <span className={`text-[10px] font-semibold  tracking-wider ${gridEval.color}`}>{gridEval.score}</span>
-                                                <span className="text-[10px] text-zinc-400  tracking-wider">• {gridEval.msg}</span>
+                                                <span className={`text-[10px] font-semibold tracking-wider ${gridEval.color}`}>{gridEval.score}</span>
+                                                <span className="text-[10px] text-zinc-500 tracking-wider">• {gridEval.msg}</span>
                                             </div>
-                                            <p className="text-zinc-400 font-bold text-[10px] tracking-[0.4em]  ml-1">Routine Synchronization Engine</p>
+                                            <p className="text-zinc-500 font-bold text-[10px] tracking-[0.4em] ml-1">Routine Synchronization Engine</p>
                                         </div>
-                                        <div className="flex items-center gap-4 bg-zinc-50 border-2 border-zinc-100 p-3 rounded-[2.5rem] max-w-xl w-full shadow-inner group focus-within:border-zinc-300 transition-all">
-                                            <div className="bg-white p-4 rounded-3xl text-zinc-300 shadow-sm group-focus-within:text-zinc-900 transition-colors">
+                                        <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-3 rounded-[2.5rem] max-w-xl w-full shadow-inner group focus-within:border-emerald-500/50 transition-all backdrop-blur-sm">
+                                            <div className="bg-zinc-800 p-4 rounded-3xl text-zinc-500 shadow-sm group-focus-within:text-emerald-400 transition-colors">
                                                 <Plus className="w-7 h-7" />
                                             </div>
                                             <input
                                                 value={newTaskName} onChange={(e) => setNewTaskName(e.target.value)}
                                                 placeholder="Inject tactical objective..."
-                                                className="bg-transparent border-none text-lg font-semibold w-full outline-none text-slate-900 placeholder:text-zinc-300 "
+                                                className="bg-transparent border-none text-lg font-semibold w-full outline-none text-white placeholder:text-zinc-600"
                                                 onKeyDown={(e) => e.key === 'Enter' && addCustomTask()}
                                             />
-                                            <button onClick={addCustomTask} className={`px-10 py-4 rounded-[1.75rem] font-semibold transition-all  tracking-[0.2em] text-[10px] ${newTaskName ? 'bg-slate-900 text-white shadow-lg shadow-zinc-200/40 hover:scale-105 active:scale-95' : 'bg-transparent text-zinc-200 cursor-not-allowed'}`}>
+                                            <button onClick={addCustomTask} className={`px-10 py-4 rounded-[1.75rem] font-semibold transition-all tracking-[0.2em] text-[10px] ${newTaskName ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95' : 'bg-transparent text-zinc-700 cursor-not-allowed'}`}>
                                                 Deploy
                                             </button>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 relative z-10">
                                         {habits.map((habit) => (
                                             <motion.div
                                                 layout key={habit.id}
                                                 className={`flex items-center group justify-between p-6 rounded-2xl border transition-all cursor-pointer ${habit.is_completed
-                                                    ? `${accentLightBg} ${accentBorder} ${accentColor} shadow-md shadow-zinc-200/40`
-                                                    : 'bg-white border-zinc-100 text-slate-700 hover:border-zinc-200 hover:shadow-sm'
+                                                    ? `bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-xl shadow-emerald-500/5`
+                                                    : 'bg-zinc-900/50 border-white/5 text-zinc-400 hover:border-white/20 hover:bg-zinc-800/50'
                                                     }`}
                                             >
                                                 <button onClick={() => toggleHabit(habit.id, habit.is_completed)} className="flex-1 flex items-center gap-5 text-left font-medium text-lg pr-6 group-active:scale-[0.98] transition-transform">
                                                     {habit.is_completed ? (
-                                                        <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center shadow-sm"><CheckCircle2 className="w-5 h-5" /></div>
+                                                        <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-white"><CheckCircle2 className="w-5 h-5" /></div>
                                                     ) : (
-                                                        <div className="w-8 h-8 rounded-xl bg-zinc-50 border border-zinc-200 flex items-center justify-center transition-colors group-hover:border-zinc-300"><Circle className="w-4 h-4 text-zinc-300" /></div>
+                                                        <div className="w-8 h-8 rounded-xl bg-zinc-800 border border-white/10 flex items-center justify-center transition-colors group-hover:border-emerald-500/50"><Circle className="w-4 h-4 text-zinc-600 group-hover:text-emerald-500" /></div>
                                                     )}
                                                     <span className={`${habit.is_completed ? 'line-through opacity-40' : ''} transition-all`}>{habit.task_name}</span>
                                                 </button>
-                                                <button onClick={() => deleteHabit(habit.id)} className="opacity-0 group-hover:opacity-100 p-3 hover:bg-red-50 rounded-xl transition-all text-zinc-300 hover:text-red-500 scale-95 hover:scale-100">
+                                                <button onClick={() => deleteHabit(habit.id)} className="opacity-0 group-hover:opacity-100 p-3 hover:bg-rose-500/10 rounded-xl transition-all text-zinc-600 hover:text-rose-400 scale-95 hover:scale-100">
                                                     <Trash2 className="w-5 h-5" />
                                                 </button>
                                             </motion.div>
                                         ))}
                                     </div>
-                                    <div className="mt-16 pt-10 border-t border-zinc-50 flex flex-wrap items-center justify-between gap-6">
-                                        <div className="flex gap-10 text-zinc-400 text-[10px] font-semibold  tracking-[0.4em]">
+                                    <div className="mt-16 pt-10 border-t border-white/5 flex flex-wrap items-center justify-between gap-6 relative z-10">
+                                        <div className="flex gap-10 text-zinc-500 text-[10px] font-semibold tracking-[0.4em]">
                                             <span>Active Nodes: {habits.length}</span>
-                                            <span className={accentColor}>Sync Level: {progressPerc}%</span>
+                                            <span className="text-emerald-400">Sync Level: {progressPerc}%</span>
                                         </div>
-                                        <div className="p-6 bg-zinc-50 rounded-[2rem] border border-zinc-100 max-w-md">
-                                            <p className="text-[10px] font-semibold text-zinc-900  tracking-wider mb-2 flex items-center gap-2"><Brain className="w-3 h-3" /> Por que o Grid?</p>
-                                            <p className="text-xs text-zinc-400  font-medium leading-relaxed">A dopamina é liberada ao "dar check". O Grid não é apenas uma lista, é um sistema de recompensa neural para manter seu córtex pré-frontal focado no objetivo anabólico.</p>
+                                        <div className="p-6 bg-white/5 backdrop-blur-sm rounded-[2rem] border border-white/5 max-w-md">
+                                            <p className="text-[10px] font-semibold text-white tracking-wider mb-2 flex items-center gap-2"><Brain className="w-3 h-3 text-emerald-400" /> Por que o Grid?</p>
+                                            <p className="text-xs text-zinc-500 font-medium leading-relaxed">A dopamina é liberada ao "dar check". O Grid não é apenas uma lista, é um sistema de recompensa neural para manter seu córtex pré-frontal focado no objetivo anabólico.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1002,8 +1017,8 @@ export default function DashboardPage() {
                             <motion.div key="dieta" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                                     <div>
-                                        <h3 className="text-4xl font-semibold text-zinc-900   tracking-tight">Diet Analytics</h3>
-                                        <p className="text-zinc-400 font-bold text-[10px] tracking-[0.4em] ">High-Fidelity Nutrition Evaluator</p>
+                                        <h3 className="text-4xl font-semibold text-white tracking-tight">Diet Analytics</h3>
+                                        <p className="text-zinc-500 font-bold text-[10px] tracking-[0.4em]">High-Fidelity Nutrition Evaluator</p>
                                     </div>
                                     <div className="flex gap-4">
                                         {isEditingDiet && (
@@ -1044,11 +1059,11 @@ export default function DashboardPage() {
                                             </div>
                                         )}
                                         {isEditingDiet ? (
-                                            <button onClick={saveDiet} disabled={isSavingDiet} className="px-8 py-3 bg-slate-900 text-white rounded-2xl font-semibold text-[10px]  tracking-wider flex items-center gap-2 shadow-md shadow-zinc-200/40 hover:scale-105 transition-all">
+                                            <button onClick={saveDiet} disabled={isSavingDiet} className="px-8 py-3 bg-emerald-500 text-white rounded-2xl font-semibold text-[10px] tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all">
                                                 <Save className="w-4 h-4" /> {isSavingDiet ? 'Salvando...' : 'Salvar Customização'}
                                             </button>
                                         ) : (
-                                            <button onClick={toggleDietEdit} className="px-8 py-3 bg-white border-2 border-zinc-100 text-slate-900 rounded-2xl font-semibold text-[10px]  tracking-wider flex items-center gap-2 hover:bg-zinc-50 transition-all">
+                                            <button onClick={toggleDietEdit} className="px-8 py-3 bg-zinc-900/50 border border-white/5 text-white rounded-2xl font-semibold text-[10px] tracking-wider flex items-center gap-2 hover:bg-zinc-800 transition-all backdrop-blur-sm">
                                                 <Settings className="w-4 h-4" /> Customizar Protocolo
                                             </button>
                                         )}
@@ -1108,19 +1123,19 @@ export default function DashboardPage() {
                                                             })));
                                                         }
                                                     }}
-                                                    className={`p-6 rounded-[2rem] text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${selectedProfile === cat.id ? `${accentBorder} bg-white shadow-md shadow-zinc-200/40` : 'border-zinc-100 bg-zinc-50/50 opacity-60 hover:opacity-100'} relative overflow-hidden`}
+                                                    className={`p-6 rounded-[2rem] text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${selectedProfile === cat.id ? `border-white/10 bg-zinc-900/40 shadow-2xl shadow-black/40` : 'border-white/5 bg-zinc-950/50 opacity-60 hover:opacity-100'} border relative overflow-hidden group/cat`}
                                                 >
-                                                    {!isPro && cat.id !== 'standard' && <div className="absolute top-4 right-4"><Lock className="w-4 h-4 text-zinc-300" /></div>}
-                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${selectedProfile === cat.id ? accentBg + ' text-white' : 'bg-white text-zinc-300'}`}>
+                                                    {!isPro && cat.id !== 'standard' && <div className="absolute top-4 right-4"><Lock className="w-4 h-4 text-zinc-600" /></div>}
+                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${selectedProfile === cat.id ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-zinc-800 text-zinc-600 group-hover/cat:text-zinc-400'}`}>
                                                         {cat.icon}
                                                     </div>
                                                     <div className="flex items-center justify-between">
                                                         <div>
-                                                            <h4 className="font-semibold   tracking-tight mb-1 text-sm">{cat.label}</h4>
-                                                            <p className="text-[10px] text-zinc-400 font-bold leading-tight">{cat.desc}</p>
+                                                            <h4 className="font-semibold tracking-tight mb-1 text-sm text-white">{cat.label}</h4>
+                                                            <p className="text-[10px] text-zinc-500 font-bold leading-tight">{cat.desc}</p>
                                                         </div>
                                                         <div className="ml-4 flex-shrink-0 text-right">
-                                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${catColor.replace('text', 'bg').replace('500', '50/50')} ${catColor}`}>{catScore}</span>
+                                                            <span className={`px-3 py-1 rounded-full text-[9px] font-bold ${catColor.replace('text', 'bg').replace('500', '500/10')} ${catColor}`}>{catScore}</span>
                                                         </div>
                                                     </div>
                                                 </button>
@@ -1132,18 +1147,19 @@ export default function DashboardPage() {
                                 {/* Advanced Evaluator Panel */}
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                                     {/* Status Card */}
-                                    <div className={`col-span-1 p-10 rounded-[3rem] border-2 flex flex-col justify-between relative overflow-hidden ${evalResult.color.replace('text', 'border')} ${evalResult.color.replace('text', 'bg').replace('500', '50/50')}`}>
+                                    <div className={`col-span-1 p-10 rounded-[3rem] border flex flex-col justify-between relative overflow-hidden transition-all hover:scale-[1.02] shadow-2xl shadow-black/40 ${evalResult.color.replace('text', 'border').replace('500', '500/20')} ${evalResult.color.replace('text', 'bg').replace('500', '500/5')}`}>
+                                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
                                         <div className="relative z-10">
-                                            <p className="text-[10px] font-semibold  tracking-wider opacity-40 mb-2">Veredito AI</p>
-                                            <h4 className={`text-4xl font-semibold  tracking-tight  mb-2 ${evalResult.color}`}>{evalResult.score}</h4>
-                                            <p className="text-sm font-bold text-zinc-600 leading-tight">{evalResult.msg}</p>
+                                            <p className="text-[10px] font-semibold tracking-wider opacity-40 mb-2">Veredito AI</p>
+                                            <h4 className={`text-5xl font-semibold tracking-tight mb-2 ${evalResult.color}`}>{evalResult.score}</h4>
+                                            <p className="text-sm font-bold text-zinc-500 leading-tight">{evalResult.msg}</p>
                                         </div>
                                         <div className="mt-8 relative z-10">
                                             <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-[10px] font-semibold ">Consistência de Macro</span>
-                                                <span className="text-[10px] font-semibold ml-auto">{Math.min(100, Math.round((totalDietMacros.p / finalProtein) * 100))}%</span>
+                                                <span className="text-[10px] font-semibold text-zinc-400">Consistência de Macro</span>
+                                                <span className="text-[10px] font-semibold ml-auto text-white">{Math.min(100, Math.round((totalDietMacros.p / finalProtein) * 100))}%</span>
                                             </div>
-                                            <div className="w-full bg-zinc-200/50 rounded-full h-1.5 overflow-hidden">
+                                            <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
                                                 <motion.div className={`h-full ${accentBg}`} initial={{ width: 0 }} animate={{ width: `${(totalDietMacros.p / finalProtein) * 100}%` }} />
                                             </div>
                                         </div>
@@ -1151,30 +1167,31 @@ export default function DashboardPage() {
                                     </div>
 
                                     {/* Macro Comparison bars */}
-                                    <div className="col-span-1 lg:col-span-2 bg-slate-900 rounded-[3rem] p-10 text-white shadow-lg shadow-zinc-200/40 relative overflow-hidden">
+                                    <div className="col-span-1 lg:col-span-2 bg-zinc-900/40 backdrop-blur-3xl rounded-[3rem] p-10 text-white shadow-2xl shadow-black/40 relative overflow-hidden border border-white/5">
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 via-transparent to-sky-500/5 pointer-events-none"></div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
                                             <div className="space-y-6">
                                                 <div className="flex items-center justify-between">
-                                                    <h5 className="text-[10px] font-semibold  tracking-wider text-zinc-500">Alinhamento de Macros</h5>
+                                                    <h5 className="text-[10px] font-semibold tracking-wider text-zinc-600 uppercase">Alinhamento de Macros</h5>
                                                     <div className="flex gap-2">
-                                                        <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                                        <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                                                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                                        <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/20"></div>
+                                                        <div className="w-2 h-2 rounded-full bg-sky-500 shadow-lg shadow-sky-500/20"></div>
+                                                        <div className="w-2 h-2 rounded-full bg-rose-500 shadow-lg shadow-rose-500/20"></div>
                                                     </div>
                                                 </div>
 
                                                 {[
-                                                    { label: 'Proteína', current: totalDietMacros.p, target: finalProtein, color: 'bg-emerald-500' },
-                                                    { label: 'Carbos', current: totalDietMacros.c, target: finalCarbs, color: 'bg-orange-500' },
-                                                    { label: 'Gordura', current: totalDietMacros.f, target: finalFats, color: 'bg-yellow-500' }
+                                                    { label: 'Proteína', current: totalDietMacros.p, target: finalProtein, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
+                                                    { label: 'Carbos', current: totalDietMacros.c, target: finalCarbs, color: 'bg-sky-500', shadow: 'shadow-sky-500/20' },
+                                                    { label: 'Gordura', current: totalDietMacros.f, target: finalFats, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' }
                                                 ].map((m, idx) => (
                                                     <div key={idx} className="space-y-2">
-                                                        <div className="flex justify-between text-[10px] font-semibold ">
+                                                        <div className="flex justify-between text-[11px] font-semibold">
                                                             <span className="text-zinc-500">{m.label}</span>
-                                                            <span>{m.current}g / <span className="text-zinc-500">{m.target}g</span></span>
+                                                            <span className="text-white">{m.current}g <span className="text-zinc-600">/ {m.target}g</span></span>
                                                         </div>
                                                         <div className="w-full bg-white/5 rounded-full h-2">
-                                                            <motion.div className={`h-full rounded-full ${m.color}`} initial={{ width: 0 }} animate={{ width: `${Math.min(100, (m.current / m.target) * 100)}%` }} />
+                                                            <motion.div className={`h-full rounded-full ${m.color} ${m.shadow} shadow-lg`} initial={{ width: 0 }} animate={{ width: `${Math.min(100, (m.current / m.target) * 100)}%` }} />
                                                         </div>
                                                     </div>
                                                 ))}
@@ -1182,33 +1199,33 @@ export default function DashboardPage() {
 
                                             <div className="flex flex-col justify-between border-l border-white/5 md:pl-10">
                                                 <div>
-                                                    <p className="text-[10px] font-semibold  tracking-wider text-primary mb-4 flex items-center gap-2"><Brain className="w-3 h-3" /> Mentoria Tactical</p>
+                                                    <p className="text-[10px] font-semibold tracking-wider text-emerald-400 mb-4 flex items-center gap-2 uppercase"><Brain className="w-3 h-3" /> Mentoria Tactical</p>
                                                     <div className="space-y-4">
                                                         {isPro ? (
                                                             dietInsights.map((insight, idx) => (
-                                                                <div key={idx} className="flex gap-3 items-start">
-                                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>
-                                                                    <p className="text-[11px] font-medium text-zinc-400 leading-relaxed ">"{insight}"</p>
+                                                                <div key={idx} className="flex gap-3 items-start group/insight">
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0 group-hover/insight:scale-125 transition-transform"></div>
+                                                                    <p className="text-[11px] font-medium text-zinc-500 leading-relaxed group-hover:text-zinc-300 transition-colors">"{insight}"</p>
                                                                 </div>
                                                             ))
                                                         ) : (
-                                                            <div className="p-4 bg-white/5 rounded-2xl border border-white/10 text-center py-10">
-                                                                <Lock className="w-6 h-6 text-zinc-600 mx-auto mb-3" />
-                                                                <p className="text-[10px] font-semibold text-zinc-500  tracking-wider mb-2">Mentoria AI Bloqueada</p>
+                                                            <div className="p-4 bg-white/5 rounded-2xl border border-white/5 text-center py-10 backdrop-blur-sm">
+                                                                <Lock className="w-6 h-6 text-zinc-700 mx-auto mb-3" />
+                                                                <p className="text-[10px] font-semibold text-zinc-500 tracking-wider mb-2">Mentoria AI Bloqueada</p>
                                                                 <p className="text-[9px] text-zinc-600 font-bold mb-4">Evolua para o Plano Pro Alpha para insights neurais sobre sua dieta.</p>
-                                                                <Link href="/pricing" className="text-[8px] font-semibold  tracking-wider bg-primary px-4 py-2 rounded-lg text-black hover:scale-105 transition-all inline-block">Upgrade</Link>
+                                                                <Link href="/pricing" className="text-[8px] font-semibold tracking-wider bg-emerald-500 px-4 py-2 rounded-lg text-white hover:scale-105 transition-all inline-block shadow-lg shadow-emerald-500/20">Upgrade</Link>
                                                             </div>
                                                         )}
                                                     </div>
                                                 </div>
                                                 <div className="mt-8 pt-6 border-t border-white/5 flex items-end justify-between">
                                                     <div>
-                                                        <p className="text-[10px] font-semibold text-zinc-600  mb-1">Total Diário</p>
-                                                        <p className="text-3xl font-semibold  tracking-tight">{totalDietMacros.kcal} kcal</p>
+                                                        <p className="text-[10px] font-semibold text-zinc-600 mb-1">Total Diário</p>
+                                                        <p className="text-3xl font-semibold tracking-tight text-white">{totalDietMacros.kcal} kcal</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-[10px] font-semibold text-zinc-600  mb-1">Alvo</p>
-                                                        <p className="text-xl font-semibold  text-zinc-400 tracking-tight">{finalCalories} kcal</p>
+                                                        <p className="text-[10px] font-semibold text-zinc-700 mb-1">Meta</p>
+                                                        <p className="text-xl font-semibold text-zinc-500 tracking-tight">{finalCalories} kcal</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1218,68 +1235,69 @@ export default function DashboardPage() {
 
                                 <div className="grid grid-cols-1 gap-6">
                                     {(isEditingDiet ? customMeals.filter(m => m.mode === mode) : (useMeals || displaySuggestions)).map((food: any, i) => (
-                                        <div key={i} className="rounded-[3rem] p-10 bg-transparent shadow-sm relative group overflow-hidden">
-                                            <div className="flex flex-col xl:flex-row gap-10 items-start xl:items-center">
-                                                <div className={`w-32 h-32 rounded-[2rem] ${accentLightBg} border-2 ${accentBorder} flex flex-col items-center justify-center font-semibold ${accentColor} shadow-inner`}>
-                                                    <span className="text-[10px]  tracking-wider mb-1 opacity-50">T-Minus</span>
+                                        <div key={i} className="rounded-[3rem] p-10 bg-zinc-900/40 backdrop-blur-xl border border-white/5 shadow-2xl shadow-black/40 relative group overflow-hidden transition-all hover:bg-zinc-800/40 hover:border-white/10 hover:-translate-y-1">
+                                            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[80px] rounded-full group-hover:bg-emerald-500/10 transition-colors pointer-events-none"></div>
+                                            <div className="flex flex-col xl:flex-row gap-10 items-start xl:items-center relative z-10">
+                                                <div className={`w-36 h-36 rounded-[2.5rem] bg-zinc-900 border border-white/5 flex flex-col items-center justify-center font-semibold text-white shadow-2xl group-hover:border-emerald-500/30 transition-colors`}>
+                                                    <span className="text-[9px] tracking-[0.2em] mb-1 opacity-30 uppercase">Tactical Time</span>
                                                     {isEditingDiet ? (
-                                                        <input value={food.time} onChange={(e) => updateCustomMeal(food.id, 'time', e.target.value)} className="bg-transparent w-full text-center text-xl tracking-tight  font-semibold outline-none" />
+                                                        <input value={food.time} onChange={(e) => updateCustomMeal(food.id, 'time', e.target.value)} className="bg-transparent w-full text-center text-3xl tracking-tight font-semibold outline-none text-emerald-400" />
                                                     ) : (
-                                                        <span className="text-3xl tracking-tight ">{food.time}</span>
+                                                        <span className="text-4xl tracking-tight text-white">{food.time}</span>
                                                     )}
                                                 </div>
                                                 <div className="flex-1 w-full">
                                                     <div className="flex items-center gap-4 mb-3">
                                                         {isEditingDiet ? (
-                                                            <input value={food.name} onChange={(e) => updateCustomMeal(food.id, 'name', e.target.value)} className="text-2xl md:text-3xl font-semibold text-zinc-900  tracking-tight  bg-zinc-50 px-4 py-2 rounded-xl w-full outline-none focus:bg-white" />
+                                                            <input value={food.name} onChange={(e) => updateCustomMeal(food.id, 'name', e.target.value)} className="text-2xl md:text-3xl font-semibold text-white tracking-tight bg-white/5 px-4 py-2 rounded-2xl w-full outline-none focus:bg-white/10 border border-white/5" />
                                                         ) : (
-                                                            <h4 className="text-4xl font-semibold text-zinc-900  tracking-tight ">{food.name}</h4>
+                                                            <h4 className="text-5xl font-semibold text-white tracking-tight leading-none">{food.name}</h4>
                                                         )}
-                                                        {!isEditingDiet && <button onClick={() => setShowMealInfo(showMealInfo === i ? null : i)} className={`p-3 rounded-2xl transition-all ${showMealInfo === i ? 'bg-slate-900 text-white' : 'bg-zinc-100 text-zinc-400 hover:text-zinc-900'}`}><Info className="w-5 h-5" /></button>}
+                                                        {!isEditingDiet && <button onClick={() => setShowMealInfo(showMealInfo === i ? null : i)} className={`p-4 rounded-2xl transition-all ${showMealInfo === i ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-white/5 text-zinc-500 hover:text-white hover:bg-white/10 border border-white/10'}`}><Info className="w-5 h-5" /></button>}
+                                                        {isEditingDiet && (
+                                                            <button onClick={() => deleteCustomMeal(food.id)} className="p-4 bg-rose-500/10 text-rose-500 rounded-2xl hover:bg-rose-500 hover:text-white transition-all">
+                                                                <Trash2 className="w-5 h-5" />
+                                                            </button>
+                                                        )}
                                                     </div>
-
-                                                    {isEditingDiet ? (
-                                                        <textarea value={food.items} onChange={(e) => updateCustomMeal(food.id, 'items', e.target.value)} className="w-full bg-zinc-50 p-4 rounded-xl font-bold text-zinc-600  mb-6 outline-none focus:bg-white min-h-[80px]" />
-                                                    ) : (
-                                                        <p className="text-xl font-bold text-zinc-600 mb-6  leading-tight">{food.items}</p>
-                                                    )}
-
-                                                    <div className="flex flex-wrap gap-4">
-                                                        {isEditingDiet ? (
-                                                            <div className="flex gap-2">
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="text-[8px] font-semibold  text-zinc-400">P</span>
-                                                                    <input type="number" value={food.protein} onChange={(e) => updateCustomMeal(food.id, 'protein', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-semibold text-xs" />
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="text-[8px] font-semibold  text-zinc-400">C</span>
-                                                                    <input type="number" value={food.carbs} onChange={(e) => updateCustomMeal(food.id, 'carbs', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-semibold text-xs" />
-                                                                </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="text-[8px] font-semibold  text-zinc-400">G</span>
-                                                                    <input type="number" value={food.fats} onChange={(e) => updateCustomMeal(food.id, 'fats', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-semibold text-xs" />
-                                                                </div>
-                                                                <div className="flex flex-col gap-1 ml-4 justify-center">
-                                                                    <span className="text-[10px] font-semibold text-slate-900">{food.calories} kcal</span>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <>
-                                                                <span className={`px-4 py-2 rounded-xl text-[10px] font-semibold  tracking-wider bg-zinc-50 border border-zinc-100 ${accentColor}`}>{food.macros || `${food.protein}P / ${food.carbs}C / ${food.fats}G`}</span>
-                                                                <span className="px-4 py-2 rounded-xl text-[10px] font-semibold  tracking-wider bg-slate-900 text-white">{typeof food.calories === 'string' ? food.calories : `${food.calories} kcal`}</span>
-                                                            </>
-                                                        )}
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        {food.items.split(',').map((item: string, idx: number) => (
+                                                            <span key={idx} className="px-5 py-2 rounded-full bg-white/5 border border-white/5 text-zinc-500 text-[10px] font-bold tracking-wider uppercase group-hover:text-zinc-400 transition-colors">{item.trim()}</span>
+                                                        ))}
                                                     </div>
                                                 </div>
+                                                <div className="flex gap-4 xl:border-l xl:border-white/5 xl:pl-10">
+                                                    {[
+                                                        { label: 'P', val: food.protein, color: 'text-emerald-400' },
+                                                        { label: 'C', val: food.carbs, color: 'text-sky-400' },
+                                                        { label: 'G', val: food.fats, color: 'text-rose-400' },
+                                                        { label: 'KCAL', val: food.calories, color: 'text-white' }
+                                                    ].map((stat, idx) => (
+                                                        <div key={idx} className="text-center min-w-[60px]">
+                                                            <p className="text-[10px] font-bold text-zinc-600 mb-1 tracking-widest uppercase">{stat.label}</p>
+                                                            {isEditingDiet ? (
+                                                                <input type="number" value={stat.val} onChange={(e) => updateCustomMeal(food.id, stat.label === 'P' ? 'protein' : stat.label === 'C' ? 'carbs' : stat.label === 'G' ? 'fats' : 'calories', parseInt(e.target.value) || 0)} className={`bg-white/5 w-full text-center text-lg font-bold outline-none rounded-lg border border-white/5 focus:border-white/10 ${stat.color}`} />
+                                                            ) : (
+                                                                <p className={`text-2xl font-semibold tracking-tight ${stat.color}`}>{stat.val}</p>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
+
                                             <AnimatePresence>
                                                 {showMealInfo === i && (
-                                                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mt-10 pt-10 border-t border-zinc-50">
-                                                        <div className="bg-slate-900 p-10 rounded-[2.5rem] flex gap-8 items-start shadow-lg shadow-zinc-200/40">
-                                                            <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 text-emerald-500"><Brain className="w-8 h-8" /></div>
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: 'auto' }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        className="mt-8 pt-8 border-t border-white/5"
+                                                    >
+                                                        <div className="flex items-start gap-4 p-6 bg-emerald-500/5 rounded-3xl border border-emerald-500/10">
+                                                            <Brain className="w-5 h-5 text-emerald-400 shrink-0 mt-1" />
                                                             <div>
-                                                                <span className="text-[10px] font-semibold  tracking-[0.4em] text-emerald-500 mb-6 block underline decoration-emerald-900 underline-offset-8">Fundamentação Bioquímica</span>
-                                                                <p className="text-lg font-medium text-zinc-400  leading-relaxed">"{food.science}"</p>
+                                                                <p className="text-[10px] font-bold text-emerald-400 tracking-[0.2em] mb-2 uppercase">Neural Optimization Note</p>
+                                                                <p className="text-xs text-zinc-500 font-medium leading-relaxed">Este protocolo foi estruturado para maximizar a janela de absorção no horário {food.time}. As proporções de {food.protein}g P / {food.carbs}g C visam a via mTor e ressíntese de glicogênio eficiente.</p>
                                                             </div>
                                                         </div>
                                                     </motion.div>
@@ -1294,19 +1312,37 @@ export default function DashboardPage() {
                         {activeTab === 'treinos' && (
                             <motion.div key="treinos" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                                 {isPro ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        {WORKOUTS.map((wk, i) => (
-                                            <div key={i} className="bg-white rounded-[3rem] p-10 border border-zinc-200 transition-all hover:-translate-y-2 hover:shadow-lg shadow-zinc-200/40 group">
-                                                <div className="flex justify-between items-start mb-6">
-                                                    <h4 className="text-3xl font-semibold text-zinc-900  tracking-tight  leading-none">{wk.title}</h4>
-                                                    <Dumbbell className="w-6 h-6 text-zinc-200 group-hover:text-emerald-500 transition-colors" />
+                                    <div className="flex flex-col gap-8">
+                                        <div className="flex items-center gap-4 bg-zinc-900/50 p-2 rounded-3xl w-fit border border-white/5 backdrop-blur-xl mx-auto md:mx-0 shadow-lg shadow-emerald-500/5">
+                                            <button
+                                                onClick={() => setWorkoutType('hipertrofia')}
+                                                className={`px-8 py-3 rounded-[1.5rem] font-semibold text-xs tracking-wider transition-all ${workoutType === 'hipertrofia' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-400 hover:text-white'}`}
+                                            >
+                                                Hipertrofia
+                                            </button>
+                                            <button
+                                                onClick={() => setWorkoutType('forca')}
+                                                className={`px-8 py-3 rounded-[1.5rem] font-semibold text-xs tracking-wider transition-all ${workoutType === 'forca' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20' : 'text-zinc-400 hover:text-white'}`}
+                                            >
+                                                Força Bruta
+                                            </button>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            {WORKOUT_CATEGORIES[workoutType].map((wk, i) => (
+                                                <div key={i} className="bg-zinc-900/50 backdrop-blur-xl rounded-[3rem] p-10 border border-white/5 transition-all hover:-translate-y-2 hover:border-white/10 hover:shadow-2xl hover:shadow-emerald-500/10 group overflow-hidden relative">
+                                                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[50px] rounded-full group-hover:bg-emerald-500/10 transition-colors pointer-events-none"></div>
+                                                    <div className="flex justify-between items-start mb-6 relative z-10">
+                                                        <h4 className="text-3xl font-semibold text-white tracking-tight leading-none pr-4">{wk.title}</h4>
+                                                        <Dumbbell className="w-6 h-6 text-zinc-600 group-hover:text-emerald-400 transition-colors shrink-0" />
+                                                    </div>
+                                                    <p className="text-zinc-400 text-lg font-medium leading-relaxed mb-8 relative z-10">{wk.desc}</p>
+                                                    <div className="flex items-center gap-2 text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 w-fit px-4 py-2 rounded-full border border-emerald-500/20 tracking-wider relative z-10">
+                                                        <Zap className="w-4 h-4" /> {workoutType === 'hipertrofia' ? 'Maximum Volume' : 'Maximal Load System'}
+                                                    </div>
                                                 </div>
-                                                <p className="text-zinc-500 text-lg font-bold  leading-tight mb-8">{wk.desc}</p>
-                                                <div className="flex items-center gap-2 text-[10px] font-semibold text-emerald-600 bg-emerald-50 w-fit px-4 py-2 rounded-full border border-emerald-100  tracking-wider">
-                                                    <Zap className="w-4 h-4" /> Hardcore Intensity
-                                                </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
                                 ) : (
                                     <div className="bg-slate-900 rounded-[4rem] p-24 text-center border border-zinc-800 shadow-[0_50px_100px_rgba(0,0,0,0.5)] relative overflow-hidden">
@@ -1326,9 +1362,9 @@ export default function DashboardPage() {
                             </motion.div>
                         )}
 
-                    </AnimatePresence >
-                </div >
-            </main >
-        </div >
+                    </AnimatePresence>
+                </div>
+            </main>
+        </div>
     );
 }

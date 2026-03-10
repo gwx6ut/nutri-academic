@@ -49,12 +49,24 @@ export const DIET_CATALOG = {
 export const SUGGESTIONS_CUTTING = DIET_CATALOG.standard.cutting;
 export const SUGGESTIONS_BULKING = DIET_CATALOG.standard.bulking;
 
-export const WORKOUTS = [
-    { title: "Treino A - Dorsal e Bíceps", desc: "Puxada Frontal (4x12), Remada Curvada (4x10), Rosca Direta (3x12)" },
-    { title: "Treino B - Peito e Tríceps", desc: "Supino Reto (4x10), Tríceps Corda (3x12), Paralelas (3x10)" },
-    { title: "Treino C - Quadríceps", desc: "Agachamento Livre (4x8), Leg Press (4x12), Extensora (3x15)" },
-    { title: "Treino D - Deltóides e Trapézio", desc: "Desenvolvimento (4x10), Elevação Lateral (4x15), Encolhimento (3x12)" },
-];
+export const WORKOUT_CATEGORIES = {
+    hipertrofia: [
+        { title: "Treino A - Dorsal e Bíceps", desc: "Puxada Frontal (4x12), Remada Curvada (4x10), Rosca Direta (3x12). Foco em contração escapular." },
+        { title: "Treino B - Peito e Tríceps", desc: "Supino Reto (4x10), Tríceps Corda (3x12), Paralelas (3x10). Ênfase em tempo sob tensão." },
+        { title: "Treino C - Quadríceps", desc: "Agachamento Livre (4x8), Leg Press (4x12), Extensora (3x15). Protocolo de falha concêntrica." },
+        { title: "Treino D - Deltóides e Trapézio", desc: "Desenvolvimento (4x10), Elevação Lateral (4x15), Encolhimento (3x12). Volume alto para densidade." },
+        { title: "Treino E - Posterior e Panturrilha", desc: "Stiff (4x10), Mesa Flexora (3x12), Gêmeos em Pé (4x20). Foco em alongamento sob carga." },
+        { title: "Treino F - Fullbody Metabolic", desc: "Burpees (3x15), Agachamento com Salto (3x20), Mountain Climbers (3x30s). Glicólise anaeróbica." },
+    ],
+    forca: [
+        { title: "Treino A - Força Upper (Push/Pull)", desc: "Supino Reto (5x5), Barra Fixa com Peso (5x5), Desenvolvimento Militar (4x6). RPE 8-9." },
+        { title: "Treino B - Força Lower (Squat)", desc: "Agachamento Livre (5x5), Levantamento Terra (3x5), Leg Press Pesado (4x6). Foco em recrutamento motor." },
+        { title: "Treino C - Potência e Core", desc: "Power Clean (5x3), Push Press (4x4), Prancha com Peso (3x1 min). Explosão máxima." },
+        { title: "Treino D - Fullbody Hipertrofia Mista", desc: "Agachamento Frontal (4x8), Supino Inclinado (4x8), Remada Cavalinho (4x8). Hibridismo funcional." },
+        { title: "Treino E - Deadlift Specialty", desc: "Levantamento Terra Sumô (5x3), Rack Pull (3x5), Farmers Walk (4x40m). Estabilidade de core." },
+        { title: "Treino F - Conditioning Tactical", desc: "Kettlebell Swing (5x20), Box Jumps (5x10), Sprints (10x100m). Limiar de lactato." },
+    ]
+};
 
 export const SIDEBAR_ITEMS = [
     { id: 'overview', icon: PieChart, label: 'Visão Geral', proOnly: false },
