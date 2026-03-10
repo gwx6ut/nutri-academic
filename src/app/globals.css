@@ -8,7 +8,7 @@
   /* default text/foreground should be true black */
   --color-foreground: #000000;
 
-  --font-sans: var(--font-montserrat), sans-serif;
+  --font-sans: var(--font-plus-jakarta), sans-serif;
 }
 
 @tailwind base;

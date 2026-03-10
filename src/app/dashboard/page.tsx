@@ -508,13 +508,13 @@ export default function DashboardPage() {
             <motion.div
                 animate={{ x: sidebarOpen ? 0 : -320 }}
                 transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed left-0 top-0 h-screen w-80 bg-white shadow-2xl z-[95] lg:hidden flex flex-col overflow-hidden"
+                className="fixed left-0 top-0 h-screen w-80 bg-white shadow-lg shadow-zinc-200/40 z-[95] lg:hidden flex flex-col overflow-hidden"
             >
                 <div className="p-10 border-b border-zinc-100 flex items-center gap-3 bg-gradient-to-r from-green-400 to-green-700">
                     <div className="p-2.5 rounded-xl bg-white/20 text-white shadow-lg">
                         <Activity className="w-6 h-6" />
                     </div>
-                    <h1 className="font-black tracking-tighter text-white text-xl leading-none uppercase italic pr-4">Nutri<br />Academic</h1>
+                    <h1 className="font-semibold tracking-tight text-white text-xl leading-none   pr-4">Nutri<br />Academic</h1>
                 </div>
 
                 <div className="flex-1 px-4 space-y-2 overflow-y-auto py-4">
@@ -534,13 +534,13 @@ export default function DashboardPage() {
                                     }
                                 }}
                                 className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 group ${activeTab === item.id
-                                    ? 'bg-zinc-950 text-white shadow-xl'
+                                    ? 'bg-slate-900 text-white shadow-md shadow-zinc-200/40'
                                     : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900'
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
                                     <Icon className="w-5 h-5" />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
+                                    <span className="text-[10px] font-semibold  tracking-[0.2em]">{item.label}</span>
                                 </div>
                                 {isLocked && <Lock className="w-3 h-3 text-zinc-300" />}
                             </button>
@@ -554,7 +554,7 @@ export default function DashboardPage() {
                         className="w-full flex items-center gap-3 px-4 py-3 text-green-600 hover:bg-green-50 rounded-lg transition"
                     >
                         <LogOut className="w-4 h-4" />
-                        <span className="text-xs font-semibold uppercase">Sair</span>
+                        <span className="text-xs font-semibold ">Sair</span>
                     </button>
                 </div>
             </motion.div>
@@ -594,7 +594,7 @@ export default function DashboardPage() {
                     <div className={`p-2.5 rounded-xl ${accentBg} text-white shadow-lg shadow-zinc-100`}>
                         <Activity className="w-6 h-6" />
                     </div>
-                    <h1 className="font-black tracking-tighter text-zinc-900 text-xl leading-none uppercase italic pr-4">Nutri<br />Academic</h1>
+                    <h1 className="font-semibold tracking-tight text-zinc-900 text-xl leading-none   pr-4">Nutri<br />Academic</h1>
                 </div>
 
                 {/* Sidebar Items */}
@@ -614,13 +614,13 @@ export default function DashboardPage() {
                                     }
                                 }}
                                 className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl transition-all duration-300 group ${activeTab === item.id
-                                    ? 'bg-zinc-950 text-white shadow-xl shadow-zinc-900/20'
+                                    ? 'bg-slate-900 text-white shadow-md shadow-zinc-200/40 shadow-zinc-900/20'
                                     : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900'
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
                                     <Icon className={`w-5 h-5 transition-transform duration-500 ${activeTab === item.id ? 'scale-110' : 'group-hover:scale-110'}`} />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
+                                    <span className="text-[10px] font-semibold  tracking-[0.2em]">{item.label}</span>
                                 </div>
                                 {isLocked ? (
                                     <Lock className="w-3 h-3 text-zinc-300" />
@@ -640,27 +640,27 @@ export default function DashboardPage() {
                             className="w-full mt-10 flex items-center gap-4 px-6 py-4 rounded-2xl bg-green-600/10 border border-green-600/20 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-300 group shadow-lg shadow-green-500/5"
                         >
                             <ShieldCheck className="w-5 h-5 transition-transform group-hover:rotate-12" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Painel Admin Master</span>
+                            <span className="text-[10px] font-semibold  tracking-[0.2em]">Painel Admin Master</span>
                         </Link>
                     )}
                 </div>
 
                 <div className="mt-auto p-8 border-t border-zinc-50 bg-zinc-50/50">
                     <div className="flex items-center gap-4 mb-8 p-4 bg-white rounded-2xl border border-zinc-100 shadow-sm">
-                        <div className="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center text-white border-2 border-white shadow-lg">
+                        <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-white border-2 border-white shadow-lg">
                             <User className="w-6 h-6" />
                         </div>
                         <div className="overflow-hidden">
-                            <p className="text-xs font-black text-zinc-950 truncate uppercase italic tracking-tighter">Guardião da Performance</p>
-                            <p className="text-[8px] text-zinc-400 truncate font-black uppercase tracking-widest">{profile?.email || 'N/A'}</p>
+                            <p className="text-xs font-semibold text-slate-900 truncate   tracking-tight">Guardião da Performance</p>
+                            <p className="text-[8px] text-zinc-400 truncate font-semibold  tracking-wider">{profile?.email || 'N/A'}</p>
                         </div>
                     </div>
                     {!isPro && (
-                        <button onClick={() => router.push('/pricing')} className="w-full mb-4 py-4 flex items-center justify-center gap-2 rounded-2xl bg-zinc-950 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:scale-[1.02] transition-transform active:scale-95 group">
+                        <button onClick={() => router.push('/pricing')} className="w-full mb-4 py-4 flex items-center justify-center gap-2 rounded-2xl bg-slate-900 text-white text-[10px] font-semibold  tracking-[0.2em] shadow-md shadow-zinc-200/40 hover:scale-[1.02] transition-transform active:scale-95 group">
                             <Crown className="w-4 h-4 text-primary group-hover:animate-pulse" /> Ativar Pro Alpha
                         </button>
                     )}
-                    <button onClick={handleLogout} className="w-full py-3 flex items-center justify-center gap-2 rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 text-[10px] font-black uppercase tracking-widest transition-all">
+                    <button onClick={handleLogout} className="w-full py-3 flex items-center justify-center gap-2 rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 text-[10px] font-semibold  tracking-wider transition-all">
                         <LogOut className="w-4 h-4" /> Sair do Sistema
                     </button>
                 </div>
@@ -675,9 +675,9 @@ export default function DashboardPage() {
                         <div>
                             <div className="flex items-center gap-3 mb-3">
                                 <span className={`w-3 h-3 rounded-full ${accentBg} animate-ping`}></span>
-                                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em]">Status: Operacional • V6.0</span>
+                                <span className="text-[10px] font-semibold text-zinc-400  tracking-[0.3em]">Status: Operacional • V6.0</span>
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-black text-zinc-900 tracking-tight italic uppercase leading-[0.9] pr-6">
+                            <h2 className="text-4xl md:text-5xl font-semibold text-zinc-900 tracking-tight   leading-[0.9] pr-6">
                                 {SIDEBAR_ITEMS.find(i => i.id === activeTab)?.label}
                             </h2>
                         </div>
@@ -689,10 +689,10 @@ export default function DashboardPage() {
                                 animate={{ x: mode === 'cutting' ? 8 : '100%' }}
                                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
                             />
-                            <button onClick={() => updateMode('cutting')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-colors ${mode === 'cutting' ? 'text-white' : 'text-zinc-400 hover:text-zinc-900'}`}>
+                            <button onClick={() => updateMode('cutting')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-3 rounded-xl font-semibold text-[10px]  tracking-wider transition-colors ${mode === 'cutting' ? 'text-white' : 'text-zinc-400 hover:text-zinc-900'}`}>
                                 <Droplets className="w-4 h-4" /> Cutting
                             </button>
-                            <button onClick={() => updateMode('bulking')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-colors ${mode === 'bulking' ? 'text-white' : 'text-zinc-400 hover:text-zinc-900'}`}>
+                            <button onClick={() => updateMode('bulking')} className={`relative z-10 flex-1 flex items-center justify-center gap-3 py-3 rounded-xl font-semibold text-[10px]  tracking-wider transition-colors ${mode === 'bulking' ? 'text-white' : 'text-zinc-400 hover:text-zinc-900'}`}>
                                 <Flame className="w-4 h-4" /> Bulking
                             </button>
                         </div>
@@ -706,39 +706,39 @@ export default function DashboardPage() {
 
                                 {/* Top Stats Ribbon */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                                    <div className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm transition-all hover:scale-[1.02] hover:shadow-xl group">
+                                    <div className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md shadow-zinc-200/40 group">
                                         <div className="flex items-center justify-between mb-8">
-                                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Adesão Protocolo</span>
-                                            <div className={`p-2 rounded-lg ${accentLightBg} ${accentColor} group-hover:bg-zinc-950 group-hover:text-white transition-colors cursor-help`} title="Adesão mede sua consistência neural. Sem consistência, não há hipertrofia.">
+                                            <span className="text-[10px] font-semibold text-zinc-400  tracking-wider">Adesão Protocolo</span>
+                                            <div className={`p-2 rounded-lg ${accentLightBg} ${accentColor} group-hover:bg-slate-900 group-hover:text-white transition-colors cursor-help`} title="Adesão mede sua consistência neural. Sem consistência, não há hipertrofia.">
                                                 <Activity className="w-4 h-4" />
                                             </div>
                                         </div>
-                                        <div className="text-5xl font-black text-zinc-900 tracking-tighter italic mb-4">{progressPerc}%</div>
+                                        <div className="text-5xl font-semibold text-zinc-900 tracking-tight  mb-4">{progressPerc}%</div>
                                         <div className="w-full bg-zinc-100 rounded-full h-1.5 mb-4">
                                             <motion.div className={`h-full rounded-full ${accentBg}`} initial={{ width: 0 }} animate={{ width: `${progressPerc}%` }} />
                                         </div>
-                                        <p className="text-[8px] text-zinc-400 font-bold uppercase leading-tight italic opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <p className="text-[8px] text-zinc-400 font-bold  leading-tight  opacity-0 group-hover:opacity-100 transition-opacity">
                                             "Consistência vence a intensidade. 80%+ é o alvo Alpha."
                                         </p>
                                     </div>
 
                                     <motion.div
                                         animate={isWaterSplashing ? { scale: [1, 1.05, 1], rotate: [0, 1, -1, 0] } : {}}
-                                        className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm relative overflow-hidden group transition-shadow hover:shadow-xl"
+                                        className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm relative overflow-hidden group transition-shadow hover:shadow-md shadow-zinc-200/40"
                                     >
                                         <div className="flex items-center justify-between mb-8 relative z-20">
-                                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Tanque d'Água</span>
+                                            <span className="text-[10px] font-semibold text-zinc-400  tracking-wider">Tanque d'Água</span>
                                             <div className="p-2 rounded-lg bg-blue-50 text-blue-500 cursor-help" title="A água é o condutor da síntese proteica. Células desidratadas não crescem.">
                                                 <Waves className={`w-4 h-4 ${isWaterSplashing ? 'animate-bounce' : ''}`} />
                                             </div>
                                         </div>
                                         <div className="flex items-baseline gap-1 mb-4 relative z-20">
-                                            <span className="text-5xl font-black text-zinc-900 tracking-tighter italic">{(waterIntake / 1000).toFixed(1)}</span>
-                                            <span className="text-xs font-black text-zinc-300 uppercase tracking-widest">/ 3.0L</span>
+                                            <span className="text-5xl font-semibold text-zinc-900 tracking-tight ">{(waterIntake / 1000).toFixed(1)}</span>
+                                            <span className="text-xs font-semibold text-zinc-300  tracking-wider">/ 3.0L</span>
                                         </div>
                                         <div className="flex gap-2 relative z-20">
                                             <button onClick={() => updateWater(Math.max(0, waterIntake - 250))} className="p-3 bg-zinc-50 rounded-xl hover:bg-zinc-100 text-zinc-400 hover:text-zinc-600 transition outline-none"><Minus className="w-3 h-3" /></button>
-                                            <button onClick={() => updateWater(waterIntake + 250)} className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-blue-100 transition hover:bg-blue-700 active:scale-95 outline-none">+ 250ML</button>
+                                            <button onClick={() => updateWater(waterIntake + 250)} className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-semibold text-[10px]  tracking-[0.2em] shadow-lg shadow-blue-100 transition hover:bg-blue-700 active:scale-95 outline-none">+ 250ML</button>
                                         </div>
 
                                         {/* Glassy Overlay for realism */}
@@ -748,31 +748,31 @@ export default function DashboardPage() {
                                         <WaterWave progress={waterPerc} />
                                     </motion.div>
 
-                                    <div className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm transition-all hover:scale-[1.02] hover:shadow-xl">
+                                    <div className="bg-white rounded-[2.5rem] p-10 border border-zinc-200 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md shadow-zinc-200/40">
                                         <div className="flex items-center justify-between mb-8">
-                                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Peso Atual</span>
+                                            <span className="text-[10px] font-semibold text-zinc-400  tracking-wider">Peso Atual</span>
                                             <Scale className="w-5 h-5 text-zinc-300" />
                                         </div>
-                                        <div className="text-5xl font-black text-zinc-900 tracking-tighter italic">{weight || '--'} <span className="text-xs text-zinc-300 not-italic uppercase tracking-widest">kg</span></div>
-                                        <p className="text-[9px] font-black text-green-500 bg-green-50 px-3 py-1.5 rounded-full w-fit mt-5 uppercase tracking-widest border border-green-100">Algoritmo Ativado</p>
+                                        <div className="text-5xl font-semibold text-zinc-900 tracking-tight ">{weight || '--'} <span className="text-xs text-zinc-300 not-  tracking-wider">kg</span></div>
+                                        <p className="text-[9px] font-semibold text-green-500 bg-green-50 px-3 py-1.5 rounded-full w-fit mt-5  tracking-wider border border-green-100">Algoritmo Ativado</p>
                                     </div>
 
-                                    <div className="bg-zinc-950 rounded-[2.5rem] p-10 shadow-2xl text-white relative overflow-hidden group transition-all hover:scale-[1.02] hover:shadow-[0_40px_100px_rgba(0,0,0,0.3)]">
+                                    <div className="bg-slate-900 rounded-[2.5rem] p-10 shadow-lg shadow-zinc-200/40 text-white relative overflow-hidden group transition-all hover:scale-[1.02] hover:shadow-xl shadow-zinc-200/50">
                                         <div className="absolute top-0 right-0 p-6 opacity-10 scale-150 rotate-12 transition-transform group-hover:rotate-0"><Brain className="w-24 h-24" /></div>
                                         <div className="flex items-center justify-between mb-8 relative z-10">
-                                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Neural Index</span>
+                                            <span className="text-[10px] font-semibold text-zinc-500  tracking-wider">Neural Index</span>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[10px] font-black uppercase text-primary">{overallScore}/100</span>
+                                                <span className="text-[10px] font-semibold  text-primary">{overallScore}/100</span>
                                                 <Activity className="w-4 h-4 text-primary" />
                                             </div>
                                         </div>
-                                        <p className="text-xl font-black italic tracking-tight leading-[1.1] relative z-10 group-hover:text-primary transition-colors mb-4">
+                                        <p className="text-xl font-semibold  tracking-tight leading-[1.1] relative z-10 group-hover:text-primary transition-colors mb-4">
                                             {overallScore > 80 ? 'Protocolo em estado de fluxo. Performance de elite.' : overallScore > 50 ? 'Consistente, mas há margem para otimização neural.' : 'Sistema em degradação. Reajuste protocolos imediatamente.'}
                                         </p>
                                         <div className="w-full bg-zinc-800 rounded-full h-1 mb-4 relative z-10">
                                             <motion.div className="h-full bg-primary rounded-full" initial={{ width: 0 }} animate={{ width: `${overallScore}%` }} />
                                         </div>
-                                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-600">Biohacking V6 Alpha</span>
+                                        <span className="text-[9px] font-semibold  tracking-[0.3em] text-zinc-600">Biohacking V6 Alpha</span>
                                     </div>
                                 </div>
 
@@ -781,12 +781,12 @@ export default function DashboardPage() {
                                     <div className="flex flex-col lg:flex-row gap-20">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-4 mb-4">
-                                                <h3 className="text-3xl md:text-4xl font-black text-zinc-900 uppercase italic tracking-tight pr-4">Budget de Nutrientes</h3>
-                                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${targetCalories ? 'bg-orange-950 text-white' : 'bg-zinc-100 text-zinc-400'}`}>
+                                                <h3 className="text-3xl md:text-4xl font-semibold text-zinc-900   tracking-tight pr-4">Budget de Nutrientes</h3>
+                                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-semibold  tracking-wider ${targetCalories ? 'bg-orange-950 text-white' : 'bg-zinc-100 text-zinc-400'}`}>
                                                     {targetCalories ? 'Manual Override' : 'Auto Algorithm'}
                                                 </div>
                                             </div>
-                                            <p className="text-zinc-500 font-bold text-sm mb-12 uppercase tracking-widest max-w-xl leading-relaxed">Referencial estratégico calculado para sua massa de {weight || '?'}kg sob regime de {mode}.</p>
+                                            <p className="text-zinc-500 font-bold text-sm mb-12  tracking-wider max-w-xl leading-relaxed">Referencial estratégico calculado para sua massa de {weight || '?'}kg sob regime de {mode}.</p>
 
                                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                                 {[
@@ -795,49 +795,49 @@ export default function DashboardPage() {
                                                     { label: 'Gorduras', val: finalFats, color: 'yellow', sub: 'Hormonal' }
                                                 ].map((macro, i) => (
                                                     <div key={i} className="bg-zinc-50 border border-zinc-100 p-8 rounded-[2rem] hover:bg-white transition-all hover:border-zinc-200 shadow-inner">
-                                                        <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4">{macro.label}</p>
-                                                        <p className="text-4xl font-black text-zinc-950 tracking-tighter italic mb-2">{macro.val}g</p>
-                                                        <p className={`text-[8px] font-black uppercase tracking-widest text-${macro.color}-600`}>{macro.sub}</p>
+                                                        <p className="text-[10px] font-semibold text-zinc-400  tracking-wider mb-4">{macro.label}</p>
+                                                        <p className="text-4xl font-semibold text-slate-900 tracking-tight  mb-2">{macro.val}g</p>
+                                                        <p className={`text-[8px] font-semibold  tracking-wider text-${macro.color}-600`}>{macro.sub}</p>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        <div className="w-full lg:w-96 aspect-square rounded-[3rem] bg-zinc-950 flex flex-col items-center justify-center p-12 text-center shadow-[0_40px_100px_rgba(0,0,0,0.1)] relative group">
-                                            <div className="absolute top-8 right-8 text-primary shadow-2xl opacity-50 group-hover:scale-125 transition-transform"><TargetIcon className="w-8 h-8" /></div>
-                                            <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.4em] mb-6">Demanda Calórica</p>
+                                        <div className="w-full lg:w-96 aspect-square rounded-[3rem] bg-slate-900 flex flex-col items-center justify-center p-12 text-center shadow-lg shadow-zinc-200/30 relative group">
+                                            <div className="absolute top-8 right-8 text-primary shadow-lg shadow-zinc-200/40 opacity-50 group-hover:scale-125 transition-transform"><TargetIcon className="w-8 h-8" /></div>
+                                            <p className="text-[10px] font-semibold text-zinc-600  tracking-[0.4em] mb-6">Demanda Calórica</p>
                                             <div className="relative">
-                                                <span className="text-7xl md:text-8xl font-black text-white tracking-tighter italic leading-[0.85] pr-4">{finalCalories}</span>
+                                                <span className="text-7xl md:text-8xl font-semibold text-white tracking-tight  leading-[0.85] pr-4">{finalCalories}</span>
                                                 <div className="absolute -right-4 -top-4 w-4 h-4 rounded-full bg-primary blur-sm"></div>
                                             </div>
-                                            <span className="text-xs font-black text-primary uppercase tracking-[0.3em] mt-6">KCal / Ciclo 24h</span>
-                                            <div className="mt-12 p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800 w-full">
-                                                <p className="text-[8px] font-black text-zinc-500 uppercase tracking-[0.2em]">Basal + Efeito Térmico + NEAT</p>
+                                            <span className="text-xs font-semibold text-primary  tracking-[0.3em] mt-6">KCal / Ciclo 24h</span>
+                                            <div className="mt-12 p-4 bg-slate-800/50 rounded-2xl border border-zinc-800 w-full">
+                                                <p className="text-[8px] font-semibold text-zinc-500  tracking-[0.2em]">Basal + Efeito Térmico + NEAT</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* ACESSO RÁPIDO GLOBAL: NUTRIÇÃO ESPORTIVA */}
-                                <div className="bg-zinc-950 rounded-[3.5rem] p-10 md:p-14 text-white relative overflow-hidden group border border-white/5 shadow-2xl">
+                                <div className="bg-slate-900 rounded-[3.5rem] p-10 md:p-14 text-white relative overflow-hidden group border border-white/5 shadow-lg shadow-zinc-200/40">
                                     <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-700">
                                         <Trophy className="w-64 h-64 text-white" />
                                     </div>
-                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_rgba(204,255,0,0.05)_0%,_transparent_70%)]"></div>
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_rgba(16,185,129,0.08)_0%,_transparent_70%)]"></div>
 
                                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-10">
                                         <div className="max-w-xl text-center md:text-left">
-                                            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#CCFF00]/10 border border-zinc-800 rounded-full mb-6 mx-auto md:mx-0">
-                                                <Crown className="w-3 h-3 text-[#CCFF00]" />
-                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#CCFF00]">Módulo de Elite Alpha</span>
+                                            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-6 mx-auto md:mx-0">
+                                                <Crown className="w-3 h-3 text-emerald-400" />
+                                                <span className="text-[9px] font-semibold tracking-wider text-emerald-400">Módulo de Elite Alpha</span>
                                             </div>
-                                            <h3 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 leading-none">Nutrição <br className="hidden md:block" /> <span className="bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent">Esportiva</span></h3>
-                                            <p className="text-zinc-400 text-sm font-bold italic leading-relaxed">
+                                            <h3 className="text-4xl md:text-5xl font-semibold tracking-tight mb-4 leading-none">Nutrição <br className="hidden md:block" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">Esportiva</span></h3>
+                                            <p className="text-zinc-400 text-sm leading-relaxed">
                                                 Protocolos de timing, suplementação e métricas avançadas para transformar seu metabolismo em uma máquina de performance.
                                             </p>
                                         </div>
 
-                                        <Link href="/nutricao-esportiva" className="shrink-0 px-12 py-6 bg-gradient-to-r from-[#CCFF00] to-[#BDFF00] text-black font-black uppercase tracking-widest text-[11px] rounded-[1.75rem] hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(204,255,0,0.15)] flex items-center gap-3">
+                                        <Link href="/nutricao-esportiva" className="shrink-0 px-10 py-5 bg-emerald-500 text-white font-semibold tracking-wider text-xs rounded-3xl hover:bg-emerald-600 focus:ring-4 ring-emerald-500/30 active:scale-95 transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3">
                                             Explorar Módulo <ArrowUpRight className="w-5 h-5" />
                                         </Link>
                                     </div>
@@ -848,55 +848,55 @@ export default function DashboardPage() {
                                     <div className="col-span-1 lg:col-span-2 bg-white rounded-[2.5rem] p-8 md:p-12 border border-zinc-200 shadow-sm relative overflow-hidden">
                                         <div className="flex justify-between items-start mb-8">
                                             <div>
-                                                <h3 className="text-2xl font-black text-zinc-900 uppercase italic flex items-center gap-3">
+                                                <h3 className="text-2xl font-semibold text-zinc-900   flex items-center gap-3">
                                                     <Scale className="w-6 h-6 text-emerald-500" /> Antropometria
                                                 </h3>
-                                                <p className="text-[10px] text-zinc-400 uppercase tracking-widest mt-2">{goalEval.msg}</p>
+                                                <p className="text-[10px] text-zinc-400  tracking-wider mt-2">{goalEval.msg}</p>
                                             </div>
-                                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${goalEval.color.replace('text', 'bg').replace('500', '50/50')} ${goalEval.color}`}>{goalEval.score}</span>
+                                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-semibold  tracking-wider ${goalEval.color.replace('text', 'bg').replace('500', '50/50')} ${goalEval.color}`}>{goalEval.score}</span>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-4 mb-6">
                                             <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
-                                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block mb-1">Peso (kg)</label>
-                                                <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="00.0" className="w-full bg-transparent font-black text-2xl md:text-3xl text-zinc-950 outline-none" />
+                                                <label className="text-[10px] font-semibold text-zinc-400  tracking-wider block mb-1">Peso (kg)</label>
+                                                <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="00.0" className="w-full bg-transparent font-semibold text-2xl md:text-3xl text-slate-900 outline-none" />
                                             </div>
                                             <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
-                                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block mb-1">Altura (cm)</label>
-                                                <input value={height} onChange={(e) => setHeight(e.target.value)} placeholder="000" className="w-full bg-transparent font-black text-2xl md:text-3xl text-zinc-950 outline-none" />
+                                                <label className="text-[10px] font-semibold text-zinc-400  tracking-wider block mb-1">Altura (cm)</label>
+                                                <input value={height} onChange={(e) => setHeight(e.target.value)} placeholder="000" className="w-full bg-transparent font-semibold text-2xl md:text-3xl text-slate-900 outline-none" />
                                             </div>
                                         </div>
 
                                         <div className="grid grid-cols-4 gap-2 mb-6">
                                             <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                                                <label className="text-[8px] font-black text-zinc-400 uppercase block">Kcal Alvo</label>
-                                                <input value={targetCalories} onChange={(e) => setTargetCalories(e.target.value)} placeholder={autoCalories.toString()} className="w-full bg-transparent font-black text-lg min-w-0" />
+                                                <label className="text-[8px] font-semibold text-zinc-400  block">Kcal Alvo</label>
+                                                <input value={targetCalories} onChange={(e) => setTargetCalories(e.target.value)} placeholder={autoCalories.toString()} className="w-full bg-transparent font-semibold text-lg min-w-0" />
                                             </div>
                                             <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                                                <label className="text-[8px] font-black text-zinc-400 uppercase block">Prot (g)</label>
-                                                <input value={targetProtein} onChange={(e) => setTargetProtein(e.target.value)} placeholder={autoProtein.toString()} className="w-full bg-transparent font-black text-lg min-w-0" />
+                                                <label className="text-[8px] font-semibold text-zinc-400  block">Prot (g)</label>
+                                                <input value={targetProtein} onChange={(e) => setTargetProtein(e.target.value)} placeholder={autoProtein.toString()} className="w-full bg-transparent font-semibold text-lg min-w-0" />
                                             </div>
                                             <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
-                                                <label className="text-[8px] font-black text-zinc-400 uppercase block">Carb (g)</label>
-                                                <input value={targetCarbs} onChange={(e) => setTargetCarbs(e.target.value)} placeholder={autoCarbs.toString()} className="w-full bg-transparent font-black text-lg min-w-0" />
+                                                <label className="text-[8px] font-semibold text-zinc-400  block">Carb (g)</label>
+                                                <input value={targetCarbs} onChange={(e) => setTargetCarbs(e.target.value)} placeholder={autoCarbs.toString()} className="w-full bg-transparent font-semibold text-lg min-w-0" />
                                             </div>
-                                            <button onClick={saveMetrics} disabled={isSavingMetrics} className="col-span-4 md:col-span-1 bg-zinc-950 text-white font-black rounded-xl shadow-lg hover:bg-zinc-800 transition-colors text-[9px] uppercase tracking-widest flex items-center justify-center p-3 gap-2 disabled:opacity-50">
+                                            <button onClick={saveMetrics} disabled={isSavingMetrics} className="col-span-4 md:col-span-1 bg-slate-900 text-white font-semibold rounded-xl shadow-lg hover:bg-zinc-800 transition-colors text-[9px]  tracking-wider flex items-center justify-center p-3 gap-2 disabled:opacity-50">
                                                 {isSavingMetrics ? '...' : <><Save className="w-3 h-3" /> Salvar</>}
                                             </button>
                                         </div>
                                     </div>
 
                                     {/* Science Card Mini */}
-                                    <div className="col-span-1 bg-zinc-950 rounded-[2.5rem] p-8 text-white relative overflow-hidden group shadow-2xl flex flex-col justify-center">
+                                    <div className="col-span-1 bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden group shadow-lg shadow-zinc-200/40 flex flex-col justify-center">
                                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,_rgba(16,185,129,0.15)_0%,_transparent_50%)]"></div>
                                         <BookOpen className="w-8 h-8 text-emerald-500 mb-6 relative z-10" />
-                                        <h4 className="text-xl font-black uppercase italic mb-4 tracking-tighter relative z-10">Protocolo Alpha</h4>
-                                        <p className="text-zinc-400 text-xs leading-relaxed italic relative z-10 mb-6">
+                                        <h4 className="text-xl font-semibold   mb-4 tracking-tight relative z-10">Protocolo Alpha</h4>
+                                        <p className="text-zinc-400 text-xs leading-relaxed  relative z-10 mb-6">
                                             Ajustes de peso base devem variar entre 0.25% e 0.5% na semana. Offsets recomendados: <strong className="text-orange-400">Bulking</strong> (+38 kcal/kg), <strong className="text-emerald-400">Cutting</strong> (-26 kcal/kg).
                                         </p>
                                         <div className="mt-auto p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/5 text-center relative z-10">
-                                            <span className="text-xl font-black italic tracking-tighter block text-white">{mode.toUpperCase()}</span>
-                                            <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Modo Operacional Ativo</span>
+                                            <span className="text-xl font-semibold  tracking-tight block text-white">{mode.toUpperCase()}</span>
+                                            <span className="text-[8px] font-semibold text-emerald-500  tracking-wider">Modo Operacional Ativo</span>
                                         </div>
                                     </div>
                                 </div>
@@ -912,12 +912,12 @@ export default function DashboardPage() {
                                     <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-zinc-900 to-orange-500"></div>
                                     <div className="flex flex-col lg:flex-row justify-between lg:items-end mb-20 gap-10">
                                         <div>
-                                            <h3 className="text-4xl md:text-5xl font-black text-zinc-900 uppercase italic leading-none mb-4 tracking-tighter pr-4">The Grid</h3>
+                                            <h3 className="text-4xl md:text-5xl font-semibold text-zinc-900   leading-none mb-4 tracking-tight pr-4">The Grid</h3>
                                             <div className="flex items-center gap-2 mb-4">
-                                                <span className={`text-[10px] font-black uppercase tracking-widest ${gridEval.color}`}>{gridEval.score}</span>
-                                                <span className="text-[10px] text-zinc-400 uppercase tracking-widest">• {gridEval.msg}</span>
+                                                <span className={`text-[10px] font-semibold  tracking-wider ${gridEval.color}`}>{gridEval.score}</span>
+                                                <span className="text-[10px] text-zinc-400  tracking-wider">• {gridEval.msg}</span>
                                             </div>
-                                            <p className="text-zinc-400 font-bold text-[10px] tracking-[0.4em] uppercase ml-1">Routine Synchronization Engine</p>
+                                            <p className="text-zinc-400 font-bold text-[10px] tracking-[0.4em]  ml-1">Routine Synchronization Engine</p>
                                         </div>
                                         <div className="flex items-center gap-4 bg-zinc-50 border-2 border-zinc-100 p-3 rounded-[2.5rem] max-w-xl w-full shadow-inner group focus-within:border-zinc-300 transition-all">
                                             <div className="bg-white p-4 rounded-3xl text-zinc-300 shadow-sm group-focus-within:text-zinc-900 transition-colors">
@@ -926,10 +926,10 @@ export default function DashboardPage() {
                                             <input
                                                 value={newTaskName} onChange={(e) => setNewTaskName(e.target.value)}
                                                 placeholder="Inject tactical objective..."
-                                                className="bg-transparent border-none text-lg font-black w-full outline-none text-zinc-950 placeholder:text-zinc-300 italic"
+                                                className="bg-transparent border-none text-lg font-semibold w-full outline-none text-slate-900 placeholder:text-zinc-300 "
                                                 onKeyDown={(e) => e.key === 'Enter' && addCustomTask()}
                                             />
-                                            <button onClick={addCustomTask} className={`px-10 py-4 rounded-[1.75rem] font-black transition-all uppercase tracking-[0.2em] text-[10px] ${newTaskName ? 'bg-zinc-950 text-white shadow-2xl hover:scale-105 active:scale-95' : 'bg-transparent text-zinc-200 cursor-not-allowed'}`}>
+                                            <button onClick={addCustomTask} className={`px-10 py-4 rounded-[1.75rem] font-semibold transition-all  tracking-[0.2em] text-[10px] ${newTaskName ? 'bg-slate-900 text-white shadow-lg shadow-zinc-200/40 hover:scale-105 active:scale-95' : 'bg-transparent text-zinc-200 cursor-not-allowed'}`}>
                                                 Deploy
                                             </button>
                                         </div>
@@ -939,57 +939,57 @@ export default function DashboardPage() {
                                         {habits.map((habit) => (
                                             <motion.div
                                                 layout key={habit.id}
-                                                className={`flex items-center group justify-between p-8 rounded-[2.5rem] border-2 transition-all cursor-pointer ${habit.is_completed
-                                                    ? `${accentLightBg} ${accentBorder} ${accentColor} shadow-xl shadow-zinc-100`
-                                                    : 'bg-zinc-50 border-zinc-100 text-zinc-950 hover:border-zinc-200 hover:bg-white'
+                                                className={`flex items-center group justify-between p-6 rounded-2xl border transition-all cursor-pointer ${habit.is_completed
+                                                    ? `${accentLightBg} ${accentBorder} ${accentColor} shadow-md shadow-zinc-200/40`
+                                                    : 'bg-white border-zinc-100 text-slate-700 hover:border-zinc-200 hover:shadow-sm'
                                                     }`}
                                             >
-                                                <button onClick={() => toggleHabit(habit.id, habit.is_completed)} className="flex-1 flex items-center gap-6 text-left font-black uppercase tracking-tight text-lg md:text-xl italic pr-6 group-active:scale-[0.98] transition-transform">
+                                                <button onClick={() => toggleHabit(habit.id, habit.is_completed)} className="flex-1 flex items-center gap-5 text-left font-medium text-lg pr-6 group-active:scale-[0.98] transition-transform">
                                                     {habit.is_completed ? (
-                                                        <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center shadow-lg translate-x-1"><CheckCircle2 className="w-7 h-7" /></div>
+                                                        <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center shadow-sm"><CheckCircle2 className="w-5 h-5" /></div>
                                                     ) : (
-                                                        <div className="w-10 h-10 rounded-2xl bg-white/50 border-2 border-zinc-200 flex items-center justify-center transition-colors group-hover:border-zinc-400 translate-x-1"><Circle className="w-6 h-6 text-zinc-200" /></div>
+                                                        <div className="w-8 h-8 rounded-xl bg-zinc-50 border border-zinc-200 flex items-center justify-center transition-colors group-hover:border-zinc-300"><Circle className="w-4 h-4 text-zinc-300" /></div>
                                                     )}
-                                                    <span className={`${habit.is_completed ? 'line-through opacity-30 italic' : ''} transition-all translate-x-[-4px]`}>{habit.task_name}</span>
+                                                    <span className={`${habit.is_completed ? 'line-through opacity-40' : ''} transition-all`}>{habit.task_name}</span>
                                                 </button>
-                                                <button onClick={() => deleteHabit(habit.id)} className="opacity-0 group-hover:opacity-100 p-4 hover:bg-red-50 rounded-2xl transition-all text-zinc-300 hover:text-red-500 scale-90 hover:scale-100">
-                                                    <Trash2 className="w-6 h-6" />
+                                                <button onClick={() => deleteHabit(habit.id)} className="opacity-0 group-hover:opacity-100 p-3 hover:bg-red-50 rounded-xl transition-all text-zinc-300 hover:text-red-500 scale-95 hover:scale-100">
+                                                    <Trash2 className="w-5 h-5" />
                                                 </button>
                                             </motion.div>
                                         ))}
                                     </div>
                                     <div className="mt-16 pt-10 border-t border-zinc-50 flex flex-wrap items-center justify-between gap-6">
-                                        <div className="flex gap-10 text-zinc-400 text-[10px] font-black uppercase tracking-[0.4em]">
+                                        <div className="flex gap-10 text-zinc-400 text-[10px] font-semibold  tracking-[0.4em]">
                                             <span>Active Nodes: {habits.length}</span>
                                             <span className={accentColor}>Sync Level: {progressPerc}%</span>
                                         </div>
                                         <div className="p-6 bg-zinc-50 rounded-[2rem] border border-zinc-100 max-w-md">
-                                            <p className="text-[10px] font-black text-zinc-900 uppercase tracking-widest mb-2 flex items-center gap-2"><Brain className="w-3 h-3" /> Por que o Grid?</p>
-                                            <p className="text-xs text-zinc-400 italic font-medium leading-relaxed">A dopamina é liberada ao "dar check". O Grid não é apenas uma lista, é um sistema de recompensa neural para manter seu córtex pré-frontal focado no objetivo anabólico.</p>
+                                            <p className="text-[10px] font-semibold text-zinc-900  tracking-wider mb-2 flex items-center gap-2"><Brain className="w-3 h-3" /> Por que o Grid?</p>
+                                            <p className="text-xs text-zinc-400  font-medium leading-relaxed">A dopamina é liberada ao "dar check". O Grid não é apenas uma lista, é um sistema de recompensa neural para manter seu córtex pré-frontal focado no objetivo anabólico.</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* ACESSO RÁPIDO: NUTRIÇÃO ESPORTIVA */}
-                                <div className="bg-zinc-950 rounded-[3.5rem] p-10 md:p-14 text-white relative overflow-hidden group border border-white/5 shadow-2xl">
+                                <div className="bg-slate-900 rounded-[3.5rem] p-10 md:p-14 text-white relative overflow-hidden group border border-white/5 shadow-lg shadow-zinc-200/40">
                                     <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-all duration-700">
                                         <Trophy className="w-64 h-64 text-white" />
                                     </div>
-                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_rgba(204,255,0,0.05)_0%,_transparent_70%)]"></div>
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_rgba(16,185,129,0.08)_0%,_transparent_70%)]"></div>
 
                                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-10">
                                         <div className="max-w-xl text-center md:text-left">
-                                            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#CCFF00]/10 border border-zinc-800 rounded-full mb-6 mx-auto md:mx-0">
-                                                <Crown className="w-3 h-3 text-[#CCFF00]" />
-                                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#CCFF00]">Módulo de Elite Alpha</span>
+                                            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-6 mx-auto md:mx-0">
+                                                <Crown className="w-3 h-3 text-emerald-400" />
+                                                <span className="text-[9px] font-semibold tracking-wider text-emerald-400">Módulo de Elite Alpha</span>
                                             </div>
-                                            <h3 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter mb-4 leading-none">Nutrição <br className="hidden md:block" /> <span className="bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent">Esportiva</span></h3>
-                                            <p className="text-zinc-400 text-sm font-bold italic leading-relaxed">
+                                            <h3 className="text-4xl md:text-5xl font-semibold tracking-tight mb-4 leading-none">Nutrição <br className="hidden md:block" /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">Esportiva</span></h3>
+                                            <p className="text-zinc-400 text-sm leading-relaxed">
                                                 Protocolos de timing, suplementação e métricas avançadas para transformar seu metabolismo em uma máquina de performance.
                                             </p>
                                         </div>
 
-                                        <Link href="/nutricao-esportiva" className="shrink-0 px-12 py-6 bg-gradient-to-r from-[#CCFF00] to-[#BDFF00] text-black font-black uppercase tracking-widest text-[11px] rounded-[1.75rem] hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(204,255,0,0.15)] flex items-center gap-3">
+                                        <Link href="/nutricao-esportiva" className="shrink-0 px-10 py-5 bg-emerald-500 text-white font-semibold tracking-wider text-xs rounded-3xl hover:bg-emerald-600 focus:ring-4 ring-emerald-500/30 active:scale-95 transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3">
                                             Explorar Módulo <ArrowUpRight className="w-5 h-5" />
                                         </Link>
                                     </div>
@@ -1002,8 +1002,8 @@ export default function DashboardPage() {
                             <motion.div key="dieta" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                                     <div>
-                                        <h3 className="text-4xl font-black text-zinc-900 italic uppercase tracking-tighter">Diet Analytics</h3>
-                                        <p className="text-zinc-400 font-bold text-[10px] tracking-[0.4em] uppercase">High-Fidelity Nutrition Evaluator</p>
+                                        <h3 className="text-4xl font-semibold text-zinc-900   tracking-tight">Diet Analytics</h3>
+                                        <p className="text-zinc-400 font-bold text-[10px] tracking-[0.4em] ">High-Fidelity Nutrition Evaluator</p>
                                     </div>
                                     <div className="flex gap-4">
                                         {isEditingDiet && (
@@ -1024,7 +1024,7 @@ export default function DashboardPage() {
                                                             mode: mode
                                                         }))]);
                                                     }}
-                                                    className="px-6 py-3 bg-zinc-100 text-zinc-600 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-all"
+                                                    className="px-6 py-3 bg-zinc-100 text-zinc-600 rounded-2xl font-semibold text-[10px]  tracking-wider hover:bg-zinc-200 transition-all"
                                                 >
                                                     Restaurar Padrão
                                                 </button>
@@ -1037,18 +1037,18 @@ export default function DashboardPage() {
                                                             }
                                                         }
                                                     }}
-                                                    className="px-6 py-3 bg-red-50 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-100 transition-all"
+                                                    className="px-6 py-3 bg-red-50 text-red-500 rounded-2xl font-semibold text-[10px]  tracking-wider hover:bg-red-100 transition-all"
                                                 >
                                                     Zerar
                                                 </button>
                                             </div>
                                         )}
                                         {isEditingDiet ? (
-                                            <button onClick={saveDiet} disabled={isSavingDiet} className="px-8 py-3 bg-zinc-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-xl hover:scale-105 transition-all">
+                                            <button onClick={saveDiet} disabled={isSavingDiet} className="px-8 py-3 bg-slate-900 text-white rounded-2xl font-semibold text-[10px]  tracking-wider flex items-center gap-2 shadow-md shadow-zinc-200/40 hover:scale-105 transition-all">
                                                 <Save className="w-4 h-4" /> {isSavingDiet ? 'Salvando...' : 'Salvar Customização'}
                                             </button>
                                         ) : (
-                                            <button onClick={toggleDietEdit} className="px-8 py-3 bg-white border-2 border-zinc-100 text-zinc-950 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:bg-zinc-50 transition-all">
+                                            <button onClick={toggleDietEdit} className="px-8 py-3 bg-white border-2 border-zinc-100 text-slate-900 rounded-2xl font-semibold text-[10px]  tracking-wider flex items-center gap-2 hover:bg-zinc-50 transition-all">
                                                 <Settings className="w-4 h-4" /> Customizar Protocolo
                                             </button>
                                         )}
@@ -1057,7 +1057,7 @@ export default function DashboardPage() {
 
                                 {/* Catalog Selector */}
                                 <div className="mb-10">
-                                    <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] mb-6">Selecione seu Catálogo de Alimentos (Base do que tem em casa)</p>
+                                    <p className="text-[10px] font-semibold text-zinc-400  tracking-[0.3em] mb-6">Selecione seu Catálogo de Alimentos (Base do que tem em casa)</p>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         {[
                                             { id: 'standard', label: 'Alpha Standard', desc: 'Equilíbrio entre custo e performance.', icon: <Utensils className="w-5 h-5" /> },
@@ -1108,7 +1108,7 @@ export default function DashboardPage() {
                                                             })));
                                                         }
                                                     }}
-                                                    className={`p-6 rounded-[2rem] text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${selectedProfile === cat.id ? `${accentBorder} bg-white shadow-xl` : 'border-zinc-100 bg-zinc-50/50 opacity-60 hover:opacity-100'} relative overflow-hidden`}
+                                                    className={`p-6 rounded-[2rem] text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${selectedProfile === cat.id ? `${accentBorder} bg-white shadow-md shadow-zinc-200/40` : 'border-zinc-100 bg-zinc-50/50 opacity-60 hover:opacity-100'} relative overflow-hidden`}
                                                 >
                                                     {!isPro && cat.id !== 'standard' && <div className="absolute top-4 right-4"><Lock className="w-4 h-4 text-zinc-300" /></div>}
                                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${selectedProfile === cat.id ? accentBg + ' text-white' : 'bg-white text-zinc-300'}`}>
@@ -1116,11 +1116,11 @@ export default function DashboardPage() {
                                                     </div>
                                                     <div className="flex items-center justify-between">
                                                         <div>
-                                                            <h4 className="font-black italic uppercase tracking-tighter mb-1 text-sm">{cat.label}</h4>
+                                                            <h4 className="font-semibold   tracking-tight mb-1 text-sm">{cat.label}</h4>
                                                             <p className="text-[10px] text-zinc-400 font-bold leading-tight">{cat.desc}</p>
                                                         </div>
                                                         <div className="ml-4 flex-shrink-0 text-right">
-                                                            <span className={`px-3 py-1 rounded-full text-xs font-black ${catColor.replace('text', 'bg').replace('500', '50/50')} ${catColor}`}>{catScore}</span>
+                                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${catColor.replace('text', 'bg').replace('500', '50/50')} ${catColor}`}>{catScore}</span>
                                                         </div>
                                                     </div>
                                                 </button>
@@ -1134,14 +1134,14 @@ export default function DashboardPage() {
                                     {/* Status Card */}
                                     <div className={`col-span-1 p-10 rounded-[3rem] border-2 flex flex-col justify-between relative overflow-hidden ${evalResult.color.replace('text', 'border')} ${evalResult.color.replace('text', 'bg').replace('500', '50/50')}`}>
                                         <div className="relative z-10">
-                                            <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">Veredito AI</p>
-                                            <h4 className={`text-4xl font-black italic tracking-tighter uppercase mb-2 ${evalResult.color}`}>{evalResult.score}</h4>
+                                            <p className="text-[10px] font-semibold  tracking-wider opacity-40 mb-2">Veredito AI</p>
+                                            <h4 className={`text-4xl font-semibold  tracking-tight  mb-2 ${evalResult.color}`}>{evalResult.score}</h4>
                                             <p className="text-sm font-bold text-zinc-600 leading-tight">{evalResult.msg}</p>
                                         </div>
                                         <div className="mt-8 relative z-10">
                                             <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-[10px] font-black uppercase">Consistência de Macro</span>
-                                                <span className="text-[10px] font-black ml-auto">{Math.min(100, Math.round((totalDietMacros.p / finalProtein) * 100))}%</span>
+                                                <span className="text-[10px] font-semibold ">Consistência de Macro</span>
+                                                <span className="text-[10px] font-semibold ml-auto">{Math.min(100, Math.round((totalDietMacros.p / finalProtein) * 100))}%</span>
                                             </div>
                                             <div className="w-full bg-zinc-200/50 rounded-full h-1.5 overflow-hidden">
                                                 <motion.div className={`h-full ${accentBg}`} initial={{ width: 0 }} animate={{ width: `${(totalDietMacros.p / finalProtein) * 100}%` }} />
@@ -1151,11 +1151,11 @@ export default function DashboardPage() {
                                     </div>
 
                                     {/* Macro Comparison bars */}
-                                    <div className="col-span-1 lg:col-span-2 bg-zinc-950 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                                    <div className="col-span-1 lg:col-span-2 bg-slate-900 rounded-[3rem] p-10 text-white shadow-lg shadow-zinc-200/40 relative overflow-hidden">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
                                             <div className="space-y-6">
                                                 <div className="flex items-center justify-between">
-                                                    <h5 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Alinhamento de Macros</h5>
+                                                    <h5 className="text-[10px] font-semibold  tracking-wider text-zinc-500">Alinhamento de Macros</h5>
                                                     <div className="flex gap-2">
                                                         <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
                                                         <div className="w-2 h-2 rounded-full bg-orange-500"></div>
@@ -1169,7 +1169,7 @@ export default function DashboardPage() {
                                                     { label: 'Gordura', current: totalDietMacros.f, target: finalFats, color: 'bg-yellow-500' }
                                                 ].map((m, idx) => (
                                                     <div key={idx} className="space-y-2">
-                                                        <div className="flex justify-between text-[10px] font-black uppercase">
+                                                        <div className="flex justify-between text-[10px] font-semibold ">
                                                             <span className="text-zinc-500">{m.label}</span>
                                                             <span>{m.current}g / <span className="text-zinc-500">{m.target}g</span></span>
                                                         </div>
@@ -1182,33 +1182,33 @@ export default function DashboardPage() {
 
                                             <div className="flex flex-col justify-between border-l border-white/5 md:pl-10">
                                                 <div>
-                                                    <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-4 flex items-center gap-2"><Brain className="w-3 h-3" /> Mentoria Tactical</p>
+                                                    <p className="text-[10px] font-semibold  tracking-wider text-primary mb-4 flex items-center gap-2"><Brain className="w-3 h-3" /> Mentoria Tactical</p>
                                                     <div className="space-y-4">
                                                         {isPro ? (
                                                             dietInsights.map((insight, idx) => (
                                                                 <div key={idx} className="flex gap-3 items-start">
                                                                     <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>
-                                                                    <p className="text-[11px] font-medium text-zinc-400 leading-relaxed italic">"{insight}"</p>
+                                                                    <p className="text-[11px] font-medium text-zinc-400 leading-relaxed ">"{insight}"</p>
                                                                 </div>
                                                             ))
                                                         ) : (
                                                             <div className="p-4 bg-white/5 rounded-2xl border border-white/10 text-center py-10">
                                                                 <Lock className="w-6 h-6 text-zinc-600 mx-auto mb-3" />
-                                                                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Mentoria AI Bloqueada</p>
+                                                                <p className="text-[10px] font-semibold text-zinc-500  tracking-wider mb-2">Mentoria AI Bloqueada</p>
                                                                 <p className="text-[9px] text-zinc-600 font-bold mb-4">Evolua para o Plano Pro Alpha para insights neurais sobre sua dieta.</p>
-                                                                <Link href="/pricing" className="text-[8px] font-black uppercase tracking-widest bg-primary px-4 py-2 rounded-lg text-black hover:scale-105 transition-all inline-block">Upgrade</Link>
+                                                                <Link href="/pricing" className="text-[8px] font-semibold  tracking-wider bg-primary px-4 py-2 rounded-lg text-black hover:scale-105 transition-all inline-block">Upgrade</Link>
                                                             </div>
                                                         )}
                                                     </div>
                                                 </div>
                                                 <div className="mt-8 pt-6 border-t border-white/5 flex items-end justify-between">
                                                     <div>
-                                                        <p className="text-[10px] font-black text-zinc-600 uppercase mb-1">Total Diário</p>
-                                                        <p className="text-3xl font-black italic tracking-tighter">{totalDietMacros.kcal} kcal</p>
+                                                        <p className="text-[10px] font-semibold text-zinc-600  mb-1">Total Diário</p>
+                                                        <p className="text-3xl font-semibold  tracking-tight">{totalDietMacros.kcal} kcal</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-[10px] font-black text-zinc-600 uppercase mb-1">Alvo</p>
-                                                        <p className="text-xl font-black italic text-zinc-400 tracking-tighter">{finalCalories} kcal</p>
+                                                        <p className="text-[10px] font-semibold text-zinc-600  mb-1">Alvo</p>
+                                                        <p className="text-xl font-semibold  text-zinc-400 tracking-tight">{finalCalories} kcal</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1220,53 +1220,53 @@ export default function DashboardPage() {
                                     {(isEditingDiet ? customMeals.filter(m => m.mode === mode) : (useMeals || displaySuggestions)).map((food: any, i) => (
                                         <div key={i} className="rounded-[3rem] p-10 bg-transparent shadow-sm relative group overflow-hidden">
                                             <div className="flex flex-col xl:flex-row gap-10 items-start xl:items-center">
-                                                <div className={`w-32 h-32 rounded-[2rem] ${accentLightBg} border-2 ${accentBorder} flex flex-col items-center justify-center font-black ${accentColor} shadow-inner`}>
-                                                    <span className="text-[10px] uppercase tracking-widest mb-1 opacity-50">T-Minus</span>
+                                                <div className={`w-32 h-32 rounded-[2rem] ${accentLightBg} border-2 ${accentBorder} flex flex-col items-center justify-center font-semibold ${accentColor} shadow-inner`}>
+                                                    <span className="text-[10px]  tracking-wider mb-1 opacity-50">T-Minus</span>
                                                     {isEditingDiet ? (
-                                                        <input value={food.time} onChange={(e) => updateCustomMeal(food.id, 'time', e.target.value)} className="bg-transparent w-full text-center text-xl tracking-tighter italic font-black outline-none" />
+                                                        <input value={food.time} onChange={(e) => updateCustomMeal(food.id, 'time', e.target.value)} className="bg-transparent w-full text-center text-xl tracking-tight  font-semibold outline-none" />
                                                     ) : (
-                                                        <span className="text-3xl tracking-tighter italic">{food.time}</span>
+                                                        <span className="text-3xl tracking-tight ">{food.time}</span>
                                                     )}
                                                 </div>
                                                 <div className="flex-1 w-full">
                                                     <div className="flex items-center gap-4 mb-3">
                                                         {isEditingDiet ? (
-                                                            <input value={food.name} onChange={(e) => updateCustomMeal(food.id, 'name', e.target.value)} className="text-2xl md:text-3xl font-black text-zinc-900 italic tracking-tighter uppercase bg-zinc-50 px-4 py-2 rounded-xl w-full outline-none focus:bg-white" />
+                                                            <input value={food.name} onChange={(e) => updateCustomMeal(food.id, 'name', e.target.value)} className="text-2xl md:text-3xl font-semibold text-zinc-900  tracking-tight  bg-zinc-50 px-4 py-2 rounded-xl w-full outline-none focus:bg-white" />
                                                         ) : (
-                                                            <h4 className="text-4xl font-black text-zinc-900 italic tracking-tighter uppercase">{food.name}</h4>
+                                                            <h4 className="text-4xl font-semibold text-zinc-900  tracking-tight ">{food.name}</h4>
                                                         )}
-                                                        {!isEditingDiet && <button onClick={() => setShowMealInfo(showMealInfo === i ? null : i)} className={`p-3 rounded-2xl transition-all ${showMealInfo === i ? 'bg-zinc-950 text-white' : 'bg-zinc-100 text-zinc-400 hover:text-zinc-900'}`}><Info className="w-5 h-5" /></button>}
+                                                        {!isEditingDiet && <button onClick={() => setShowMealInfo(showMealInfo === i ? null : i)} className={`p-3 rounded-2xl transition-all ${showMealInfo === i ? 'bg-slate-900 text-white' : 'bg-zinc-100 text-zinc-400 hover:text-zinc-900'}`}><Info className="w-5 h-5" /></button>}
                                                     </div>
 
                                                     {isEditingDiet ? (
-                                                        <textarea value={food.items} onChange={(e) => updateCustomMeal(food.id, 'items', e.target.value)} className="w-full bg-zinc-50 p-4 rounded-xl font-bold text-zinc-600 italic mb-6 outline-none focus:bg-white min-h-[80px]" />
+                                                        <textarea value={food.items} onChange={(e) => updateCustomMeal(food.id, 'items', e.target.value)} className="w-full bg-zinc-50 p-4 rounded-xl font-bold text-zinc-600  mb-6 outline-none focus:bg-white min-h-[80px]" />
                                                     ) : (
-                                                        <p className="text-xl font-bold text-zinc-600 mb-6 italic leading-tight">{food.items}</p>
+                                                        <p className="text-xl font-bold text-zinc-600 mb-6  leading-tight">{food.items}</p>
                                                     )}
 
                                                     <div className="flex flex-wrap gap-4">
                                                         {isEditingDiet ? (
                                                             <div className="flex gap-2">
                                                                 <div className="flex flex-col gap-1">
-                                                                    <span className="text-[8px] font-black uppercase text-zinc-400">P</span>
-                                                                    <input type="number" value={food.protein} onChange={(e) => updateCustomMeal(food.id, 'protein', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-black text-xs" />
+                                                                    <span className="text-[8px] font-semibold  text-zinc-400">P</span>
+                                                                    <input type="number" value={food.protein} onChange={(e) => updateCustomMeal(food.id, 'protein', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-semibold text-xs" />
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
-                                                                    <span className="text-[8px] font-black uppercase text-zinc-400">C</span>
-                                                                    <input type="number" value={food.carbs} onChange={(e) => updateCustomMeal(food.id, 'carbs', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-black text-xs" />
+                                                                    <span className="text-[8px] font-semibold  text-zinc-400">C</span>
+                                                                    <input type="number" value={food.carbs} onChange={(e) => updateCustomMeal(food.id, 'carbs', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-semibold text-xs" />
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
-                                                                    <span className="text-[8px] font-black uppercase text-zinc-400">G</span>
-                                                                    <input type="number" value={food.fats} onChange={(e) => updateCustomMeal(food.id, 'fats', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-black text-xs" />
+                                                                    <span className="text-[8px] font-semibold  text-zinc-400">G</span>
+                                                                    <input type="number" value={food.fats} onChange={(e) => updateCustomMeal(food.id, 'fats', parseInt(e.target.value))} className="w-16 bg-zinc-100 p-2 rounded-lg font-semibold text-xs" />
                                                                 </div>
                                                                 <div className="flex flex-col gap-1 ml-4 justify-center">
-                                                                    <span className="text-[10px] font-black text-zinc-950">{food.calories} kcal</span>
+                                                                    <span className="text-[10px] font-semibold text-slate-900">{food.calories} kcal</span>
                                                                 </div>
                                                             </div>
                                                         ) : (
                                                             <>
-                                                                <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest bg-zinc-50 border border-zinc-100 ${accentColor}`}>{food.macros || `${food.protein}P / ${food.carbs}C / ${food.fats}G`}</span>
-                                                                <span className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest bg-zinc-950 text-white">{typeof food.calories === 'string' ? food.calories : `${food.calories} kcal`}</span>
+                                                                <span className={`px-4 py-2 rounded-xl text-[10px] font-semibold  tracking-wider bg-zinc-50 border border-zinc-100 ${accentColor}`}>{food.macros || `${food.protein}P / ${food.carbs}C / ${food.fats}G`}</span>
+                                                                <span className="px-4 py-2 rounded-xl text-[10px] font-semibold  tracking-wider bg-slate-900 text-white">{typeof food.calories === 'string' ? food.calories : `${food.calories} kcal`}</span>
                                                             </>
                                                         )}
                                                     </div>
@@ -1275,11 +1275,11 @@ export default function DashboardPage() {
                                             <AnimatePresence>
                                                 {showMealInfo === i && (
                                                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mt-10 pt-10 border-t border-zinc-50">
-                                                        <div className="bg-zinc-950 p-10 rounded-[2.5rem] flex gap-8 items-start shadow-2xl">
+                                                        <div className="bg-slate-900 p-10 rounded-[2.5rem] flex gap-8 items-start shadow-lg shadow-zinc-200/40">
                                                             <div className="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 text-emerald-500"><Brain className="w-8 h-8" /></div>
                                                             <div>
-                                                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-500 mb-6 block underline decoration-emerald-900 underline-offset-8">Fundamentação Bioquímica</span>
-                                                                <p className="text-lg font-medium text-zinc-400 italic leading-relaxed">"{food.science}"</p>
+                                                                <span className="text-[10px] font-semibold  tracking-[0.4em] text-emerald-500 mb-6 block underline decoration-emerald-900 underline-offset-8">Fundamentação Bioquímica</span>
+                                                                <p className="text-lg font-medium text-zinc-400  leading-relaxed">"{food.science}"</p>
                                                             </div>
                                                         </div>
                                                     </motion.div>
@@ -1296,25 +1296,25 @@ export default function DashboardPage() {
                                 {isPro ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         {WORKOUTS.map((wk, i) => (
-                                            <div key={i} className="bg-white rounded-[3rem] p-10 border border-zinc-200 transition-all hover:-translate-y-2 hover:shadow-2xl group">
+                                            <div key={i} className="bg-white rounded-[3rem] p-10 border border-zinc-200 transition-all hover:-translate-y-2 hover:shadow-lg shadow-zinc-200/40 group">
                                                 <div className="flex justify-between items-start mb-6">
-                                                    <h4 className="text-3xl font-black text-zinc-900 italic tracking-tighter uppercase leading-none">{wk.title}</h4>
+                                                    <h4 className="text-3xl font-semibold text-zinc-900  tracking-tight  leading-none">{wk.title}</h4>
                                                     <Dumbbell className="w-6 h-6 text-zinc-200 group-hover:text-emerald-500 transition-colors" />
                                                 </div>
-                                                <p className="text-zinc-500 text-lg font-bold italic leading-tight mb-8">{wk.desc}</p>
-                                                <div className="flex items-center gap-2 text-[10px] font-black text-emerald-600 bg-emerald-50 w-fit px-4 py-2 rounded-full border border-emerald-100 uppercase tracking-widest">
+                                                <p className="text-zinc-500 text-lg font-bold  leading-tight mb-8">{wk.desc}</p>
+                                                <div className="flex items-center gap-2 text-[10px] font-semibold text-emerald-600 bg-emerald-50 w-fit px-4 py-2 rounded-full border border-emerald-100  tracking-wider">
                                                     <Zap className="w-4 h-4" /> Hardcore Intensity
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="bg-zinc-950 rounded-[4rem] p-24 text-center border border-zinc-800 shadow-[0_50px_100px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                                    <div className="bg-slate-900 rounded-[4rem] p-24 text-center border border-zinc-800 shadow-[0_50px_100px_rgba(0,0,0,0.5)] relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-24 opacity-5 rotate-12 scale-150"><Dumbbell className="w-96 h-96 text-white" /></div>
                                         <div className="bg-emerald-600/10 p-8 rounded-[2rem] w-fit mx-auto mb-12 border border-emerald-500/20 shadow-inner"><Lock className="w-16 h-16 text-emerald-500" /></div>
-                                        <h3 className="text-5xl font-black text-white italic tracking-tighter uppercase mb-6 leading-none">Periodização <br />Bloqueada</h3>
-                                        <p className="text-zinc-500 text-xl font-bold italic max-w-2xl mx-auto leading-relaxed mb-16">Para resultados de nível competição, seu treino precisa de ciência, não apenas esforço. O PRO entrega o mapa biomecânico completo.</p>
-                                        <Link href="/pricing" className="bg-primary text-black font-black px-16 py-6 rounded-[2rem] text-xs uppercase tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-emerald-500/20 flex items-center gap-4 mx-auto w-fit">Injetar Upgrade Pro <Crown className="w-5 h-5" /></Link>
+                                        <h3 className="text-5xl font-semibold text-white  tracking-tight  mb-6 leading-none">Periodização <br />Bloqueada</h3>
+                                        <p className="text-zinc-500 text-xl font-bold  max-w-2xl mx-auto leading-relaxed mb-16">Para resultados de nível competição, seu treino precisa de ciência, não apenas esforço. O PRO entrega o mapa biomecânico completo.</p>
+                                        <Link href="/pricing" className="bg-primary text-black font-semibold px-16 py-6 rounded-[2rem] text-xs  tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-lg shadow-zinc-200/40 shadow-emerald-500/20 flex items-center gap-4 mx-auto w-fit">Injetar Upgrade Pro <Crown className="w-5 h-5" /></Link>
                                     </div>
                                 )}
                             </motion.div>
