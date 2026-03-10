@@ -60,7 +60,6 @@ export const SIDEBAR_ITEMS = [
     { id: 'overview', icon: PieChart, label: 'Visão Geral', proOnly: false },
     { id: 'dieta', icon: Utensils, label: 'Dieta & Ciência', proOnly: false },
     { id: 'treinos', icon: Dumbbell, label: 'Protocolo de Treino', proOnly: false },
-    { id: 'antropometria', icon: Scale, label: 'Antropometria', proOnly: false },
     { id: 'grid', icon: LayoutList, label: 'The Grid (Rotina)', proOnly: false },
     { id: 'scanner', icon: SearchCode, label: 'Scan de Whey (IA)', proOnly: false },
     { id: 'esportiva_link', icon: Trophy, label: 'Nutrição Esportiva', isExternal: true, proOnly: true },

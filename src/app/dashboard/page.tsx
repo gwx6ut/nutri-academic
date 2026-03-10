@@ -50,7 +50,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [mode, setMode] = useState<'cutting' | 'bulking'>('cutting');
     const [selectedProfile, setSelectedProfile] = useState<'standard' | 'economical' | 'practical'>('standard');
-    const [activeTab, setActiveTab] = useState<'overview' | 'dieta' | 'treinos' | 'antropometria' | 'grid' | 'scanner'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'dieta' | 'treinos' | 'grid' | 'scanner'>('overview');
     const [habits, setHabits] = useState<Habit[]>([]);
     const [waterIntake, setWaterIntake] = useState(0);
 
@@ -843,105 +843,67 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
 
-                                {/* Placeholder for missing metrics */}
-                                {!hasMetrics && (
-                                    <div className="bg-zinc-900/5 border-2 border-dashed border-zinc-200 rounded-[3rem] p-24 text-center cursor-pointer hover:bg-zinc-100/50 transition-all" onClick={() => setActiveTab('antropometria')}>
-                                        <div className="bg-white w-20 h-20 rounded-[1.5rem] flex items-center justify-center mx-auto mb-8 shadow-xl"><Calculator className="w-10 h-10 text-zinc-300" /></div>
-                                        <h4 className="text-2xl font-black text-zinc-900 uppercase italic mb-4">Métricas Indefinidas</h4>
-                                        <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs max-w-sm mx-auto">Você precisa injetar seu peso e altura no sistema para calibrar o algoritmo de macros.</p>
-                                    </div>
-                                )}
-                            </motion.div>
-                        )}
-
-                        {/* TAB: ANTROPOMETRIA */}
-                        {activeTab === 'antropometria' && (
-                            <motion.div key="antro" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-12">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                                    {/* Physical Data */}
-                                    <div className="bg-white rounded-[3rem] p-12 border border-zinc-200 shadow-sm">
-                                        <h3 className="text-3xl font-black text-zinc-900 mb-2 uppercase italic flex items-center gap-4">
-                                            <Scale className="w-8 h-8 text-emerald-500" /> Medidas de Base
-                                        </h3>
-                                        <div className="flex items-center gap-2 mb-10">
-                                            <span className={`text-[10px] font-black uppercase tracking-widest ${goalEval.color}`}>{goalEval.score}</span>
-                                            <span className="text-[10px] text-zinc-400 uppercase tracking-widest">• {goalEval.msg}</span>
+                                {/* Anthropometry Module (Summarized) */}
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                                    <div className="col-span-1 lg:col-span-2 bg-white rounded-[2.5rem] p-8 md:p-12 border border-zinc-200 shadow-sm relative overflow-hidden">
+                                        <div className="flex justify-between items-start mb-8">
+                                            <div>
+                                                <h3 className="text-2xl font-black text-zinc-900 uppercase italic flex items-center gap-3">
+                                                    <Scale className="w-6 h-6 text-emerald-500" /> Antropometria
+                                                </h3>
+                                                <p className="text-[10px] text-zinc-400 uppercase tracking-widest mt-2">{goalEval.msg}</p>
+                                            </div>
+                                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${goalEval.color.replace('text', 'bg').replace('500', '50/50')} ${goalEval.color}`}>{goalEval.score}</span>
                                         </div>
-                                        <div className="space-y-8">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                <div>
-                                                    <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4 block ml-1">Massa Corporal</label>
-                                                    <div className="relative">
-                                                        <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="00.0" className="w-full bg-zinc-50 p-6 font-black text-4xl text-zinc-950 rounded-2xl outline-none focus:bg-white border-2 border-transparent focus:border-zinc-200 transition-all" />
-                                                        <span className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-300 font-black italic text-xl">kg</span>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4 block ml-1">Estatura</label>
-                                                    <div className="relative">
-                                                        <input value={height} onChange={(e) => setHeight(e.target.value)} placeholder="000" className="w-full bg-zinc-50 p-6 font-black text-4xl text-zinc-950 rounded-2xl outline-none focus:bg-white border-2 border-transparent focus:border-zinc-200 transition-all" />
-                                                        <span className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-300 font-black italic text-xl">cm</span>
-                                                    </div>
-                                                </div>
+
+                                        <div className="grid grid-cols-2 gap-4 mb-6">
+                                            <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
+                                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block mb-1">Peso (kg)</label>
+                                                <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="00.0" className="w-full bg-transparent font-black text-2xl md:text-3xl text-zinc-950 outline-none" />
+                                            </div>
+                                            <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100">
+                                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest block mb-1">Altura (cm)</label>
+                                                <input value={height} onChange={(e) => setHeight(e.target.value)} placeholder="000" className="w-full bg-transparent font-black text-2xl md:text-3xl text-zinc-950 outline-none" />
                                             </div>
                                         </div>
 
-                                        <div className="mt-16 pt-12 border-t border-zinc-50">
-                                            <h3 className="text-3xl font-black text-zinc-900 mb-12 uppercase italic flex items-center gap-4">
-                                                <TargetIcon className="w-8 h-8 text-orange-500" /> Metas Manuais (Override)
-                                            </h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 mb-12">
-                                                <div className="md:col-span-2">
-                                                    <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4 block ml-1">Calorias Diárias</label>
-                                                    <input value={targetCalories} onChange={(e) => setTargetCalories(e.target.value)} placeholder={autoCalories.toString()} className="w-full bg-zinc-50 p-6 font-black text-4xl text-zinc-950 rounded-2xl outline-none border-2 border-transparent focus:border-orange-200" />
-                                                </div>
-                                                <div>
-                                                    <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4 block ml-1">Proteína (g)</label>
-                                                    <input value={targetProtein} onChange={(e) => setTargetProtein(e.target.value)} placeholder={autoProtein.toString()} className="w-full bg-zinc-50 p-5 font-black text-2xl text-zinc-950 rounded-xl outline-none" />
-                                                </div>
-                                                <div>
-                                                    <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4 block ml-1">Carbos (g)</label>
-                                                    <input value={targetCarbs} onChange={(e) => setTargetCarbs(e.target.value)} placeholder={autoCarbs.toString()} className="w-full bg-zinc-50 p-5 font-black text-2xl text-zinc-950 rounded-xl outline-none" />
-                                                </div>
+                                        <div className="grid grid-cols-4 gap-2 mb-6">
+                                            <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
+                                                <label className="text-[8px] font-black text-zinc-400 uppercase block">Kcal Alvo</label>
+                                                <input value={targetCalories} onChange={(e) => setTargetCalories(e.target.value)} placeholder={autoCalories.toString()} className="w-full bg-transparent font-black text-lg min-w-0" />
                                             </div>
-                                            <button onClick={saveMetrics} disabled={isSavingMetrics} className="w-full bg-zinc-950 text-white font-black py-6 rounded-[2rem] shadow-2xl hover:scale-[1.01] active:scale-95 transition-all text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-4 disabled:opacity-50">
-                                                {isSavingMetrics ? 'Sincronizando Banco de Dados...' : <><Save className="w-5 h-5" /> Consolidar Mudanças</>}
+                                            <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
+                                                <label className="text-[8px] font-black text-zinc-400 uppercase block">Prot (g)</label>
+                                                <input value={targetProtein} onChange={(e) => setTargetProtein(e.target.value)} placeholder={autoProtein.toString()} className="w-full bg-transparent font-black text-lg min-w-0" />
+                                            </div>
+                                            <div className="col-span-4 md:col-span-1 bg-zinc-50 p-3 rounded-xl border border-zinc-100">
+                                                <label className="text-[8px] font-black text-zinc-400 uppercase block">Carb (g)</label>
+                                                <input value={targetCarbs} onChange={(e) => setTargetCarbs(e.target.value)} placeholder={autoCarbs.toString()} className="w-full bg-transparent font-black text-lg min-w-0" />
+                                            </div>
+                                            <button onClick={saveMetrics} disabled={isSavingMetrics} className="col-span-4 md:col-span-1 bg-zinc-950 text-white font-black rounded-xl shadow-lg hover:bg-zinc-800 transition-colors text-[9px] uppercase tracking-widest flex items-center justify-center p-3 gap-2 disabled:opacity-50">
+                                                {isSavingMetrics ? '...' : <><Save className="w-3 h-3" /> Salvar</>}
                                             </button>
                                         </div>
                                     </div>
 
-                                    {/* Scientific References */}
-                                    <div className="space-y-8">
-                                        <div className="bg-zinc-950 rounded-[3rem] p-12 text-white relative overflow-hidden group">
-                                            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
-                                            <h4 className="text-2xl font-black uppercase italic mb-8 tracking-tighter relative z-10 flex items-center gap-3"><BookOpen className="w-6 h-6" /> Protocolo Alpha</h4>
-
-                                            <div className="mt-8 mb-8 p-6 bg-white/5 border border-white/10 rounded-2xl relative z-10">
-                                                <p className="text-primary font-black text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2"><Brain className="w-3 h-3" /> Ciência da Meta</p>
-                                                <p className="text-zinc-400 text-sm font-medium leading-relaxed italic">
-                                                    "A taxa de perda/ganho ideal é de 0.25% a 0.5% do peso corporal por semana. Forçar mais que isso resulta em disfunção metabólica e perda de tecido contrátil (músculo)."
-                                                </p>
-                                            </div>
-
-                                            <div className="space-y-6 relative z-10">
-                                                <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
-                                                    <p className="text-primary font-black text-[10px] uppercase tracking-widest mb-2">Bulking Cheat-Sheet</p>
-                                                    <p className="text-zinc-400 text-sm font-medium leading-relaxed">Multiplique seu peso por 38 para calorias base. Proteína: 2.2g/kg. Gordura: 1.0g/kg. Carbo: O restante.</p>
-                                                </div>
-                                                <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
-                                                    <p className="text-emerald-500 font-black text-[10px] uppercase tracking-widest mb-2">Cutting Cheat-Sheet</p>
-                                                    <p className="text-zinc-400 text-sm font-medium leading-relaxed">Multiplique seu peso por 26 para déficit agressivo. Proteína: 2.5g/kg (proteção). Gordura: 0.7g/kg.</p>
-                                                </div>
-                                            </div>
-                                            <div className="mt-12 p-8 bg-zinc-900 rounded-[2rem] border border-zinc-800 text-center">
-                                                <span className="text-5xl font-black italic tracking-tighter block mb-2">{mode.toUpperCase()}</span>
-                                                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Estado de Fluxo do Sistema</span>
-                                            </div>
+                                    {/* Science Card Mini */}
+                                    <div className="col-span-1 bg-zinc-950 rounded-[2.5rem] p-8 text-white relative overflow-hidden group shadow-2xl flex flex-col justify-center">
+                                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,_rgba(16,185,129,0.15)_0%,_transparent_50%)]"></div>
+                                        <BookOpen className="w-8 h-8 text-emerald-500 mb-6 relative z-10" />
+                                        <h4 className="text-xl font-black uppercase italic mb-4 tracking-tighter relative z-10">Protocolo Alpha</h4>
+                                        <p className="text-zinc-400 text-xs leading-relaxed italic relative z-10 mb-6">
+                                            Ajustes de peso base devem variar entre 0.25% e 0.5% na semana. Offsets recomendados: <strong className="text-orange-400">Bulking</strong> (+38 kcal/kg), <strong className="text-emerald-400">Cutting</strong> (-26 kcal/kg).
+                                        </p>
+                                        <div className="mt-auto p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/5 text-center relative z-10">
+                                            <span className="text-xl font-black italic tracking-tighter block text-white">{mode.toUpperCase()}</span>
+                                            <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Modo Operacional Ativo</span>
                                         </div>
                                     </div>
                                 </div>
                             </motion.div>
                         )}
+
+
 
                         {/* TAB: GRID */}
                         {activeTab === 'grid' && (

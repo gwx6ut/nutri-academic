@@ -70,8 +70,12 @@ export default function SupplementScanner({ isPro, userId }: { isPro: boolean, u
                 }
             }
 
-        } catch (err: any) {
-            setErrorMsg(err.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setErrorMsg(err.message);
+            } else {
+                setErrorMsg("Ocorreu um erro inesperado.");
+            }
         } finally {
             setIsScanning(false);
         }
