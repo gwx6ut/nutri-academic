@@ -18,24 +18,15 @@ export default function LoginPage() {
     const supabase = createClient();
 
     const translateError = (message: string): string => {
-        if (message.includes("Invalid login credentials"))
-            return "Email ou senha incorretos. Verifique seus dados e tente novamente.";
-        if (message.includes("Email not confirmed"))
-            return "Seu email ainda não foi confirmado. Verifique sua caixa de entrada.";
-        if (message.includes("User already registered"))
-            return "Este email já está cadastrado. Tente fazer login.";
-        if (message.includes("Password should be at least"))
-            return "A senha deve ter pelo menos 6 caracteres.";
-        if (message.includes("Unable to validate email address"))
-            return "Endereço de email inválido.";
-        if (message.includes("signup is disabled") || message.includes("signups are disabled"))
-            return "O cadastro por email está desativado. Entre em contato com o suporte.";
-        if (message.includes("logins are disabled"))
-            return "O login por email está desativado. Entre em contato com o suporte.";
-        if (message.includes("rate limit"))
-            return "Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.";
-        if (message.includes("sending confirmation email") || message.includes("confirmation email"))
-            return "EMAIL_CONFIRM_ERROR";
+        if (message.includes("Invalid login credentials")) return "Email ou senha incorretos. Verifique seus dados e tente novamente.";
+        if (message.includes("Email not confirmed")) return "Seu email ainda não foi confirmado. Verifique sua caixa de entrada.";
+        if (message.includes("User already registered")) return "Este email já está cadastrado. Tente fazer login.";
+        if (message.includes("Password should be at least")) return "A senha deve ter pelo menos 6 caracteres.";
+        if (message.includes("Unable to validate email address")) return "Endereço de email inválido.";
+        if (message.includes("signup is disabled") || message.includes("signups are disabled")) return "O cadastro por email está desativado. Entre em contato com o suporte.";
+        if (message.includes("logins are disabled")) return "O login por email está desativado. Entre em contato com o suporte.";
+        if (message.includes("rate limit")) return "Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.";
+        if (message.includes("sending confirmation email") || message.includes("confirmation email")) return "EMAIL_CONFIRM_ERROR";
         return message || "Ocorreu um erro durante a autenticação.";
     };
 
@@ -55,13 +46,8 @@ export default function LoginPage() {
                 router.push("/dashboard");
             } else {
                 const { error: signUpError, data } = await supabase.auth.signUp({ email, password });
-
-                const isEmailSendError =
-                    signUpError?.message?.includes("sending confirmation email") ||
-                    signUpError?.message?.includes("confirmation email");
-
+                const isEmailSendError = signUpError?.message?.includes("sending confirmation email") || signUpError?.message?.includes("confirmation email");
                 if (signUpError && !isEmailSendError) throw signUpError;
-
                 const user = data?.user;
 
                 if (!isEmailSendError && user && !data.session) {
@@ -76,7 +62,6 @@ export default function LoginPage() {
                         { onConflict: "id" }
                     );
                 }
-
                 router.push("/dashboard");
             }
         } catch (err: any) {
@@ -87,79 +72,64 @@ export default function LoginPage() {
     };
 
     const features = [
-        { icon: Zap, title: "IA Adaptativa", desc: "Planos que evoluem com você" },
-        { icon: Target, title: "Metas Precisas", desc: "Macros calculados cientificamente" },
-        { icon: Shield, title: "Dados Seguros", desc: "Criptografia de ponta a ponta" },
+        { icon: Zap, title: "Inteligência Sintética", desc: "Algoritmos que analisam sua composição em tempo real" },
+        { icon: Target, title: "O Sistema GRID", desc: "Condicionamento neural através de metas diárias" },
+        { icon: Shield, title: "Suplementação PRO", desc: "Timings exatos e dosagens científicas para ergogênicos" },
     ];
 
     return (
-        <div className="min-h-screen flex bg-[#090c0a] font-sans overflow-hidden">
+        <div className="min-h-screen flex bg-zinc-950 font-sans overflow-hidden selection:bg-emerald-500/30">
 
             {/* ── LEFT PANEL ── */}
-            <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 overflow-hidden">
+            <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 overflow-hidden border-r border-white/5 bg-zinc-950">
 
-                {/* Grid background */}
-                <div
-                    className="absolute inset-0 opacity-[0.04]"
-                    style={{
-                        backgroundImage: `linear-gradient(#22c55e 1px, transparent 1px), linear-gradient(90deg, #22c55e 1px, transparent 1px)`,
-                        backgroundSize: "60px 60px",
-                    }}
-                />
-
-                {/* Green glow blobs */}
-                <div className="absolute top-[-80px] left-[-80px] w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-80px] right-[-80px] w-[400px] h-[400px] bg-emerald-400/8 rounded-full blur-[100px]" />
+                {/* Subdued Background Effects */}
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-600/5 rounded-[100%] blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-600/5 rounded-[100%] blur-[100px]" />
 
                 {/* Logo */}
-                <Link href="/" className="relative flex items-center gap-3 w-fit group">
-                    <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
-                        <Activity className="w-5 h-5 text-white" />
+                <Link href="/" className="relative flex items-center gap-3 w-fit group z-10">
+                    <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center shadow-lg shadow-emerald-500/10 group-hover:border-emerald-500/30 transition-colors">
+                        <Activity className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform" />
                     </div>
-                    <span className="text-xl font-black text-white uppercase italic tracking-tight">
-                        Nutri<span className="text-green-400">Academic</span>
+                    <span className="text-xl font-semibold tracking-tight text-white flex items-center gap-1">
+                        Nutri<span className="text-zinc-500 font-normal">Academic</span>
                     </span>
                 </Link>
 
                 {/* Hero text */}
-                <div className="relative">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, ease: "easeOut" }}
-                    >
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 mb-6">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                            <span className="text-xs font-bold text-green-400 uppercase tracking-widest">Performance Científica</span>
+                <div className="relative z-10">
+                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: "easeOut" }}>
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            <span className="text-[10px] font-semibold text-zinc-300 tracking-[0.2em] uppercase">Engenharia Fisiológica V6.0</span>
                         </div>
 
-                        <h1 className="text-5xl xl:text-6xl font-black text-white leading-[1.05] tracking-tighter mb-6">
-                            Nutrição<br />
-                            <span className="bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
-                                de Elite
-                            </span>
+                        <h1 className="text-5xl xl:text-6xl font-medium tracking-tight text-white leading-[1.05] mb-6">
+                            Bem-vindo de volta <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-400 via-white to-zinc-500 italic pr-4">ao Sistema.</span>
                         </h1>
 
-                        <p className="text-zinc-400 text-lg leading-relaxed max-w-md mb-10">
-                            Análises avançadas, recomendações personalizadas com IA e protocolos de alta performance para atletas sérios.
+                        <p className="text-zinc-400 text-lg leading-relaxed max-w-md mb-12">
+                            Acesse seu painel central. Seus protocolos, macros e condicionamento neural aguardam sua execução.
                         </p>
 
                         {/* Feature cards */}
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-4">
                             {features.map(({ icon: Icon, title, desc }, i) => (
                                 <motion.div
                                     key={title}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur"
+                                    className="flex items-center gap-4 p-5 rounded-2xl bg-zinc-900/50 border border-white/5 backdrop-blur-sm group hover:border-white/10 transition-colors"
                                 >
-                                    <div className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center flex-shrink-0">
-                                        <Icon className="w-5 h-5 text-green-400" />
+                                    <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-zinc-800 transition-colors">
+                                        <Icon className="w-5 h-5 text-emerald-400" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-white">{title}</p>
-                                        <p className="text-xs text-zinc-500">{desc}</p>
+                                        <p className="text-sm font-medium text-white mb-1">{title}</p>
+                                        <p className="text-xs text-zinc-500 leading-relaxed">{desc}</p>
                                     </div>
                                 </motion.div>
                             ))}
@@ -168,47 +138,49 @@ export default function LoginPage() {
                 </div>
 
                 {/* Bottom quote */}
-                <p className="relative text-xs text-zinc-600 border-t border-white/5 pt-6">
-                    © 2025 NutriAcademic. Todos os direitos reservados.
+                <p className="relative z-10 text-xs text-zinc-600 border-t border-white/5 pt-6 mt-12 flex items-center justify-between">
+                    <span>© {new Date().getFullYear()} NutriAcademic. Todos os direitos reservados.</span>
+                    <span className="flex items-center gap-1">Status: <span className="text-emerald-500 font-medium">Operacional</span></span>
                 </p>
             </div>
 
             {/* ── RIGHT PANEL ── */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 relative">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 relative bg-zinc-950 overflow-hidden">
+                <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-emerald-600/5 rounded-[100%] blur-[120px] pointer-events-none" />
 
                 {/* Mobile top bar */}
-                <div className="absolute top-6 left-6 lg:hidden">
+                <div className="absolute top-6 left-6 lg:hidden z-10">
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-700 rounded-lg flex items-center justify-center">
-                            <Activity className="w-4 h-4 text-white" />
+                        <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                            <Activity className="w-4 h-4 text-emerald-400" />
                         </div>
-                        <span className="text-sm font-black text-white uppercase italic">
-                            Nutri<span className="text-green-400">Academic</span>
+                        <span className="text-sm font-semibold tracking-tight text-white flex items-center gap-1">
+                            Nutri<span className="text-zinc-500 font-normal">Academic</span>
                         </span>
                     </Link>
                 </div>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="w-full max-w-[420px]"
+                    className="w-full max-w-[420px] relative z-10"
                 >
                     {/* Card */}
-                    <div className="bg-[#0e1410] border border-white/[0.08] rounded-3xl p-8 shadow-2xl shadow-black/60">
+                    <div className="bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-2xl">
 
                         {/* Tab toggle */}
-                        <div className="flex gap-2 p-1 bg-white/[0.04] rounded-2xl mb-8">
+                        <div className="flex gap-2 p-1 bg-zinc-950/50 rounded-xl mb-10 border border-white/5">
                             {[
-                                { label: "Entrar", value: true, icon: LogIn },
-                                { label: "Criar Conta", value: false, icon: UserPlus },
+                                { label: "Injetar Protocolo", value: true, icon: LogIn },
+                                { label: "Criar Acesso", value: false, icon: UserPlus },
                             ].map(({ label, value, icon: Icon }) => (
                                 <button
                                     key={label}
                                     onClick={() => { setIsLogin(value); setFeedback(null); }}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 ${isLogin === value
-                                            ? "bg-green-500 text-white shadow-lg shadow-green-500/30"
-                                            : "text-zinc-500 hover:text-zinc-300"
+                                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-300 ${isLogin === value
+                                        ? "bg-white text-zinc-950 shadow-md"
+                                        : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
                                         }`}
                                 >
                                     <Icon className="w-4 h-4" />
@@ -225,53 +197,53 @@ export default function LoginPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -8 }}
                                 transition={{ duration: 0.2 }}
-                                className="mb-7"
+                                className="mb-8 text-center"
                             >
-                                <h2 className="text-2xl font-black text-white mb-1">
-                                    {isLogin ? "Bem-vindo de volta" : "Crie sua conta"}
+                                <h2 className="text-2xl font-medium tracking-tight text-white mb-2">
+                                    {isLogin ? "Acessar Dashboard" : "Iniciar Nova Jornada"}
                                 </h2>
-                                <p className="text-sm text-zinc-500">
+                                <p className="text-sm text-zinc-400">
                                     {isLogin
-                                        ? "Entre para acessar seu dashboard de performance"
-                                        : "Comece sua jornada de alta performance agora"}
+                                        ? "Autentique-se para sincronizar seus dados biológicos."
+                                        : "O primeiro passo para a hipertrofia e definição decodificada."}
                                 </p>
                             </motion.div>
                         </AnimatePresence>
 
                         {/* Form */}
-                        <form onSubmit={handleAuth} className="space-y-4">
+                        <form onSubmit={handleAuth} className="space-y-5">
                             {/* Email */}
                             <div>
-                                <label className="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">
-                                    Email
+                                <label className="block text-[10px] font-semibold text-zinc-500 uppercase tracking-widest mb-2 px-1">
+                                    Identificação (Email)
                                 </label>
                                 <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                                     <input
                                         type="email"
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="seu@email.com"
-                                        className="w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/[0.08] hover:border-green-500/40 focus:border-green-500 focus:ring-2 focus:ring-green-500/10 rounded-xl text-white text-sm placeholder:text-zinc-600 transition-all outline-none"
+                                        placeholder="seu@dominio.com"
+                                        className="w-full pl-11 pr-4 py-3.5 bg-zinc-950 border border-white/10 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 rounded-xl text-white text-sm placeholder:text-zinc-600 transition-all outline-none"
                                     />
                                 </div>
                             </div>
 
                             {/* Password */}
                             <div>
-                                <label className="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">
-                                    Senha
+                                <label className="block text-[10px] font-semibold text-zinc-500 uppercase tracking-widest mb-2 px-1">
+                                    Código de Segurança (Senha)
                                 </label>
                                 <div className="relative">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                                     <input
                                         type="password"
                                         required
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="••••••••"
-                                        className="w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/[0.08] hover:border-green-500/40 focus:border-green-500 focus:ring-2 focus:ring-green-500/10 rounded-xl text-white text-sm placeholder:text-zinc-600 transition-all outline-none"
+                                        className="w-full pl-11 pr-4 py-3.5 bg-zinc-950 border border-white/10 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 rounded-xl text-white text-sm placeholder:text-zinc-600 transition-all outline-none"
                                     />
                                 </div>
                             </div>
@@ -280,16 +252,16 @@ export default function LoginPage() {
                             <AnimatePresence>
                                 {feedback && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: -8 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0 }}
-                                        className={`text-sm font-medium p-3.5 rounded-xl flex items-start gap-2.5 ${feedback.isSuccess
-                                                ? "bg-green-500/10 border border-green-500/20 text-green-400"
-                                                : "bg-red-500/10 border border-red-500/20 text-red-400"
+                                        initial={{ opacity: 0, y: -8, height: 0 }}
+                                        animate={{ opacity: 1, y: 0, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className={`text-sm font-medium p-4 rounded-xl flex items-start gap-3 ${feedback.isSuccess
+                                            ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
+                                            : "bg-red-500/10 border border-red-500/20 text-red-400"
                                             }`}
                                     >
                                         <span className="mt-0.5 flex-shrink-0">{feedback.isSuccess ? "✅" : "⚠️"}</span>
-                                        <span>{feedback.message}</span>
+                                        <span className="leading-relaxed">{feedback.message}</span>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -298,13 +270,13 @@ export default function LoginPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-3.5 bg-green-500 hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-sm uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-green-500/20 hover:shadow-green-500/40 flex items-center justify-center gap-2 group mt-2"
+                                className="w-full py-4 mt-2 bg-white hover:bg-zinc-200 text-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2 group"
                             >
                                 {loading ? (
                                     <Loader2 className="w-5 h-5 animate-spin" />
                                 ) : (
                                     <>
-                                        {isLogin ? "Entrar Agora" : "Criar Conta"}
+                                        {isLogin ? "Acessar Sistema" : "Inicializar Conta"}
                                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                     </>
                                 )}
@@ -312,21 +284,21 @@ export default function LoginPage() {
                         </form>
 
                         {/* Footer toggle */}
-                        <p className="text-center text-xs text-zinc-600 mt-6">
-                            {isLogin ? "Não tem conta? " : "Já tem uma conta? "}
+                        <p className="text-center text-xs text-zinc-500 mt-8">
+                            {isLogin ? "Sem credenciais? " : "Já possui acesso? "}
                             <button
                                 onClick={() => { setIsLogin(!isLogin); setFeedback(null); }}
-                                className="text-green-400 font-bold hover:text-green-300 transition-colors"
+                                className="text-white font-medium hover:text-emerald-400 transition-colors"
                             >
-                                {isLogin ? "Crie agora" : "Faça login"}
+                                {isLogin ? "Solicitar acesso" : "Autorizar entrada"}
                             </button>
                         </p>
                     </div>
 
                     {/* Bottom link */}
-                    <p className="text-center text-xs text-zinc-700 mt-6">
-                        <Link href="/pricing" className="hover:text-green-500 transition-colors">
-                            Ver planos e preços →
+                    <p className="text-center text-xs text-zinc-500 mt-8">
+                        <Link href="/pricing" className="hover:text-white transition-colors flex items-center justify-center gap-2 group">
+                            Explorar Protocolos PRO <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </p>
                 </motion.div>

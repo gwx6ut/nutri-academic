@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${plusJakartaSans.variable} antialiased selection:bg-emerald-200 selection:text-emerald-900 bg-[#FAFAFA]`} suppressHydrationWarning>
+      <body className={`${plusJakartaSans.variable} antialiased selection:bg-emerald-500/30 text-white bg-zinc-950`} suppressHydrationWarning>
         {children}
       </body>
     </html>

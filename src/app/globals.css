@@ -17,9 +17,11 @@
 
 @layer base {
   :root {
-    /* use full white and full black for clarity */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    /* dark cinematic theme */
+    --background: 240 5.9% 10%;
+    /* zinc-950 equivalent */
+    --foreground: 0 0% 100%;
+    /* white */
   }
 
   html {

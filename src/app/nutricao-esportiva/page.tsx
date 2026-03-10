@@ -28,7 +28,7 @@ const SPORTS_DATA = {
         protocol: [
             { time: "Pré-Treino", title: "Carga de Glicogênio", desc: "Carboidratos de baixo IG + 5g Creatina. Objetivo: Saturação intracelular.", stats: "1.0g Carb/kg" },
             { time: "Pós-Treino", title: "Janela Anabólica", desc: "Whey Isolado + Carboidratos rápidos. Disparo de insulina para transporte de aminoácidos.", stats: "40g Prot | 60g Carbs" },
-            { time: "Ceia", title: "Reparo Noturno", desc: "Proteína de lenta absorção (Caseína/Ovos) + Gorduras boas.", stats: "30g Prot | 10g Gordura" }
+            { time: "Ceia", title: "Reparo Noturno", desc: "Proteína de lenta absorção (Caseína/Ovos) + Gorduras estruturais.", stats: "30g Prot | 10g Gordura" }
         ],
         supps: [
             { name: "Creatina", info: "O suplemento mais estudado. Aumenta força explosiva." },
@@ -56,7 +56,7 @@ const SPORTS_DATA = {
             { time: "Dia Todo", title: "Hidratação Isotônica", desc: "Manter balanço hidroeletrolítico para evitar cãibras.", stats: "40ml/kg + Adição de Sais" }
         ],
         supps: [
-            { name: "Palatinose", info: "Energia de liberação gradual para endurace." },
+            { name: "Palatinose", info: "Energia de liberação gradual para endurance." },
             { name: "Ômega 3", info: "Ação anti-inflamatória sistêmica pós-impacto." },
             { name: "Magnésio", info: "Recuperação neural e relaxamento muscular." }
         ],
@@ -70,8 +70,8 @@ const SPORTS_DATA = {
         id: "corrida",
         label: "Running",
         icon: Footprints,
-        accent: "text-[#CCFF00]",
-        bgAccent: "bg-[#CCFF00]",
+        accent: "text-sky-500",
+        bgAccent: "bg-sky-500",
         description: "Eficiência aeróbica, economia de corrida e resiliência metabólica de longa distância.",
         nutritionTitle: "Oxidação de Gordura",
         nutritionDesc: "Estratégias de 'Train Low' e 'Race High' para flexibilidade metabólica.",
@@ -98,7 +98,7 @@ const SPORTS_DATA = {
         accent: "text-red-500",
         bgAccent: "bg-red-500",
         description: "Potência explosiva, controle de peso e recuperação rápida entre rounds.",
-        nutritionTitle: "Tactical Weight Cutting",
+        nutritionTitle: "Corte de Peso Tático",
         nutritionDesc: "Protocolos para manter força enquanto ajusta o peso para a categoria.",
         protocol: [
             { time: "Manhã", title: "Corte Gradual", desc: "Dieta hiperproteica com baixo carboidrato (se em fase de corte).", stats: "2.5g Prot/kg" },
@@ -128,15 +128,15 @@ const TacticalGrid = ({ habits, accentColor, bgAccent }: { habits: string[], acc
     };
 
     return (
-        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-6 sm:mb-8">
+        <div className="bg-zinc-900/50 border border-white/5 rounded-3xl p-6 sm:p-10 backdrop-blur-xl">
+            <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h3 className="text-xl sm:text-2xl font-black italic uppercase">Tactical Grid</h3>
-                    <p className="text-[9px] sm:text-[10px] text-zinc-500 font-black uppercase tracking-widest mt-1 italic">Checklist de Performance Diária</p>
+                    <h3 className="text-xl sm:text-2xl font-medium tracking-tight text-white mb-1">Rotina Perfeita</h3>
+                    <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest">Checklist de Performance Diária</p>
                 </div>
                 <LayoutList className={`w-6 h-6 sm:w-8 sm:h-8 ${accentColor}`} />
             </div>
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-4">
                 {habits.map((habit, i) => (
                     <motion.div
                         key={habit}
@@ -144,14 +144,14 @@ const TacticalGrid = ({ habits, accentColor, bgAccent }: { habits: string[], acc
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.1 }}
                         onClick={() => toggle(habit)}
-                        className={`flex items-center gap-4 p-5 rounded-2xl border cursor-pointer transition-all ${completed[habit] ? `bg-white/5 ${accentColor.replace('text', 'border')}` : 'bg-black/20 border-white/5 hover:border-white/10'}`}
+                        className={`flex items-center gap-4 p-5 rounded-2xl border cursor-pointer transition-all ${completed[habit] ? `bg-white/5 ${accentColor.replace('text', 'border')}` : 'bg-zinc-950/50 border-white/5 hover:border-white/10 hover:bg-zinc-900'}`}
                     >
                         {completed[habit] ? (
                             <CheckCircle2 className={`w-5 h-5 ${accentColor}`} />
                         ) : (
-                            <Circle className="w-5 h-5 text-zinc-700" />
+                            <Circle className="w-5 h-5 text-zinc-600" />
                         )}
-                        <span className={`text-xs font-black uppercase italic tracking-tighter ${completed[habit] ? 'line-through opacity-30' : 'text-zinc-300'}`}>
+                        <span className={`text-sm font-medium tracking-tight ${completed[habit] ? 'line-through opacity-40 text-zinc-500' : 'text-zinc-300'}`}>
                             {habit}
                         </span>
                     </motion.div>
@@ -192,69 +192,71 @@ export default function SportsNutritionPage() {
     }, [supabase]);
 
     return (
-        <main className="relative min-h-screen bg-[#050505] text-white selection:bg-[#CCFF00] selection:text-black font-sans pb-20">
+        <main className="relative min-h-screen bg-zinc-950 text-white selection:bg-emerald-500/30 font-sans pb-24">
 
             {/* BOTÃO VOLTAR */}
             <div className="fixed top-8 left-8 z-[60] max-sm:left-4 max-sm:top-4">
-                <Link href="/dashboard" className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-xl border border-white/5 px-6 py-3 rounded-2xl hover:bg-zinc-800 transition-all group shadow-2xl max-sm:px-4 max-sm:py-2.5 max-sm:rounded-xl min-h-[44px] min-w-[44px]">
-                    <ArrowLeft className="w-4 h-4 text-zinc-400 group-hover:text-[#CCFF00] transition-colors" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors max-sm:hidden">Voltar ao Painel</span>
+                <Link href="/dashboard" className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-xl border border-white/5 px-5 py-3 rounded-xl hover:bg-zinc-800 transition-all group shadow-2xl">
+                    <ArrowLeft className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+                    <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors max-sm:hidden">Retornar ao Painel</span>
                 </Link>
             </div>
 
             {/* HERO SECTION */}
-            <section className="relative h-[80vh] min-h-screen sm:h-[80vh] flex flex-col items-center justify-center overflow-hidden">
+            <section className="relative h-[75vh] flex flex-col items-center justify-center overflow-hidden">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={selectedSport}
-                        initial={{ opacity: 0, scale: 1.1 }}
-                        animate={{ opacity: 0.3, scale: 1 }}
+                        initial={{ opacity: 0, scale: 1.05 }}
+                        animate={{ opacity: 0.4, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 1 }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                         className="absolute inset-0 z-0"
                     >
                         <Image
                             src="/whisk-hero.jpeg"
                             alt="NutriAcademic Lab"
                             fill
-                            className="object-cover object-center grayscale-[50%]"
+                            className="object-cover object-center grayscale-[80%] opacity-40 mix-blend-luminosity"
                             priority
                         />
                     </motion.div>
                 </AnimatePresence>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/40 via-transparent to-[#050505]"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent"></div>
 
-                <div className="z-10 text-center px-4 sm:px-6 max-w-5xl">
+                {/* Emerald Background Glow */}
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-600/5 rounded-[100%] blur-[120px] pointer-events-none" />
+
+                <div className="z-10 text-center px-4 sm:px-6 max-w-5xl mt-10">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/20 rounded-full mb-6 sm:mb-8"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-8 backdrop-blur-md"
                     >
-                        <Crown className="w-3 h-3 sm:w-4 sm:h-4 text-[#CCFF00]" />
-                        <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#CCFF00]">Módulo de Elite Pro Alpha</span>
+                        <Crown className="w-4 h-4 text-emerald-400" />
+                        <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-400">Nutrição Esportiva Avançada</span>
                     </motion.div>
 
                     <motion.h1
                         layout
-                        className="text-4xl sm:text-6xl md:text-9xl font-black italic uppercase leading-[0.8] tracking-tighter mb-6 sm:mb-8"
+                        className="text-5xl sm:text-7xl md:text-8xl font-medium tracking-tight leading-[1] mb-12 text-white"
                     >
-                        SPORTS <br />
-                        <span className={`bg-gradient-to-r ${currentSport.accent === 'text-[#CCFF00]' ? 'from-[#CCFF00] to-[#4A7A00]' : 'from-white to-zinc-500'} bg-clip-text text-transparent italic`}>
+                        Protocolos de <br />
+                        <span className={`bg-gradient-to-r ${currentSport.accent === 'text-emerald-500' ? 'from-emerald-400 to-teal-500' : 'from-white to-zinc-400'} bg-clip-text text-transparent italic`}>
                             {currentSport.label}
                         </span>
                     </motion.h1>
 
                     {/* SELECTOR DE ESPORTE */}
-                    <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 w-full max-w-3xl mx-auto">
+                    <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-3 sm:gap-4 mb-8 w-full max-w-3xl mx-auto">
                         {Object.values(SPORTS_DATA).map((sport) => (
                             <button
                                 key={sport.id}
                                 onClick={() => setSelectedSport(sport.id as any)}
-                                className={`px-2 sm:px-6 py-3 sm:py-3 rounded-[1.25rem] sm:rounded-2xl border-2 transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 font-black text-[9px] sm:text-[10px] uppercase tracking-widest min-h-[44px] shadow-lg ${selectedSport === sport.id ? `${sport.accent.replace('text', 'border')} bg-white text-black scale-105` : 'border-white/5 bg-zinc-900/50 text-zinc-500 hover:border-white/10 hover:bg-zinc-800'}`}
+                                className={`px-4 sm:px-6 py-3 rounded-2xl border transition-all flex items-center justify-center gap-2 font-medium text-sm tracking-tight min-h-[48px] shadow-sm backdrop-blur-sm ${selectedSport === sport.id ? `${sport.accent.replace('text', 'border')} bg-zinc-900 border-white/20 text-white scale-[1.02]` : 'border-white/5 bg-zinc-900/40 text-zinc-500 hover:border-white/10 hover:bg-zinc-800 hover:text-zinc-300'}`}
                             >
-                                <sport.icon className={`w-5 h-5 sm:w-4 sm:h-4 ${selectedSport === sport.id ? 'text-black' : sport.accent}`} />
-                                <span className="text-center leading-tight">{sport.label}</span>
+                                <sport.icon className={`w-4 h-4 shrink-0 transition-colors ${selectedSport === sport.id ? sport.accent : 'text-zinc-500'}`} />
+                                <span>{sport.label}</span>
                             </button>
                         ))}
                     </div>
@@ -262,62 +264,61 @@ export default function SportsNutritionPage() {
             </section>
 
             {/* CONTENT GRID */}
-            <section className="px-3 sm:px-6 max-w-7xl mx-auto relative">
+            <section className="px-4 sm:px-6 max-w-7xl mx-auto relative z-10">
                 {!isPro && !loading && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 z-50 flex items-center justify-center px-4 sm:px-6 -top-20"
+                        className="absolute inset-0 z-50 flex items-start justify-center px-4 sm:px-6 mt-10"
                     >
-                        <div className="absolute inset-0 bg-[#050505]/90 backdrop-blur-xl"></div>
-                        <div className="relative z-10 max-w-2xl w-full bg-zinc-900/80 border border-white/10 p-6 sm:p-12 md:p-20 rounded-3xl sm:rounded-[4rem] text-center shadow-[0_50px_100px_rgba(0,0,0,0.5)]">
-                            <div className="bg-[#CCFF00]/10 p-6 sm:p-8 rounded-2xl sm:rounded-[2rem] w-fit mx-auto mb-8 sm:mb-12 border border-[#CCFF00]/20">
-                                <Lock className="w-12 h-12 sm:w-16 sm:h-16 text-[#CCFF00]" />
+                        <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-xl rounded-[3rem]"></div>
+                        <div className="relative z-10 max-w-xl w-full bg-zinc-900 border border-white/10 p-8 sm:p-12 rounded-[2rem] text-center shadow-2xl mt-20">
+                            <div className="bg-emerald-500/10 p-6 rounded-2xl w-fit mx-auto mb-8 border border-emerald-500/20">
+                                <Lock className="w-10 h-10 text-emerald-400" />
                             </div>
-                            <h2 className="text-3xl sm:text-5xl font-black italic uppercase tracking-tighter mb-4 sm:mb-6 leading-none">Acesso <br /> Restrito</h2>
-                            <p className="text-zinc-500 text-base sm:text-xl font-bold italic max-w-md mx-auto leading-relaxed mb-8 sm:mb-16">
-                                O laboratório de performance avançada é exclusivo para membros Pro Alpha. Escolha seu caminho de elite.
+                            <h2 className="text-3xl font-medium tracking-tight text-white mb-4">Acesso PRO Necessário</h2>
+                            <p className="text-zinc-400 text-sm leading-relaxed mb-10">
+                                O laboratório de performance avançada e análise científica esportiva é exclusivo para assinantes. Eleve seu jogo para o nível profissional.
                             </p>
-                            <Link href="/pricing" className="bg-[#CCFF00] text-black font-black px-8 sm:px-12 py-4 sm:py-6 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-2xl flex items-center gap-3 sm:gap-4 mx-auto w-fit min-h-[44px]">
-                                Migrar para Pro Alpha <Crown className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <Link href="/pricing" className="bg-white text-zinc-950 font-semibold px-8 py-4 rounded-xl text-sm transition-all hover:bg-zinc-200 flex items-center justify-center gap-3 w-full shadow-lg">
+                                Desbloquear Performance <Crown className="w-4 h-4" />
                             </Link>
                         </div>
                     </motion.div>
                 )}
 
-                <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10 transition-all duration-700 ${!isPro && !loading ? 'blur-2xl pointer-events-none' : ''}`}>
+                <div className={`grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8 transition-all duration-700 ${!isPro && !loading ? 'blur-md pointer-events-none select-none opacity-50' : ''}`}>
 
-                    <div className="lg:col-span-2 space-y-10">
+                    <div className="xl:col-span-2 space-y-8">
                         {/* PROTOCOLO NUTRICIONAL */}
-                        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm relative overflow-hidden">
-                            <div className={`absolute top-0 right-0 p-6 sm:p-10 opacity-5 ${currentSport.accent}`}><Zap className="w-32 h-32 sm:w-48 sm:h-48" /></div>
-                            <div className="flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 gap-6 relative z-10 w-full">
+                        <div className="bg-zinc-900/50 border border-white/5 rounded-[2rem] p-8 sm:p-10 backdrop-blur-xl relative overflow-hidden group">
+                            <div className={`absolute top-0 right-0 p-10 opacity-[0.03] transition-opacity group-hover:opacity-5 ${currentSport.accent}`}><Zap className="w-48 h-48" /></div>
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-6 relative z-10 w-full">
                                 <div className="flex-1 w-full">
-                                    <h2 className="text-2xl sm:text-3xl font-black italic uppercase leading-tight">{currentSport.nutritionTitle}</h2>
-                                    <p className="text-[9px] sm:text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-2 sm:mt-3 italic max-w-lg leading-relaxed">{currentSport.nutritionDesc}</p>
+                                    <h2 className="text-2xl sm:text-3xl font-medium tracking-tight text-white">{currentSport.nutritionTitle}</h2>
+                                    <p className="text-sm text-zinc-400 font-medium mt-2 leading-relaxed max-w-lg">{currentSport.nutritionDesc}</p>
                                 </div>
-                                <div className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${currentSport.bgAccent} rounded-2xl flex items-center justify-center text-black shadow-xl`}>
-                                    <Target className="w-6 h-6 sm:w-7 sm:h-7" />
+                                <div className={`w-14 h-14 shrink-0 bg-zinc-950 border border-white/10 rounded-2xl flex items-center justify-center shadow-inner`}>
+                                    <Target className={`w-6 h-6 ${currentSport.accent}`} />
                                 </div>
                             </div>
 
-                            <div className="space-y-4 sm:space-y-6 relative z-10">
+                            <div className="space-y-4 relative z-10">
                                 {currentSport.protocol.map((step, idx) => (
                                     <motion.div
                                         key={idx}
                                         layout
-                                        className="bg-black/40 border border-white/5 p-5 sm:p-8 rounded-[1.5rem] sm:rounded-3xl hover:border-white/20 transition-all flex flex-col md:flex-row gap-4 sm:gap-8 items-start group relative overflow-hidden"
+                                        className="bg-zinc-950/50 border border-white/5 p-6 rounded-2xl hover:border-white/10 hover:bg-zinc-900/80 transition-all flex flex-col md:flex-row gap-6 items-start relative overflow-hidden"
                                     >
-                                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <div className="flex flex-col gap-2 shrink-0">
-                                            <span className={`text-[8px] sm:text-[9px] font-black ${currentSport.accent} border ${currentSport.accent.replace('text', 'border')}/30 px-3 py-1.5 rounded-full w-fit uppercase tracking-[0.2em]`}>{step.time}</span>
-                                            <h4 className="text-lg sm:text-xl font-black italic uppercase mt-1 sm:mt-2">{step.title}</h4>
+                                        <div className="flex flex-col gap-2 shrink-0 md:w-48">
+                                            <span className={`text-[9px] font-semibold text-zinc-400 uppercase tracking-widest`}>{step.time}</span>
+                                            <h4 className="text-lg font-medium text-white tracking-tight">{step.title}</h4>
                                         </div>
-                                        <div className="space-y-3 sm:space-y-4">
-                                            <p className="text-xs sm:text-sm text-zinc-400 font-medium italic leading-relaxed">{step.desc}</p>
-                                            <div className={`flex items-center flex-wrap gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest ${currentSport.accent} bg-white/5 px-3 py-2 rounded-xl w-fit`}>
+                                        <div className="space-y-4 flex-1">
+                                            <p className="text-sm text-zinc-400 leading-relaxed font-normal">{step.desc}</p>
+                                            <div className={`flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest ${currentSport.accent} bg-white/5 px-3 py-2 rounded-lg w-fit`}>
                                                 <Zap className="w-3 h-3 shrink-0" />
-                                                <span className="leading-none">{step.stats}</span>
+                                                <span className="leading-none pt-0.5">{step.stats}</span>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -326,16 +327,16 @@ export default function SportsNutritionPage() {
                         </div>
 
                         {/* PROTOCOLO DE TREINO ESPECÍFICO */}
-                        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm relative overflow-hidden">
-                            <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-10">
-                                <Activity className={`w-5 h-5 sm:w-6 sm:h-6 ${currentSport.accent}`} />
-                                <h3 className="text-xl sm:text-2xl font-black italic uppercase">Engenharia de Treino</h3>
+                        <div className="bg-zinc-900/50 border border-white/5 rounded-[2rem] p-8 sm:p-10 backdrop-blur-xl">
+                            <div className="flex items-center gap-3 mb-8">
+                                <Activity className={`w-5 h-5 ${currentSport.accent}`} />
+                                <h3 className="text-xl font-medium tracking-tight text-white">Dinâmica de Treino</h3>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {currentSport.workout.map((w, i) => (
-                                    <div key={i} className="p-5 sm:p-8 bg-black/40 border border-white/5 rounded-[1.5rem] sm:rounded-[2.5rem] group hover:bg-zinc-800/50 transition-all hover:border-white/10">
-                                        <h4 className={`text-xs sm:text-sm font-black uppercase tracking-widest mb-3 sm:mb-4 ${currentSport.accent}`}>{w.title}</h4>
-                                        <p className="text-xs sm:text-sm font-bold italic text-zinc-400 leading-relaxed">{w.desc}</p>
+                                    <div key={i} className="p-6 bg-zinc-950/50 border border-white/5 rounded-2xl hover:bg-zinc-900 transition-all">
+                                        <h4 className={`text-[10px] font-semibold uppercase tracking-widest mb-2 ${currentSport.accent}`}>{w.title}</h4>
+                                        <p className="text-sm text-zinc-400 leading-relaxed font-normal">{w.desc}</p>
                                     </div>
                                 ))}
                             </div>
@@ -345,23 +346,23 @@ export default function SportsNutritionPage() {
                         <SupplementAnalyzer accentColor={currentSport.accent} bgAccent={currentSport.bgAccent} />
                     </div>
 
-                    <div className="space-y-10">
+                    <div className="space-y-8">
                         {/* TACTICAL GRID ESPECÍFICO */}
                         <TacticalGrid habits={currentSport.grid} accentColor={currentSport.accent} bgAccent={currentSport.bgAccent} />
 
                         {/* SUPLEMENTAÇÃO */}
-                        <div className="bg-zinc-900/30 border border-white/5 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 backdrop-blur-sm">
-                            <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-                                <Microscope className={`w-5 h-5 sm:w-6 sm:h-6 ${currentSport.accent}`} />
-                                <h3 className="text-lg sm:text-xl font-black italic uppercase">Suplementos</h3>
+                        <div className="bg-zinc-900/50 border border-white/5 rounded-[2rem] p-8 sm:p-10 backdrop-blur-xl">
+                            <div className="flex items-center gap-3 mb-8">
+                                <Microscope className={`w-5 h-5 ${currentSport.accent}`} />
+                                <h3 className="text-xl font-medium tracking-tight text-white">Ergogênicos</h3>
                             </div>
-                            <div className="space-y-4 sm:space-y-6">
+                            <div className="space-y-4">
                                 {currentSport.supps.map((s, i) => (
-                                    <div key={i} className="flex gap-3 sm:gap-4 items-start group bg-black/20 p-4 sm:p-5 rounded-2xl border border-white/5 hover:bg-white/5 transition-all">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${currentSport.bgAccent} mt-2 shrink-0 group-hover:scale-150 transition-all shadow-[0_0_10px_rgba(255,255,255,0.3)]`}></div>
+                                    <div key={i} className="flex gap-4 items-start bg-zinc-950/50 p-5 rounded-2xl border border-white/5 hover:border-white/10 transition-colors">
+                                        <div className={`w-1.5 h-1.5 rounded-full ${currentSport.bgAccent} mt-2 shrink-0 shadow-[0_0_8px_rgba(255,255,255,0.2)]`}></div>
                                         <div>
-                                            <p className="text-[11px] sm:text-xs font-black uppercase text-white mb-1.5 group-hover:text-primary transition-colors tracking-wide">{s.name}</p>
-                                            <p className="text-[10px] sm:text-[11px] text-zinc-400 leading-relaxed italic">{s.info}</p>
+                                            <p className="text-sm font-medium text-white mb-1 tracking-tight">{s.name}</p>
+                                            <p className="text-xs text-zinc-500 leading-relaxed font-normal">{s.info}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -369,29 +370,34 @@ export default function SportsNutritionPage() {
                         </div>
 
                         {/* INSIGHTS NEURAIS */}
-                        <div className="bg-gradient-to-br from-zinc-900 to-black border border-white/10 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 relative overflow-hidden">
-                            <div className="flex items-center gap-3 mb-5 sm:mb-6">
-                                <Brain className="w-5 h-5 text-purple-500" />
-                                <h3 className="text-lg font-black italic uppercase">Physio Insight</h3>
+                        <div className="bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/10 rounded-[2rem] p-8 sm:p-10 relative overflow-hidden shadow-xl">
+                            <div className="flex items-center gap-3 mb-6 relative z-10">
+                                <Brain className="w-5 h-5 text-purple-400" />
+                                <h3 className="text-xl font-medium tracking-tight text-white">Biomecânica</h3>
                             </div>
-                            <div className="space-y-4">
-                                <p className="text-[10px] sm:text-[11px] text-zinc-300 leading-relaxed italic border-l-2 border-purple-500/30 pl-4 py-1">
+                            <div className="space-y-6 relative z-10">
+                                <p className="text-sm text-zinc-400 leading-relaxed font-normal border-l-2 border-purple-500/20 pl-4 py-1">
                                     "{currentSport.description}"
                                 </p>
-                                <p className="text-[8px] sm:text-[9px] text-[#CCFF00] font-black uppercase tracking-[0.2em] sm:tracking-widest animate-pulse mt-4">Alpha Brain Connection: Active</p>
+                                <p className="text-[9px] font-semibold text-emerald-400 tracking-widest uppercase flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    Sincronizado
+                                </p>
                             </div>
+                            <div className="absolute top-[-50%] right-[-50%] w-[100%] h-[100%] bg-purple-500/5 rounded-[100%] blur-[80px] pointer-events-none" />
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* FOOTER */}
-            <footer className="py-20 px-6 border-t border-white/5 bg-black mt-20">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-                    <div className="flex items-center gap-4">
-                        <Activity className="text-[#CCFF00] w-8 h-8" />
-                        <span className="text-2xl font-black italic uppercase tracking-tighter bg-gradient-to-r from-[#CCFF00] to-[#4A7A00] bg-clip-text text-transparent">NutriAcademic Lab</span>
+            <footer className="py-12 px-6 border-t border-white/5 mt-24">
+                <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center">
+                    <div className="flex items-center gap-3 mb-4">
+                        <Activity className="text-emerald-500 w-5 h-5" />
+                        <span className="text-lg font-medium tracking-tight text-white flex items-center gap-1">Nutri<span className="text-zinc-500">Academic</span></span>
                     </div>
+                    <p className="text-xs text-zinc-600">Alta Performance Decodificada. © {new Date().getFullYear()}</p>
                 </div>
             </footer>
 
