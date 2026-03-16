@@ -6,16 +6,15 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-    Activity, ArrowUpRight, BookOpen, Brain, Calculator, CheckCircle2, ChevronRight, Circle, Crown, Droplets, Dumbbell, Flame, Heart, Info, LayoutList, Lock, LogOut, Megaphone, Minus, PieChart, Plus, Save, Scale, Settings, ShieldCheck, Target as TargetIcon, Trash2, Trophy, User, Users, Utensils, Waves, Zap, SearchCode
+    Activity, ArrowUpRight, BookOpen, Brain, Calculator, CheckCircle2, ChevronRight, Circle, Crown, Droplets, Dumbbell, Flame, Heart, Info, LayoutList, Lock, LogOut, Minus, PieChart, Plus, Save, Scale, Settings, ShieldCheck, Target as TargetIcon, Trash2, Trophy, User, Users, Utensils, Waves, Zap, SearchCode
 } from "lucide-react";
 import { DIET_CATALOG, WORKOUT_CATEGORIES, SIDEBAR_ITEMS, WaterWave } from "./constants";
 import SupplementScanner from "@/components/SupplementScanner";
-import ViralizzzzTab from "@/components/ViralizzzzTab";
 
 type Profile = {
     id: string;
     email?: string;
-    plan_type: 'free' | 'pro' | 'unlimited';
+    plan_type: 'free' | 'pro';
     is_admin: boolean;
     weight?: string;
     height?: string;
@@ -51,7 +50,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [mode, setMode] = useState<'cutting' | 'bulking'>('cutting');
     const [selectedProfile, setSelectedProfile] = useState<'standard' | 'economical' | 'practical'>('standard');
-    const [activeTab, setActiveTab] = useState<'overview' | 'dieta' | 'treinos' | 'grid' | 'scanner' | 'viralizzz'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'dieta' | 'treinos' | 'grid' | 'scanner'>('overview');
     const [habits, setHabits] = useState<Habit[]>([]);
     const [waterIntake, setWaterIntake] = useState(0);
     const [workoutType, setWorkoutType] = useState<'hipertrofia' | 'forca'>('hipertrofia');
@@ -1360,16 +1359,6 @@ export default function DashboardPage() {
                         {activeTab === 'scanner' && (
                             <motion.div key="scanner" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-[calc(100vh-120px)] sm:h-[calc(100vh-80px)]">
                                 <SupplementScanner isPro={!!isPro} userId={profile?.id || ''} />
-                            </motion.div>
-                        )}
-
-                        {activeTab === 'viralizzz' && (
-                            <motion.div key="viralizzz" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                                <ViralizzzzTab
-                                    userId={profile?.id || ''}
-                                    isPro={!!isPro}
-                                    isUnlimited={profile?.plan_type === 'unlimited' || !!profile?.is_admin}
-                                />
                             </motion.div>
                         )}
 
