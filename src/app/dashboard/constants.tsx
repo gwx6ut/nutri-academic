@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import {
-    PieChart, Utensils, Dumbbell, Scale, LayoutList, Trophy, SearchCode
+    PieChart, Utensils, Dumbbell, Scale, LayoutList, Trophy, SearchCode, Megaphone
 } from "lucide-react";
 
 export const DIET_CATALOG = {
@@ -74,6 +74,7 @@ export const SIDEBAR_ITEMS = [
     { id: 'treinos', icon: Dumbbell, label: 'Protocolo de Treino', proOnly: false },
     { id: 'grid', icon: LayoutList, label: 'The Grid (Rotina)', proOnly: false },
     { id: 'scanner', icon: SearchCode, label: 'Scan de Whey (IA)', proOnly: false },
+    { id: 'viralizzz', icon: Megaphone, label: 'Viralizzz 🔥', proOnly: false },
     { id: 'esportiva_link', icon: Trophy, label: 'Nutrição Esportiva', isExternal: true, proOnly: true },
 ];
 
